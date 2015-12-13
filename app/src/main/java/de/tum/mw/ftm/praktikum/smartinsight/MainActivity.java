@@ -13,15 +13,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Button btnLogOut;
     UserLocalStore userLocalStore;
-
+    AnfrageAdapter adapter;
+    ListView listviewAnfrage;
+    String [] startTime = {"9:00", "10:00", "10.20"};
+    String [] endTime = {"9:10", "10:10", "10.30"};
+    String [] taskNumber = {"1", "3", "1"};
+    String [] taskSubNumber = {"a", "b", "c"};
+    String [] frageArt = {"Inhalt", "Inhalt + Punkte", "Punkte"};
+    String [] frageBearbeiter = {"Hand Peter Wurst", "Klaus Heinz", "Waltraud Franz"};
     private GetJSONListener l = new GetJSONListener(){
 
         @Override
@@ -60,6 +71,16 @@ public class MainActivity extends AppCompatActivity
         //Generate button Logout
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
 
+        //generate lsitview für anfragen
+        // Construct the data source
+        ArrayList<Anfrage> arrayOfUsers = new ArrayList<Anfrage>();
+        // Create the adapter to convert the array to views
+        adapter = new AnfrageAdapter(this, arrayOfUsers);
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.listViewAnfrangen);
+        listView.setAdapter(adapter);
+
+
         userLocalStore = new UserLocalStore(this);
 
         //Execute JSON
@@ -68,6 +89,37 @@ public class MainActivity extends AppCompatActivity
         client.execute(url);
     }
 
+    public void clearAnfragen(View view){
+        adapter.clear();
+    }
+
+
+    public void addAnfrage(View view){
+        // Add item to adapter
+        Anfrage newAnfrage = new Anfrage(startTime[0], endTime[0], taskNumber[0], taskSubNumber[0], frageArt[0], frageBearbeiter[0]);
+        adapter.add(newAnfrage);
+    }
+
+    public void addAllAnfrage(View view){
+        adapter.clear();
+        for(int i=0; i < startTime.length; i++){
+
+        Anfrage newAnfrage = new Anfrage(startTime[i], endTime[i], taskNumber[i], taskSubNumber[i], frageArt[i], frageBearbeiter[i]);
+        adapter.add(newAnfrage);
+
+        }
+ /*
+
+// Or even append an entire new collection
+// Fetching some data, data has now returned
+// If data was JSON, convert to ArrayList of User objects.
+JSONArray jsonArray = ...;
+ArrayList<Anfrage> newAnfrage = Anfrage.fromJson(jsonArray)
+adapter.addAll(newAnfrage);
+
+
+*/
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -152,4 +204,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

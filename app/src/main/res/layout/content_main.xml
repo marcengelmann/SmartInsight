@@ -13,59 +13,34 @@
     android:orientation="vertical"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Anfragen" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="9:00" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" Aufgabe: 1a, Inhalt" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="5">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="9:10" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" Bearbeiter: Hand Müller" />
-        </LinearLayout>
-    </LinearLayout>
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="Abmelden"
         android:id="@+id/btnLogOut"
         android:onClick="logOut"/>
+    <Button
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:text="Add Anfrage"
+    android:id="@+id/btnAddAnfrage"
+    android:onClick="addAnfrage"/>
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Add All Anfrage"
+        android:id="@+id/btnAddAllAnfrage"
+        android:onClick="addAllAnfrage"/>
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Clear Anfragen"
+        android:id="@+id/btnClearAnfrage"
+        android:onClick="clearAnfragen"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewAnfrangen">
 
+    </ListView>
 </LinearLayout>
