@@ -68,14 +68,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private ArrayList<String> listdata = new ArrayList<>();
 
-    private GetJSONListener l = new GetJSONListener(){
+    UserLocalStore userLocalStore;
 
-        @Override
-        public void onRemoteCallComplete(JSONObject jsonFromNet) {
-            System.out.println(jsonFromNet);
-        }
-
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,19 +98,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
-                Intent myIntent = new Intent(view.getContext(), MainActivity.class);
-                startActivity(myIntent);
+
             }
         });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-
-        //Execute JSON
-        JSONClient client = new JSONClient(this, l);
-        String url = "http://www.marcengelmann.com/smart/download.php";
-        client.execute(url);
+        userLocalStore = new UserLocalStore(this);
     }
 
     private void populateAutoComplete() {
@@ -336,6 +325,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
+                //Marc: hier muss der Netzwerkzugriff rein
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
@@ -345,11 +335,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+                    boolean state = pieces[1].equals(mPassword);
+                        userLocalStore.setUserLoggedIn(state);
+                    return state;
                 }
             }
-
+/*
             // TODO: register the new account here.
+            User user = new User(mEmail, mPassword, "Max Mustermann", 1234);
+            userLocalStore.storeUserData(user);
+            userLocalStore.setUserLoggedIn(true);
+*/
             return true;
         }
 

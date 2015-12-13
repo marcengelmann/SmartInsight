@@ -13,9 +13,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    Button btnLogOut;
+    UserLocalStore userLocalStore;
+
+    private GetJSONListener l = new GetJSONListener(){
+
+        @Override
+        public void onRemoteCallComplete(JSONObject jsonFromNet) {
+            System.out.println(jsonFromNet);
+        }
+
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +57,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Generate button Logout
+        btnLogOut = (Button) findViewById(R.id.btnLogOut);
+
+        userLocalStore = new UserLocalStore(this);
+
+        //Execute JSON
+        JSONClient client = new JSONClient(this, l);
+        String url = "http://www.marcengelmann.com/smart/download.php";
+        client.execute(url);
     }
 
     @Override
@@ -52,6 +76,34 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void logOut(View view){
+        userLocalStore.clearUserData();
+        userLocalStore.setUserLoggedIn(false);
+        Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
+        startActivity(myIntent);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        if(authenticate() == true){
+            updateListView();
+        }
+        else{
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        }
+
+    }
+
+    private boolean authenticate(){
+        return userLocalStore.getUserLoggedIn();
+    }
+
+    private  void updateListView(){
+
     }
 
     @Override
