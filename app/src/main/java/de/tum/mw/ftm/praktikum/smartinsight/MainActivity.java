@@ -17,7 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     UserLocalStore userLocalStore;
     AnfrageClientLocalStore anfrageClientLocalStore;
     AnfrageAdapter adapter;
+    User user = null;
     ListView listviewAnfrage;
     String [] startTime = {"9:00", "10:00", "10.20"};
     String [] endTime = {"9:10", "10:10", "10.30"};
@@ -41,17 +44,28 @@ public class MainActivity extends AppCompatActivity
     TextView clientTaskSubNumb;
     TextView clientMatrikelNumb;
 
-
-
     private GetJSONListener l = new GetJSONListener(){
-
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
-            System.out.println(jsonFromNet);
+            try {
+                System.out.println("json download completed!");
+                String name = jsonFromNet.get("name").toString();
+                String matrikelnummer = user.matrikelnummer;
+                //TODO: linked_exam ist momentan emailadresse!
+                String linked_exam = jsonFromNet.get("linked_exam").toString();
+                userLocalStore.storeUserData(new User(linked_exam, "", name, matrikelnummer));
+                user  = userLocalStore.getUserLogInUser();
+
+                Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Prüfung: "+user.email,
+                        Toast.LENGTH_LONG).show();
+
+            } catch(JSONException e) {
+                System.out.println(e);
+            } catch(NullPointerException e) {
+                System.out.println(e);
+            }
         }
-
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,11 +113,11 @@ public class MainActivity extends AppCompatActivity
         anfrageClientLocalStore = new AnfrageClientLocalStore(this);
         anfrageClientLocalStore.setStatusAnfrageClient(false);
 
+        user = userLocalStore.getUserLogInUser();
 
-        //Execute JSON
-        JSONClient client = new JSONClient(this, l);
-        String url = "http://www.marcengelmann.com/smart/download.php";
-        client.execute(url);
+        System.out.println("Das sollte als 2. kommen!");
+
+        downloadData();
     }
 
     public void clearAnfragen(View view){
@@ -157,6 +171,9 @@ adapter.addAll(newAnfrage);
     @Override
     protected void onStart(){
         super.onStart();
+
+        user = userLocalStore.getUserLogInUser();
+        downloadData();
 
         if(authenticate() == true){
             updateListView();
@@ -243,6 +260,16 @@ adapter.addAll(newAnfrage);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void downloadData() {
+
+        System.out.println("downloading json now!");
+        //Execute JSON
+        JSONClient client = new JSONClient(this, l);
+        //TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
+        String url = "http://www.marcengelmann.com/smart/download.php?intent=user&matrikelnummer=" + user.matrikelnummer;
+        client.execute(url);
     }
 
 }

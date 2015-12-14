@@ -17,7 +17,7 @@ public class AnfrageClientLocalStore {
 
     public void storeAnfrageData(AnfrageClient anfrage){
         SharedPreferences.Editor spEditor = anfrageLocalDatabase.edit();
-        spEditor.putInt("matrikelnummer", anfrage.matrikelnummer);
+        spEditor.putString("matrikelnummer", anfrage.matrikelnummer);
         spEditor.putString("question",anfrage.question);
         spEditor.putString("taskNumber",anfrage.taskNumber);
         spEditor.putString("taskSubNumber",anfrage.taskSubNumber);
@@ -28,7 +28,7 @@ public class AnfrageClientLocalStore {
     public AnfrageClient getDataAnfrageClient(){
         String taskNumber = anfrageLocalDatabase.getString("taskNumber", "");
         String taskSubNumber = anfrageLocalDatabase.getString("taskSubNumber","");
-        int matrikelnummer = anfrageLocalDatabase.getInt("matrikelnummer", -1);
+        String matrikelnummer = anfrageLocalDatabase.getString("matrikelnummer", "");
         String question = anfrageLocalDatabase.getString("question", "");
 
         AnfrageClient storedAnfrage = new AnfrageClient(matrikelnummer, taskNumber, taskSubNumber , question);

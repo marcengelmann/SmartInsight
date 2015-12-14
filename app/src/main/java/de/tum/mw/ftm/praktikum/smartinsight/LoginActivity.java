@@ -3,9 +3,7 @@ package de.tum.mw.ftm.praktikum.smartinsight;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,8 +28,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -50,13 +50,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -69,7 +62,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private ArrayList<String> listdata = new ArrayList<>();
 
     UserLocalStore userLocalStore;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +177,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!isMatrikelnummerValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -205,9 +197,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+    private boolean isMatrikelnummerValid(String matrikelnummer) {
+
+        if(!TextUtils.isDigitsOnly(matrikelnummer)) {
+            return false;
+        } else if(matrikelnummer.length() <= 8 || matrikelnummer.length() > 12) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private boolean isPasswordValid(String password) {
@@ -311,39 +309,52 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
+        private final String mMatrikelnummer;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
+        UserLoginTask(String matrikelnummer, String password) {
+            this.mMatrikelnummer = matrikelnummer;
             mPassword = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+
+            JSONArray user_data = null;
 
             try {
-                // Simulate network access.
-                //Marc: hier muss der Netzwerkzugriff rein
-                Thread.sleep(2000);
+                ConnectionHandler conn = new ConnectionHandler();
+                if(conn.tryLogin(mMatrikelnummer,mPassword)) {
+                    System.out.println("Login successful!");
+                } else {
+                    System.out.println("Wrong credidentials!");
+                    return false;
+                }
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    boolean state = pieces[1].equals(mPassword);
-                        userLocalStore.setUserLoggedIn(state);
-                    return state;
-                }
-            }
+//            String[] creds = { "A", "B" };
+//
+//            for (String credential :creds ) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mMatrikelnummer)) {
+//                    // Account exists, return true if the password matches.
+//                    boolean state = pieces[1].equals(mPassword);
+//                        userLocalStore.setUserLoggedIn(state);
+//                    return state;
+//                }
+//            }
+            System.out.println("Das sollte als 1. kommen!");
+
             userLocalStore.setUserLoggedIn(true);
+            userLocalStore.storeUserData(new User("", "", "", mMatrikelnummer));
 
             return true;
         }
+
+
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -353,8 +364,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                mEmailView.setError(getString(R.string.error_incorrect_password));
+                mEmailView.requestFocus();
             }
         }
 
