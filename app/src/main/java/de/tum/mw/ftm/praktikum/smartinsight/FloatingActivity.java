@@ -27,9 +27,13 @@ public class FloatingActivity extends AppCompatActivity {
     private RadioGroup radioGroupQuestion;
 
     //Aufgaben Informationen fürs senden
+    AnfrageClient anfrageClient;
     private String artOfQuestion = "Inhalt";
     private String taskNumber = "1";
     private String taskSubNumber = "a";
+
+    AnfrageClientLocalStore anfrageClientLocalStore;
+    UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,13 @@ public class FloatingActivity extends AppCompatActivity {
         spinnerTaskSubNumber = (Spinner)findViewById(R.id.spinnerTaskSubNumber);
         ArrayAdapter<String> adapterSubTaskNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, stringTaskSubNumber);
         spinnerTaskSubNumber.setAdapter(adapterSubTaskNumber);
+
+        anfrageClientLocalStore = new AnfrageClientLocalStore(this);
+        userLocalStore = new UserLocalStore(this);
+
+        anfrageClientLocalStore.setStatusAnfrageClient(false);
+        anfrageClientLocalStore.clearDataAnfrageClient();
+
 
     }
 
@@ -83,6 +94,10 @@ public class FloatingActivity extends AppCompatActivity {
                 () {
             @Override
             public void onClick(DialogInterface dialog, int arg1) {
+                User user = userLocalStore.getUserLogInUser();
+                AnfrageClient anfrageClient = new AnfrageClient(user.matrikelnummer,taskNumber,taskSubNumber,artOfQuestion);
+                anfrageClientLocalStore.storeAnfrageData(anfrageClient);
+                anfrageClientLocalStore.setStatusAnfrageClient(true);
                 finish();
             }
         });

@@ -340,12 +340,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return state;
                 }
             }
-/*
-            // TODO: register the new account here.
-            User user = new User(mEmail, mPassword, "Max Mustermann", 1234);
-            userLocalStore.storeUserData(user);
             userLocalStore.setUserLoggedIn(true);
-*/
+
             return true;
         }
 

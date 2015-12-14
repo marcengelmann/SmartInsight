@@ -19,7 +19,7 @@ public class UserLocalStore {
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();
         spEditor.putString("name", user.name);
         spEditor.putString("email", user.email);
-        spEditor.putInt("matriknummer", user.matrikelnummer);
+        spEditor.putInt("matrikelnummer", user.matrikelnummer);
         spEditor.putString("password",user.password);
         spEditor.commit();
     }
@@ -27,7 +27,7 @@ public class UserLocalStore {
     public User getUserLogInUser(){
         String name = userLocalDatabase.getString("name", "");
         String email = userLocalDatabase.getString("email","");
-        int matrikelnummer = userLocalDatabase.getInt("matriknummer", -1);
+        int matrikelnummer = userLocalDatabase.getInt("matrikelnummer", -1);
         String password = userLocalDatabase.getString("password", "");
 
         User storedUser = new User(email, password, name , matrikelnummer);

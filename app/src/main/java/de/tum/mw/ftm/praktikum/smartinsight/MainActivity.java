@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Button btnLogOut;
     UserLocalStore userLocalStore;
+    AnfrageClientLocalStore anfrageClientLocalStore;
     AnfrageAdapter adapter;
     ListView listviewAnfrage;
     String [] startTime = {"9:00", "10:00", "10.20"};
@@ -33,6 +35,14 @@ public class MainActivity extends AppCompatActivity
     String [] taskSubNumber = {"a", "b", "c"};
     String [] frageArt = {"Inhalt", "Inhalt + Punkte", "Punkte"};
     String [] frageBearbeiter = {"Hand Peter Wurst", "Klaus Heinz", "Waltraud Franz"};
+
+    TextView clientQuestion;
+    TextView clientTaskNumber;
+    TextView clientTaskSubNumb;
+    TextView clientMatrikelNumb;
+
+
+
     private GetJSONListener l = new GetJSONListener(){
 
         @Override
@@ -73,15 +83,22 @@ public class MainActivity extends AppCompatActivity
 
         //generate lsitview für anfragen
         // Construct the data source
-        ArrayList<Anfrage> arrayOfUsers = new ArrayList<Anfrage>();
+        ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<AnfrageProvider>();
         // Create the adapter to convert the array to views
         adapter = new AnfrageAdapter(this, arrayOfUsers);
         // Attach the adapter to a ListView
         ListView listView = (ListView) findViewById(R.id.listViewAnfrangen);
         listView.setAdapter(adapter);
 
+        clientQuestion = (TextView)findViewById(R.id.clientQuestion);
+        clientTaskNumber = (TextView)findViewById(R.id.clientTaskNumb);
+        clientTaskSubNumb = (TextView)findViewById(R.id.clientTaskSubNumb);
+        clientMatrikelNumb = (TextView)findViewById(R.id.clientMatrikelNumb);
 
         userLocalStore = new UserLocalStore(this);
+        anfrageClientLocalStore = new AnfrageClientLocalStore(this);
+        anfrageClientLocalStore.setStatusAnfrageClient(false);
+
 
         //Execute JSON
         JSONClient client = new JSONClient(this, l);
@@ -96,7 +113,7 @@ public class MainActivity extends AppCompatActivity
 
     public void addAnfrage(View view){
         // Add item to adapter
-        Anfrage newAnfrage = new Anfrage(startTime[0], endTime[0], taskNumber[0], taskSubNumber[0], frageArt[0], frageBearbeiter[0]);
+        AnfrageProvider newAnfrage = new AnfrageProvider(startTime[0], endTime[0], taskNumber[0], taskSubNumber[0], frageArt[0], frageBearbeiter[0]);
         adapter.add(newAnfrage);
     }
 
@@ -104,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         adapter.clear();
         for(int i=0; i < startTime.length; i++){
 
-        Anfrage newAnfrage = new Anfrage(startTime[i], endTime[i], taskNumber[i], taskSubNumber[i], frageArt[i], frageBearbeiter[i]);
+            AnfrageProvider newAnfrage = new AnfrageProvider(startTime[i], endTime[i], taskNumber[i], taskSubNumber[i], frageArt[i], frageBearbeiter[i]);
         adapter.add(newAnfrage);
 
         }
@@ -148,14 +165,37 @@ adapter.addAll(newAnfrage);
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
 
+        //Hier kommen updates nach dem Floating action button hin
+        if(anfrageClientLocalStore.getStatusAnfrageClient())
+        {
+            //update Listview, aber ist das notwendig, wenn durchd ie audentifizierung das gleiche passiert???
+            updateListView();
+            //upload data to server
+            AnfrageClient anfrageClient = anfrageClientLocalStore.getDataAnfrageClient();
+            clientQuestion.setText(anfrageClient.question);
+            clientTaskNumber.setText(anfrageClient.taskNumber);
+            clientTaskSubNumb.setText(anfrageClient.taskSubNumber);
+            clientMatrikelNumb.setText(String.valueOf(anfrageClient.matrikelnummer));
+        }
+        anfrageClientLocalStore.setStatusAnfrageClient(false);
+
+
     }
 
     private boolean authenticate(){
         return userLocalStore.getUserLoggedIn();
     }
 
-    private  void updateListView(){
+    private  void updateListView() {
+        //ToDo: Hier müsste der Code stehen, wo die aktuelle DAten vom Server aktualisiert werden,
+        //Die Funktion sollte nur aufgerufen werden, wenn eine neue Anfrage vom User hinzugefügt wrude
+        adapter.clear();
+        for (int i = 0; i < startTime.length; i++) {
 
+            AnfrageProvider newAnfrage = new AnfrageProvider(startTime[i], endTime[i], taskNumber[i], taskSubNumber[i], frageArt[i], frageBearbeiter[i]);
+            adapter.add(newAnfrage);
+
+        }
     }
 
     @Override
