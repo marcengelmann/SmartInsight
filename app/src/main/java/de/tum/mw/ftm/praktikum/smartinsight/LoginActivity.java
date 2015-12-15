@@ -322,34 +322,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             JSONArray user_data = null;
 
+            ConnectionHandler connection = new ConnectionHandler();
+
             try {
-                ConnectionHandler conn = new ConnectionHandler();
-                if(conn.tryLogin(mMatrikelnummer,mPassword)) {
+                if(connection.tryLogin(mMatrikelnummer,mPassword)) {
                     System.out.println("Login successful!");
                 } else {
                     System.out.println("Wrong credidentials!");
                     return false;
                 }
-                Thread.sleep(1);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
 
-//            String[] creds = { "A", "B" };
-//
-//            for (String credential :creds ) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mMatrikelnummer)) {
-//                    // Account exists, return true if the password matches.
-//                    boolean state = pieces[1].equals(mPassword);
-//                        userLocalStore.setUserLoggedIn(state);
-//                    return state;
-//                }
-//            }
-            System.out.println("Das sollte als 1. kommen!");
+            User user = connection.getUserData();
 
             userLocalStore.setUserLoggedIn(true);
-            userLocalStore.storeUserData(new User("", "", "", mMatrikelnummer));
+            userLocalStore.storeUserData(user);
 
             return true;
         }

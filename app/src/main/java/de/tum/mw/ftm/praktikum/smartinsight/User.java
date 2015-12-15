@@ -12,5 +12,4 @@ public class User {
         this.matrikelnummer = matrikelnummer;
         this.name = name;
     }
-
 }

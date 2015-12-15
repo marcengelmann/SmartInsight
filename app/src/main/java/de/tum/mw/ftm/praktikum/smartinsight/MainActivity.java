@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity
     TextView clientTaskSubNumb;
     TextView clientMatrikelNumb;
 
-    private GetJSONListener l = new GetJSONListener(){
+     private GetJSONListener l = new GetJSONListener(){
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
             try {
-                System.out.println("json download completed!");
+              /*  System.out.println("json download completed!");
                 String name = jsonFromNet.get("name").toString();
                 String matrikelnummer = user.matrikelnummer;
                 //TODO: linked_exam ist momentan emailadresse!
@@ -61,8 +61,10 @@ public class MainActivity extends AppCompatActivity
 
             } catch(JSONException e) {
                 System.out.println(e);
+            } */
             } catch(NullPointerException e) {
                 System.out.println(e);
+
             }
         }
     };
@@ -115,9 +117,9 @@ public class MainActivity extends AppCompatActivity
 
         user = userLocalStore.getUserLogInUser();
 
-        System.out.println("Das sollte als 2. kommen!");
+        /* System.out.println("Das sollte als 2. kommen!");
 
-        downloadData();
+        downloadData();*/
     }
 
     public void clearAnfragen(View view){
@@ -173,7 +175,9 @@ adapter.addAll(newAnfrage);
         super.onStart();
 
         user = userLocalStore.getUserLogInUser();
-        downloadData();
+
+        Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Prüfung: "+user.email,
+                Toast.LENGTH_LONG).show();
 
         if(authenticate() == true){
             updateListView();
@@ -262,13 +266,10 @@ adapter.addAll(newAnfrage);
         return true;
     }
 
-    private void downloadData() {
-
-        System.out.println("downloading json now!");
-        //Execute JSON
+    private void downloadTasks() {
         JSONClient client = new JSONClient(this, l);
-        //TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
-        String url = "http://www.marcengelmann.com/smart/download.php?intent=user&matrikelnummer=" + user.matrikelnummer;
+        // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
+        String url = "http://www.marcengelmann.com/smart/download.php?intent=exam&matrikelnummer=" + user.matrikelnummer;
         client.execute(url);
     }
 

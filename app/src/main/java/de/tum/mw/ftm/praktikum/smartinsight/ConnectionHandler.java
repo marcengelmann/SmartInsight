@@ -17,11 +17,12 @@ import java.net.URL;
  */
 public class ConnectionHandler {
 
+    private User user = null;
+
     protected boolean tryLogin(String mUsername, String mPassword)
     {
         HttpURLConnection connection;
         OutputStreamWriter request = null;
-
         URL url = null;
         String response = null;
         String parameters = "matrikelnummer="+mUsername+"&passwort="+mPassword;
@@ -52,10 +53,11 @@ public class ConnectionHandler {
             isr.close();
             reader.close();
 
-            if(response.contains("true")) {
-                return true;
-            } else {
+            if(response.contains("access_denied")) {
                 return false;
+            } else {
+                saveUserData(response);
+                return true;
             }
 
         }
@@ -64,5 +66,30 @@ public class ConnectionHandler {
             // Error
         }
         return false;
+    }
+
+    private void saveUserData(String jsonString) {
+
+        try {
+            System.out.println("User Data received ... saving now!");
+            JSONObject json = new JSONObject(jsonString);
+
+            String name = json.get("name").toString();
+            String matrikelnummer = json.get("matrikelnummer").toString();
+
+            //TODO: linked_exam ist momentan emailadresse!
+            String linked_exam = json.get("linked_exam").toString();
+
+            user = new User(linked_exam, "", name, matrikelnummer);
+
+        } catch(JSONException e) {
+            System.out.println(e);
+        } catch(NullPointerException e) {
+            System.out.println(e);
+        }
+    }
+
+    public User getUserData() {
+        return user;
     }
 }
