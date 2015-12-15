@@ -19,24 +19,7 @@
         android:text="Abmelden"
         android:id="@+id/btnLogOut"
         android:onClick="logOut"/>
-    <Button
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content"
-    android:text="Add Anfrage"
-    android:id="@+id/btnAddAnfrage"
-    android:onClick="addAnfrage"/>
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Add All Anfrage"
-        android:id="@+id/btnAddAllAnfrage"
-        android:onClick="addAllAnfrage"/>
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Clear Anfragen"
-        android:id="@+id/btnClearAnfrage"
-        android:onClick="clearAnfragen"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

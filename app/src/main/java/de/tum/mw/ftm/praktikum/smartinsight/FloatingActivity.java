@@ -27,7 +27,7 @@ public class FloatingActivity extends AppCompatActivity {
     private RadioGroup radioGroupQuestion;
 
     //Aufgaben Informationen fürs senden
-    AnfrageClient anfrageClient;
+    Anfrage anfrage;
     private String artOfQuestion = "Inhalt";
     private String taskNumber = "1";
     private String taskSubNumber = "a";
@@ -95,8 +95,11 @@ public class FloatingActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int arg1) {
                 User user = userLocalStore.getUserLogInUser();
-                AnfrageClient anfrageClient = new AnfrageClient(user.matrikelnummer,taskNumber,taskSubNumber,artOfQuestion);
-                anfrageClientLocalStore.storeAnfrageData(anfrageClient);
+
+                //TODO: linked_student, linked_task, linked_subtask, linked_phd, linked_exam
+
+                Anfrage anfrage = new Anfrage(user.matrikelnummer,taskNumber,taskSubNumber,"linked_phd",artOfQuestion);
+                anfrageClientLocalStore.storeAnfrageData(anfrage);
                 anfrageClientLocalStore.setStatusAnfrageClient(true);
                 finish();
             }

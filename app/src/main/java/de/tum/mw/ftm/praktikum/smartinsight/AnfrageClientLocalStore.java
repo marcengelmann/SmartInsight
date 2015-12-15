@@ -15,23 +15,24 @@ public class AnfrageClientLocalStore {
         anfrageLocalDatabase = context.getSharedPreferences(SP_NAME, 0);
     }
 
-    public void storeAnfrageData(AnfrageClient anfrage){
+    public void storeAnfrageData(Anfrage anfrage){
         SharedPreferences.Editor spEditor = anfrageLocalDatabase.edit();
-        spEditor.putString("matrikelnummer", anfrage.matrikelnummer);
-        spEditor.putString("question",anfrage.question);
-        spEditor.putString("taskNumber",anfrage.taskNumber);
-        spEditor.putString("taskSubNumber",anfrage.taskSubNumber);
-
+        spEditor.putString("linked_student", anfrage.linked_student);
+        spEditor.putString("linked_task",anfrage.linked_task);
+        spEditor.putString("linked_subtask",anfrage.linked_subtask);
+        spEditor.putString("linked_phd",anfrage.linked_phd);
+        spEditor.putString("linked_exam",anfrage.linked_exam);
         spEditor.commit();
     }
 
-    public AnfrageClient getDataAnfrageClient(){
-        String taskNumber = anfrageLocalDatabase.getString("taskNumber", "");
-        String taskSubNumber = anfrageLocalDatabase.getString("taskSubNumber","");
-        String matrikelnummer = anfrageLocalDatabase.getString("matrikelnummer", "");
-        String question = anfrageLocalDatabase.getString("question", "");
+    public Anfrage getDataAnfrageClient(){
+        String linked_student = anfrageLocalDatabase.getString("linked_student", "");
+        String linked_task = anfrageLocalDatabase.getString("linked_task","");
+        String linked_subtask = anfrageLocalDatabase.getString("linked_subtask", "");
+        String linked_phd = anfrageLocalDatabase.getString("linked_phd", "");
+        String linked_exam = anfrageLocalDatabase.getString("linked_exam", "");
 
-        AnfrageClient storedAnfrage = new AnfrageClient(matrikelnummer, taskNumber, taskSubNumber , question);
+        Anfrage storedAnfrage = new Anfrage(linked_student, linked_task, linked_subtask , linked_phd,linked_exam);
 
         return storedAnfrage;
     }

@@ -3,7 +3,6 @@ package de.tum.mw.ftm.praktikum.smartinsight;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,12 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,41 +31,48 @@ public class MainActivity extends AppCompatActivity
     AnfrageAdapter adapter;
     User user = null;
     ListView listviewAnfrage;
-    String [] startTime = {"9:00", "10:00", "10.20"};
+    /*String [] startTime = {"9:00", "10:00", "10.20"};
     String [] endTime = {"9:10", "10:10", "10.30"};
     String [] taskNumber = {"1", "3", "1"};
     String [] taskSubNumber = {"a", "b", "c"};
     String [] frageArt = {"Inhalt", "Inhalt + Punkte", "Punkte"};
-    String [] frageBearbeiter = {"Hand Peter Wurst", "Klaus Heinz", "Waltraud Franz"};
+    String [] frageBearbeiter = {"Hand Peter Wurst", "Klaus Heinz", "Waltraud Franz"};*/
 
     TextView clientQuestion;
     TextView clientTaskNumber;
     TextView clientTaskSubNumb;
     TextView clientMatrikelNumb;
 
+    TextView emailView;
+    TextView nameView;
+
+    private ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
+
      private GetJSONListener l = new GetJSONListener(){
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
             try {
-              /*  System.out.println("json download completed!");
-                String name = jsonFromNet.get("name").toString();
-                String matrikelnummer = user.matrikelnummer;
-                //TODO: linked_exam ist momentan emailadresse!
-                String linked_exam = jsonFromNet.get("linked_exam").toString();
-                userLocalStore.storeUserData(new User(linked_exam, "", name, matrikelnummer));
-                user  = userLocalStore.getUserLogInUser();
 
-                Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Prüfung: "+user.email,
-                        Toast.LENGTH_LONG).show();
+                JSONArray jsonArray = jsonFromNet.getJSONArray("posts");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    String student = obj.getString("linked_student");
+                    String exam = obj.getString("linked_exam");
+                    String subtask = obj.getString("linked_subtask");
+                    String task = obj.getString("linked_task");
+                    String phd = obj.getString("linked_phd");
+                    Anfrage anfrage = new Anfrage(student, task, subtask, phd, exam);
+                    requests.add(anfrage);
+                }
+                updateListView();
 
-            } catch(JSONException e) {
+            } catch (JSONException e) {
                 System.out.println(e);
-            } */
-            } catch(NullPointerException e) {
+            }catch (NullPointerException e) {
                 System.out.println(e);
-
             }
         }
+
     };
 
     @Override
@@ -128,19 +134,23 @@ public class MainActivity extends AppCompatActivity
 
 
     public void addAnfrage(View view){
-        // Add item to adapter
+        /*// Add item to adapter
         AnfrageProvider newAnfrage = new AnfrageProvider(startTime[0], endTime[0], taskNumber[0], taskSubNumber[0], frageArt[0], frageBearbeiter[0]);
-        adapter.add(newAnfrage);
+        adapter.add(newAnfrage);*/
     }
 
     public void addAllAnfrage(View view){
         adapter.clear();
-        for(int i=0; i < startTime.length; i++){
+        for(Anfrage request:requests) {
+            AnfrageProvider newAnfrage = new AnfrageProvider("12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam,request.linked_phd);
+            adapter.add(newAnfrage);
+        }
+        /*for(int i=0; i < startTime.length; i++){
 
             AnfrageProvider newAnfrage = new AnfrageProvider(startTime[i], endTime[i], taskNumber[i], taskSubNumber[i], frageArt[i], frageBearbeiter[i]);
         adapter.add(newAnfrage);
 
-        }
+        }*/
  /*
 
 // Or even append an entire new collection
@@ -180,6 +190,7 @@ adapter.addAll(newAnfrage);
                 Toast.LENGTH_LONG).show();
 
         if(authenticate() == true){
+            downloadRequests();
             updateListView();
         }
         else{
@@ -192,11 +203,13 @@ adapter.addAll(newAnfrage);
             //update Listview, aber ist das notwendig, wenn durchd ie audentifizierung das gleiche passiert???
             updateListView();
             //upload data to server
-            AnfrageClient anfrageClient = anfrageClientLocalStore.getDataAnfrageClient();
-            clientQuestion.setText(anfrageClient.question);
-            clientTaskNumber.setText(anfrageClient.taskNumber);
-            clientTaskSubNumb.setText(anfrageClient.taskSubNumber);
-            clientMatrikelNumb.setText(String.valueOf(anfrageClient.matrikelnummer));
+            Anfrage anfrage = anfrageClientLocalStore.getDataAnfrageClient();
+
+            //TODO: Struktur: linked_student, linked_task, linked_subtask, linked_phd, linked_exam;
+            clientQuestion.setText(anfrage.linked_task);
+            clientTaskNumber.setText(anfrage.linked_task);
+            clientTaskSubNumb.setText(anfrage.linked_subtask);
+            clientMatrikelNumb.setText(String.valueOf(anfrage.linked_task));
         }
         anfrageClientLocalStore.setStatusAnfrageClient(false);
 
@@ -208,14 +221,10 @@ adapter.addAll(newAnfrage);
     }
 
     private  void updateListView() {
-        //ToDo: Hier müsste der Code stehen, wo die aktuelle DAten vom Server aktualisiert werden,
-        //Die Funktion sollte nur aufgerufen werden, wenn eine neue Anfrage vom User hinzugefügt wrude
         adapter.clear();
-        for (int i = 0; i < startTime.length; i++) {
-
-            AnfrageProvider newAnfrage = new AnfrageProvider(startTime[i], endTime[i], taskNumber[i], taskSubNumber[i], frageArt[i], frageBearbeiter[i]);
+        for(Anfrage request:requests) {
+            AnfrageProvider newAnfrage = new AnfrageProvider("12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam,request.linked_phd);
             adapter.add(newAnfrage);
-
         }
     }
 
@@ -266,10 +275,10 @@ adapter.addAll(newAnfrage);
         return true;
     }
 
-    private void downloadTasks() {
+    private void downloadRequests() {
         JSONClient client = new JSONClient(this, l);
         // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
-        String url = "http://www.marcengelmann.com/smart/download.php?intent=exam&matrikelnummer=" + user.matrikelnummer;
+        String url = "http://www.marcengelmann.com/smart/download.php?intent=request&matrikelnummer=" + user.matrikelnummer;
         client.execute(url);
     }
 
