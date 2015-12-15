@@ -20,22 +20,6 @@
         android:id="@+id/btnLogOut"
         android:onClick="logOut"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/clientQuestion"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/clientTaskNumb"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/clientTaskSubNumb"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/clientMatrikelNumb"/>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

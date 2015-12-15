@@ -1,7 +1,5 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
-import android.widget.Toast;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,7 +13,7 @@ import java.net.URL;
 /**
  * Created by marcengelmann on 14.12.15.
  */
-public class ConnectionHandler {
+public class LoginHandler {
 
     private User user = null;
 

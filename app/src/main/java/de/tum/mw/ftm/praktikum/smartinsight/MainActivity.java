@@ -31,24 +31,36 @@ public class MainActivity extends AppCompatActivity
     AnfrageAdapter adapter;
     User user = null;
     ListView listviewAnfrage;
-    /*String [] startTime = {"9:00", "10:00", "10.20"};
-    String [] endTime = {"9:10", "10:10", "10.30"};
-    String [] taskNumber = {"1", "3", "1"};
-    String [] taskSubNumber = {"a", "b", "c"};
-    String [] frageArt = {"Inhalt", "Inhalt + Punkte", "Punkte"};
-    String [] frageBearbeiter = {"Hand Peter Wurst", "Klaus Heinz", "Waltraud Franz"};*/
-
-    TextView clientQuestion;
-    TextView clientTaskNumber;
-    TextView clientTaskSubNumb;
-    TextView clientMatrikelNumb;
 
     TextView emailView;
     TextView nameView;
 
     private ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
 
-     private GetJSONListener l = new GetJSONListener(){
+
+    private GetJSONListener uploadResultListener = new GetJSONListener(){
+        @Override
+        public void onRemoteCallComplete(JSONObject jsonFromNet) {
+            try {
+                String result = jsonFromNet.getString("result");
+
+                if(result.contains("true")) {
+                    System.out.println("Upload successful!");
+                    downloadRequests();
+                }
+
+                //TODO: Receive repsonse from server!
+
+            } catch(JSONException e) {
+                System.out.println(e);
+            }catch (NullPointerException e) {
+                System.out.println(e);
+            }
+        }
+
+    };
+
+    private GetJSONListener requestResultListener = new GetJSONListener(){
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
             try {
@@ -113,20 +125,11 @@ public class MainActivity extends AppCompatActivity
         ListView listView = (ListView) findViewById(R.id.listViewAnfrangen);
         listView.setAdapter(adapter);
 
-        clientQuestion = (TextView)findViewById(R.id.clientQuestion);
-        clientTaskNumber = (TextView)findViewById(R.id.clientTaskNumb);
-        clientTaskSubNumb = (TextView)findViewById(R.id.clientTaskSubNumb);
-        clientMatrikelNumb = (TextView)findViewById(R.id.clientMatrikelNumb);
-
         userLocalStore = new UserLocalStore(this);
         anfrageClientLocalStore = new AnfrageClientLocalStore(this);
         anfrageClientLocalStore.setStatusAnfrageClient(false);
 
         user = userLocalStore.getUserLogInUser();
-
-        /* System.out.println("Das sollte als 2. kommen!");
-
-        downloadData();*/
     }
 
     public void clearAnfragen(View view){
@@ -152,17 +155,6 @@ public class MainActivity extends AppCompatActivity
         adapter.add(newAnfrage);
 
         }*/
- /*
-
-// Or even append an entire new collection
-// Fetching some data, data has now returned
-// If data was JSON, convert to ArrayList of User objects.
-JSONArray jsonArray = ...;
-ArrayList<Anfrage> newAnfrage = Anfrage.fromJson(jsonArray)
-adapter.addAll(newAnfrage);
-
-
-*/
     }
     @Override
     public void onBackPressed() {
@@ -203,14 +195,10 @@ adapter.addAll(newAnfrage);
         {
             //update Listview, aber ist das notwendig, wenn durchd ie audentifizierung das gleiche passiert???
             updateListView();
-            //upload data to server
+            //TODO: upload data to server
             Anfrage anfrage = anfrageClientLocalStore.getDataAnfrageClient();
-
-            //TODO: Struktur: linked_student, linked_task, linked_subtask, linked_phd, linked_exam;
-            clientQuestion.setText(anfrage.linked_task);
-            clientTaskNumber.setText(anfrage.linked_task);
-            clientTaskSubNumb.setText(anfrage.linked_subtask);
-            clientMatrikelNumb.setText(String.valueOf(anfrage.linked_task));
+            System.out.println("test!");
+            uploadData(anfrage);
         }
         anfrageClientLocalStore.setStatusAnfrageClient(false);
 
@@ -277,10 +265,17 @@ adapter.addAll(newAnfrage);
     }
 
     private void downloadRequests() {
-        JSONClient client = new JSONClient(this, l);
+        JSONClient client = new JSONClient(this, requestResultListener);
         // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
         String url = "http://www.marcengelmann.com/smart/download.php?intent=request&matrikelnummer=" + user.matrikelnummer;
         client.execute(url);
     }
 
+    private void uploadData(Anfrage anfrage) {
+        System.out.println("Trying data upload ...");
+        JSONClient uploader = new JSONClient(this, uploadResultListener);
+        // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
+        String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer+"&task_id="+anfrage.linked_task+"&subtask_id="+anfrage.linked_subtask;
+        uploader.execute(url);
+    }
 }

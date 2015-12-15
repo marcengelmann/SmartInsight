@@ -28,11 +28,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -322,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             JSONArray user_data = null;
 
-            ConnectionHandler connection = new ConnectionHandler();
+            LoginHandler connection = new LoginHandler();
 
             try {
                 if(connection.tryLogin(mMatrikelnummer,mPassword)) {
