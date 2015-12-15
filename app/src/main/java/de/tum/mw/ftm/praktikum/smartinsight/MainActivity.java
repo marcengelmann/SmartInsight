@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
             try {
-
+                requests.clear();
                 JSONArray jsonArray = jsonFromNet.getJSONArray("posts");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity
                     String phd = obj.getString("linked_phd");
                     Anfrage anfrage = new Anfrage(student, task, subtask, phd, exam);
                     requests.add(anfrage);
+                    System.out.println(anfrage.toString());
                 }
                 updateListView();
 
