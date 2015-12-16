@@ -95,6 +95,9 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        nameView = (TextView)findViewById(R.id.nameView);
+        emailView = (TextView)findViewById(R.id.emailView);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,29 +135,12 @@ public class MainActivity extends AppCompatActivity
         user = userLocalStore.getUserLogInUser();
     }
 
-    public void clearAnfragen(View view){
-        adapter.clear();
-    }
-
-
-    public void addAnfrage(View view){
-        /*// Add item to adapter
-        AnfrageProvider newAnfrage = new AnfrageProvider(startTime[0], endTime[0], taskNumber[0], taskSubNumber[0], frageArt[0], frageBearbeiter[0]);
-        adapter.add(newAnfrage);*/
-    }
-
     public void addAllAnfrage(View view){
         adapter.clear();
         for(Anfrage request:requests) {
             AnfrageProvider newAnfrage = new AnfrageProvider("12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam,request.linked_phd);
             adapter.add(newAnfrage);
         }
-        /*for(int i=0; i < startTime.length; i++){
-
-            AnfrageProvider newAnfrage = new AnfrageProvider(startTime[i], endTime[i], taskNumber[i], taskSubNumber[i], frageArt[i], frageBearbeiter[i]);
-        adapter.add(newAnfrage);
-
-        }*/
     }
     @Override
     public void onBackPressed() {
@@ -193,12 +179,14 @@ public class MainActivity extends AppCompatActivity
         //Hier kommen updates nach dem Floating action button hin
         if(anfrageClientLocalStore.getStatusAnfrageClient())
         {
-            //update Listview, aber ist das notwendig, wenn durchd ie audentifizierung das gleiche passiert???
-            updateListView();
+
             //TODO: upload data to server
             Anfrage anfrage = anfrageClientLocalStore.getDataAnfrageClient();
             System.out.println("test!");
             uploadData(anfrage);
+
+            //update Listview, aber ist das notwendig, wenn durchd ie audentifizierung das gleiche passiert???
+            updateListView();
         }
         anfrageClientLocalStore.setStatusAnfrageClient(false);
 
@@ -224,39 +212,14 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_anfragen) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
