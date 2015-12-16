@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -49,10 +51,25 @@ public class FloatingActivity extends AppCompatActivity {
 
         spinnerTaskNumber = (Spinner)findViewById(R.id.spinnerTaskNumber);
         ArrayAdapter<String> adapterTaskNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, stringTaskNumber);
+        adapterTaskNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTaskNumber.setAdapter(adapterTaskNumber);
+        spinnerTaskNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+               // Todo: anhand der postion das sub array laden
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
+
 
         spinnerTaskSubNumber = (Spinner)findViewById(R.id.spinnerTaskSubNumber);
         ArrayAdapter<String> adapterSubTaskNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, stringTaskSubNumber);
+        adapterSubTaskNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTaskSubNumber.setAdapter(adapterSubTaskNumber);
 
         anfrageClientLocalStore = new AnfrageClientLocalStore(this);
@@ -86,6 +103,7 @@ public class FloatingActivity extends AppCompatActivity {
 
         finalDialog("Anfrage senden","Zur Aufgabe: " + taskNumber + taskSubNumber + " hast du eine Frage zu: " + artOfQuestion).show();
     }
+
     private Dialog finalDialog(String title,String msg){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(msg);

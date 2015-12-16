@@ -1,5 +1,6 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,8 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    Button btnLogOut;
+        implements NavigationView.OnNavigationItemSelectedListener, AnfrageAdapter.customButtonListener {
     UserLocalStore userLocalStore;
     AnfrageClientLocalStore anfrageClientLocalStore;
     AnfrageAdapter adapter;
@@ -116,9 +117,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Generate button Logout
-        btnLogOut = (Button) findViewById(R.id.btnLogOut);
-
         //generate lsitview für anfragen
         // Construct the data source
         ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<AnfrageProvider>();
@@ -126,6 +124,7 @@ public class MainActivity extends AppCompatActivity
         adapter = new AnfrageAdapter(this, arrayOfUsers);
         // Attach the adapter to a ListView
         ListView listView = (ListView) findViewById(R.id.listViewAnfrangen);
+        adapter.setCustomButtonListner(MainActivity.this);
         listView.setAdapter(adapter);
 
         userLocalStore = new UserLocalStore(this);
@@ -150,13 +149,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    public void logOut(View view){
-        userLocalStore.clearUserData();
-        userLocalStore.setUserLoggedIn(false);
-        Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
-        startActivity(myIntent);
     }
 
     @Override
@@ -200,7 +192,7 @@ public class MainActivity extends AppCompatActivity
     private  void updateListView() {
         adapter.clear();
         for(Anfrage request:requests) {
-            AnfrageProvider newAnfrage = new AnfrageProvider("12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam,request.linked_phd);
+            AnfrageProvider newAnfrage = new AnfrageProvider("12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam, request.linked_phd);
             adapter.add(newAnfrage);
         }
     }
@@ -219,7 +211,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_anfragen) {
-            // Handle the camera action
+        }
+        else if (id == R.id.nav_abmelden) {
+            userLocalStore.clearUserData();
+            userLocalStore.setUserLoggedIn(false);
+            View view;
+            view = new View(this);
+            Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
+            startActivity(myIntent);
+        }
+        else if (id == R.id.nav_anfragen) {
+        }
+        else if (id == R.id.nav_profile) {
+        }
+        else if (id == R.id.nav_settings) {
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -241,4 +246,13 @@ public class MainActivity extends AppCompatActivity
         String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer+"&task_id="+anfrage.linked_task+"&subtask_id="+anfrage.linked_subtask;
         uploader.execute(url);
     }
+
+    @Override
+    public void onButtonClickListner(int position, AnfrageProvider value) {
+
+        // TODO: hier müsste die Anfrage an der Position gelöscht werden. Und danach müsste die Liste neu geupdatet werden
+        Toast.makeText(MainActivity.this, "Button click " + position + value.endTime + value.editor,
+                Toast.LENGTH_SHORT).show();
+    }
+
 }
