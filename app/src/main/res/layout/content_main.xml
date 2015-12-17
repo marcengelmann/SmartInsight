@@ -12,11 +12,9 @@
     tools:context="de.tum.mw.ftm.praktikum.smartinsight.MainActivity"
     android:orientation="vertical"
     tools:showIn="@layout/app_bar_main">
-
-    <ListView
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listViewAnfrangen">
+        android:layout_height="match_parent"/>
 
-    </ListView>
 </LinearLayout>

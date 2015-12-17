@@ -1,9 +1,12 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
+import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,18 +29,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AnfrageAdapter.customButtonListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AnfrageListFragment.OnListFragmentInteractionListener{
     UserLocalStore userLocalStore;
     AnfrageClientLocalStore anfrageClientLocalStore;
-    AnfrageAdapter adapter;
     User user = null;
-    ListView listviewAnfrage;
 
     TextView emailView;
     TextView nameView;
 
-    private ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
+    ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
 
+    @Override
+    public void onListFragmentInteraction(int position, AnfrageProvider value) {
+        // TODO: hier müsste die Anfrage an der Position gelöscht werden. Und danach müsste die Liste neu geupdatet werden
+        Toast.makeText(MainActivity.this, "Button click " + position + "  " + value.editor,
+                Toast.LENGTH_SHORT).show();
+    }
 
     private GetJSONListener uploadResultListener = new GetJSONListener(){
         @Override
@@ -79,6 +86,9 @@ public class MainActivity extends AppCompatActivity
                     System.out.println(anfrage.toString());
                 }
                 updateListView();
+                /*if (customIntFragListView != null) {
+                    customIntFragListView.updateFragmentListView(requests);
+                }*/
 
             } catch (JSONException e) {
                 System.out.println(e);
@@ -95,6 +105,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         nameView = (TextView)findViewById(R.id.nameView);
         emailView = (TextView)findViewById(R.id.emailView);
@@ -121,26 +133,18 @@ public class MainActivity extends AppCompatActivity
         // Construct the data source
         ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<AnfrageProvider>();
         // Create the adapter to convert the array to views
-        adapter = new AnfrageAdapter(this, arrayOfUsers);
-        // Attach the adapter to a ListView
-        ListView listView = (ListView) findViewById(R.id.listViewAnfrangen);
-        adapter.setCustomButtonListner(MainActivity.this);
-        listView.setAdapter(adapter);
 
         userLocalStore = new UserLocalStore(this);
         anfrageClientLocalStore = new AnfrageClientLocalStore(this);
         anfrageClientLocalStore.setStatusAnfrageClient(false);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, new AnfrageListFragment()).commit();
+
+
         user = userLocalStore.getUserLogInUser();
     }
 
-    public void addAllAnfrage(View view){
-        adapter.clear();
-        for(Anfrage request:requests) {
-            AnfrageProvider newAnfrage = new AnfrageProvider("12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam,request.linked_phd);
-            adapter.add(newAnfrage);
-        }
-    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -162,7 +166,6 @@ public class MainActivity extends AppCompatActivity
 
         if(authenticate() == true){
             downloadRequests();
-            updateListView();
         }
         else{
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -174,10 +177,7 @@ public class MainActivity extends AppCompatActivity
 
             //TODO: upload data to server
             Anfrage anfrage = anfrageClientLocalStore.getDataAnfrageClient();
-            System.out.println("test!");
             uploadData(anfrage);
-
-            //update Listview, aber ist das notwendig, wenn durchd ie audentifizierung das gleiche passiert???
             updateListView();
         }
         anfrageClientLocalStore.setStatusAnfrageClient(false);
@@ -185,15 +185,18 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     private boolean authenticate(){
         return userLocalStore.getUserLoggedIn();
     }
 
     private  void updateListView() {
-        adapter.clear();
-        for(Anfrage request:requests) {
-            AnfrageProvider newAnfrage = new AnfrageProvider("12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam, request.linked_phd);
-            adapter.add(newAnfrage);
+        AnfrageListFragment articleFrag = (AnfrageListFragment)
+                getSupportFragmentManager().findFragmentById(R.id.container);
+
+        if (articleFrag != null) {
+            articleFrag.updateFragmentListView(requests);
+
         }
     }
 
@@ -207,10 +210,12 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment;
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_anfragen) {
+        if (id == R.id.nav_calendar) {
         }
         else if (id == R.id.nav_abmelden) {
             userLocalStore.clearUserData();
@@ -221,6 +226,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(myIntent);
         }
         else if (id == R.id.nav_anfragen) {
+            fragment = new AnfrageListFragment();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         else if (id == R.id.nav_profile) {
         }
@@ -247,12 +254,5 @@ public class MainActivity extends AppCompatActivity
         uploader.execute(url);
     }
 
-    @Override
-    public void onButtonClickListner(int position, AnfrageProvider value) {
-
-        // TODO: hier müsste die Anfrage an der Position gelöscht werden. Und danach müsste die Liste neu geupdatet werden
-        Toast.makeText(MainActivity.this, "Button click " + position + value.endTime + value.editor,
-                Toast.LENGTH_SHORT).show();
-    }
 
 }
