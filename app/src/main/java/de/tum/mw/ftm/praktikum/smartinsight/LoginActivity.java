@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -57,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private ArrayList<String> listdata = new ArrayList<>();
-
+    private Spinner spinnerSitzNumberView;
     UserLocalStore userLocalStore;
 
     @Override
@@ -93,6 +94,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        spinnerSitzNumberView = (Spinner) findViewById(R.id.loginSitzNumb);
+
+        int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
+        String[] number = new String[maxSitNumb];
+        for(int i=0; i < number.length; i++){
+            number[i] = String.valueOf(i);
+        }
+        ArrayAdapter<String> adapterSitNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, number);
+        adapterSitNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSitzNumberView.setAdapter(adapterSitNumber);
 
         userLocalStore = new UserLocalStore(this);
     }
@@ -313,7 +324,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             this.mMatrikelnummer = matrikelnummer;
             mPassword = password;
         }
-
+        final String getSitNumb = String.valueOf(spinnerSitzNumberView.getSelectedItem());
         @Override
         protected Boolean doInBackground(Void... params) {
 
@@ -334,7 +345,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             User user = connection.getUserData();
-
+            user.sitNumb = getSitNumb;
             userLocalStore.setUserLoggedIn(true);
             userLocalStore.storeUserData(user);
 

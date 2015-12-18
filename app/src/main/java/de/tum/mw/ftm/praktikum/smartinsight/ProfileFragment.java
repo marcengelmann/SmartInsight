@@ -1,22 +1,28 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
 
 
 public class ProfileFragment extends Fragment {
-
+    private Spinner spinnerSitzNumber;
 
 
     public ProfileFragment() {
         // Required empty public constructor
     }
-
+    UserLocalStore userLocalStore;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -35,6 +41,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userLocalStore = new UserLocalStore(getContext());
 
     }
 
@@ -42,7 +49,36 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        spinnerSitzNumber = (Spinner) view.findViewById(R.id.profileSitzNumb);
+
+        int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
+        String[] number = new String[maxSitNumb];
+        for(int i=0; i < number.length; i++){
+            number[i] = String.valueOf(i);
+        }
+        ArrayAdapter<String> adapterSitNumber = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, number);
+        adapterSitNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSitzNumber.setAdapter(adapterSitNumber);
+        final User user = userLocalStore.getUserLogInUser();
+        spinnerSitzNumber.setSelection(Integer.valueOf(user.sitNumb));
+        spinnerSitzNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                user.sitNumb = String.valueOf(position);
+                userLocalStore.storeUserData(user);
+                //Todo interface erstellen, was die Sitzpostion updated
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
+        return view;
     }
 
     @Override

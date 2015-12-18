@@ -77,8 +77,8 @@ public class LoginHandler {
 
             //TODO: linked_exam ist momentan emailadresse!
             String linked_exam = json.get("linked_exam").toString();
-
-            user = new User(linked_exam, "", name, matrikelnummer);
+            // Todo sitznummer muss noch gespiecher werden
+            user = new User(linked_exam, "", name, matrikelnummer, "0");
 
         } catch(JSONException e) {
             System.out.println(e);

@@ -21,6 +21,7 @@ public class UserLocalStore {
         spEditor.putString("email", user.email);
         spEditor.putString("matrikelnummer", user.matrikelnummer);
         spEditor.putString("password",user.password);
+        spEditor.putString("sitNumb", user.sitNumb);
         spEditor.commit();
     }
 
@@ -29,8 +30,9 @@ public class UserLocalStore {
         String email = userLocalDatabase.getString("email","");
         String matrikelnummer = userLocalDatabase.getString("matrikelnummer", "");
         String password = userLocalDatabase.getString("password", "");
+        String sitNumb = userLocalDatabase.getString("sitNumb", "");
 
-        User storedUser = new User(email, password, name , matrikelnummer);
+        User storedUser = new User(email, password, name , matrikelnummer, sitNumb);
 
         return storedUser;
     }
