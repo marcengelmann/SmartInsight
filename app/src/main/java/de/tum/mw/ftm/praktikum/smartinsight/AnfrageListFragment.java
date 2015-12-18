@@ -92,6 +92,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
     static  ArrayList<AnfrageProvider> anfrageProviders =  new ArrayList<AnfrageProvider>();
 

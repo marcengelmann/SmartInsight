@@ -216,6 +216,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_calendar) {
+            fragment = new CalendarFragment();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         else if (id == R.id.nav_abmelden) {
             userLocalStore.clearUserData();
@@ -230,8 +232,16 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         else if (id == R.id.nav_profile) {
+            fragment = new ProfileFragment();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         else if (id == R.id.nav_settings) {
+            fragment = new SettingsFragment();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        }
+        else if (id == R.id.nav_statistic) {
+            fragment = new StatisticFragment();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
