@@ -115,7 +115,7 @@ public class FloatingActivity extends AppCompatActivity {
 
                 //TODO: linked_student, linked_task, linked_subtask, linked_phd, linked_exam
 
-                Anfrage anfrage = new Anfrage(user.matrikelnummer,taskNumber,taskSubNumber,"linked_phd",artOfQuestion);
+                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,taskNumber,taskSubNumber,"linked_phd",artOfQuestion);
                 anfrageClientLocalStore.storeAnfrageData(anfrage);
                 anfrageClientLocalStore.setStatusAnfrageClient(true);
                 finish();

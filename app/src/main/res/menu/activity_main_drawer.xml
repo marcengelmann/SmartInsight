@@ -3,26 +3,31 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_action_user"
+            android:title="Benutzerprofil" />
+        <item
             android:id="@+id/nav_anfragen"
             android:icon="@drawable/ic_action_lists"
             android:title="Anfragenliste" />
         <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_action_calendar"
-            android:title="Klausureinsichttermine" />
-        <item
-            android:id="@+id/nav_statistic"
-            android:icon="@drawable/ic_action_statistic"
-            android:title="Statistiken" />
+            android:title="Kalendar" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_action_settings"
             android:title="Einstellungen" />
         <item
+            android:id="@+id/nav_statistic"
+            android:icon="@drawable/ic_action_statistic"
+            android:title="Statistiken" />
+        <item
             android:id="@+id/nav_abmelden"
             android:icon="@drawable/ic_action_power"
             android:title="Abmelden" />
-
     </group>
+
+
 
 </menu>

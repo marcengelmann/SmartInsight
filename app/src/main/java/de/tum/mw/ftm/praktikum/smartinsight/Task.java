@@ -6,11 +6,10 @@ import java.util.ArrayList;
  * Created by marcengelmann on 15.12.15.
  */
 public class Task {
-    public int id, number, linked_phd;
-    public String name, linked_exam;
+    public String name, linked_exam,id, number, linked_phd;
     public ArrayList<SubTask> subtasks;
 
-    public Task(String name, String linked_exam, int linked_phd, int id, int number) {
+    public Task(String name, String linked_exam, String linked_phd, String id, String number) {
         this.id = id;
         this.number = number;
         this.name = name;
@@ -20,5 +19,10 @@ public class Task {
 
     public void addSubtask(SubTask subtask) {
         this.subtasks.add(subtask);
+    }
+
+    @Override
+    public String toString() {
+        return "TASK: ID"+id+" number" +number+" name"+name+ " linked_exam" +linked_exam+" linked_phd"+linked_phd;
     }
 }

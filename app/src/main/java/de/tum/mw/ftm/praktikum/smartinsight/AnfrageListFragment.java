@@ -99,7 +99,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     public void updateFragmentListView(ArrayList<Anfrage> requests) {
         anfrageProviders.clear();
         for(Anfrage request:requests) {
-            anfrageProviders.add(new AnfrageProvider("12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam, request.linked_phd));
+            anfrageProviders.add(new AnfrageProvider(request.id,"12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam, request.linked_phd));
         }
         if (recyclerView != null){
             // Create the adapter to convert the array to views

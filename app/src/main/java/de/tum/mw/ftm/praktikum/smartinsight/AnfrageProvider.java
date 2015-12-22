@@ -15,15 +15,17 @@ public class AnfrageProvider{
     public String question;
     public String taskNumber;
     public String taskSubNumber;
+    public String id;
 
 
-    public AnfrageProvider(String startTime, String endTime, String taskNumber, String taskSubNumber, String question, String editor) {
+    public AnfrageProvider(String id, String startTime, String endTime, String taskNumber, String taskSubNumber, String question, String editor) {
         this.endTime = endTime;
         this.startTime = startTime;
         this.editor = editor;
         this.question = question;
         this.taskNumber = taskNumber;
         this.taskSubNumber = taskSubNumber;
+        this.id = id;
     }
 
     public String getEndTime() {
@@ -70,6 +72,14 @@ public class AnfrageProvider{
         return taskSubNumber;
     }
 
+    public void setID(String id) {
+        this.id = id;
+    }
+
+    public String getID() {
+        return id;
+    }
+
     public void setTaskSubNumber(String taskSubNumber) {
         this.taskSubNumber = taskSubNumber;
     }
@@ -79,7 +89,7 @@ public class AnfrageProvider{
         List<AnfrageProvider> anfrageProvider = new ArrayList<AnfrageProvider>();
 
         for(Anfrage request:requests) {
-            anfrageProvider.add(new AnfrageProvider( "12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam, request.linked_phd));
+            anfrageProvider.add(new AnfrageProvider(request.id, "12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam, request.linked_phd));
         }
 
         return anfrageProvider;
