@@ -20,7 +20,7 @@ public class UserLocalStore {
         spEditor.putString("name", user.name);
         spEditor.putString("email", user.email);
         spEditor.putString("matrikelnummer", user.matrikelnummer);
-        spEditor.putString("password",user.password);
+        spEditor.putString("exam",user.exam);
         spEditor.putString("sitNumb", user.sitNumb);
         spEditor.commit();
     }
@@ -29,10 +29,10 @@ public class UserLocalStore {
         String name = userLocalDatabase.getString("name", "");
         String email = userLocalDatabase.getString("email","");
         String matrikelnummer = userLocalDatabase.getString("matrikelnummer", "");
-        String password = userLocalDatabase.getString("password", "");
+        String exam = userLocalDatabase.getString("exam", "");
         String sitNumb = userLocalDatabase.getString("sitNumb", "");
 
-        User storedUser = new User(email, password, name , matrikelnummer, sitNumb);
+        User storedUser = new User(email, exam, name , matrikelnummer, sitNumb);
 
         return storedUser;
     }
@@ -55,6 +55,4 @@ public class UserLocalStore {
         spEditor.clear();
         spEditor.commit();
     }
-
-
 }

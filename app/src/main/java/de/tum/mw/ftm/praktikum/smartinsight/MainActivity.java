@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity
                     System.out.println(anfrage.toString());
                 }
                 updateListView();
+
                 /*if (customIntFragListView != null) {
                     customIntFragListView.updateFragmentListView(requests);
                 }*/
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity
             }catch (NullPointerException e) {
                 System.out.println(e);
             }
+
         }
 
     };
@@ -106,11 +108,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
-        nameView = (TextView)findViewById(R.id.nameView);
-        emailView = (TextView)findViewById(R.id.emailView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -146,6 +143,10 @@ public class MainActivity extends AppCompatActivity
 
 
         user = userLocalStore.getUserLogInUser();
+
+        nameView = (TextView)findViewById(R.id.nameView);
+        emailView = (TextView)findViewById(R.id.emailView);
+
     }
 
     @Override
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity
 
         user = userLocalStore.getUserLogInUser();
 
-        Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Prüfung: "+user.email,
+        Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Email: "+user.email+ ", Prüfung: "+user.exam,
                 Toast.LENGTH_LONG).show();
         emailView.setText(user.email);
         nameView.setText(user.name);
@@ -258,6 +259,13 @@ public class MainActivity extends AppCompatActivity
         // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
         String url = "http://www.marcengelmann.com/smart/download.php?intent=request&matrikelnummer=" + user.matrikelnummer;
         client.execute(url);
+    }
+
+    private void downloadExam() {
+       // JSONClient client = new JSONClient(this, examResultListener);
+        // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
+       // String url = "http://www.marcengelmann.com/smart/download.php?intent=exam&exam_name=" + user.exam;
+       // client.execute(url);
     }
 
     private void uploadData(Anfrage anfrage) {

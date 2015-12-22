@@ -21,6 +21,7 @@ public class ProfileFragment extends Fragment {
     private TextView txtMatrikelNum;
     private TextView txtName;
     private TextView txtEmail;
+    private TextView txtExam;
 
 
     public ProfileFragment() {
@@ -59,6 +60,7 @@ public class ProfileFragment extends Fragment {
         txtEmail = (TextView) view.findViewById(R.id.profileEmail);
         txtMatrikelNum = (TextView) view.findViewById(R.id.profilMatrikel);
         txtName = (TextView) view.findViewById(R.id.profileName);
+        txtExam = (TextView) view.findViewById(R.id.profilExam);
 
         int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
         String[] number = new String[maxSitNumb];
@@ -89,6 +91,7 @@ public class ProfileFragment extends Fragment {
         txtEmail.setText(user.email);
         txtName.setText(user.name);
         txtMatrikelNum.setText(user.matrikelnummer);
+        txtExam.setText(user.exam);
         return view;
     }
 
