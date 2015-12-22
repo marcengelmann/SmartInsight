@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity
     AnfrageClientLocalStore anfrageClientLocalStore;
     User user = null;
 
+    private boolean fragmentAnfrageListActive = false;
+    private boolean startActFirstTime = true;
     TextView emailView;
     TextView nameView;
 
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, new AnfrageListFragment()).commit();
-
+        fragmentAnfrageListActive = true;
 
         user = userLocalStore.getUserLogInUser();
 
@@ -162,15 +164,19 @@ public class MainActivity extends AppCompatActivity
 
         user = userLocalStore.getUserLogInUser();
 
-        Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Email: "+user.email+ ", Prüfung: "+user.exam,
-                Toast.LENGTH_LONG).show();
-        emailView.setText(user.email);
-        nameView.setText(user.name);
-        if(authenticate() == true){
+
+        if(authenticate() == true && startActFirstTime){
             downloadRequests();
+            Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Email: "+user.email+ ", Prüfung: "+user.exam,
+                    Toast.LENGTH_LONG).show();
+            emailView.setText(user.email);
+            nameView.setText(user.name);
+            startActFirstTime = false;
+            updateListView();
         }
-        else{
+        else if (startActFirstTime){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActFirstTime = true;
         }
 
         //Hier kommen updates nach dem Floating action button hin
@@ -193,11 +199,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private  void updateListView() {
-        AnfrageListFragment articleFrag = (AnfrageListFragment)
-                getSupportFragmentManager().findFragmentById(R.id.container);
 
-        if (articleFrag != null) {
-            articleFrag.updateFragmentListView(requests);
+
+        if (fragmentAnfrageListActive) {
+            AnfrageListFragment listFrag = (AnfrageListFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.container);
+            if(listFrag != null) {
+                listFrag.updateFragmentListView(requests);
+            }
 
         }
     }
@@ -214,7 +223,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment;
-
+        fragmentAnfrageListActive = false;
         int id = item.getItemId();
 
         if (id == R.id.nav_calendar) {
@@ -232,10 +241,7 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_anfragen) {
             fragment = new AnfrageListFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-        }
-        else if (id == R.id.nav_profile) {
-            fragment = new ProfileFragment();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+            fragmentAnfrageListActive = true;
         }
         else if (id == R.id.nav_settings) {
             fragment = new SettingsFragment();
@@ -245,7 +251,6 @@ public class MainActivity extends AppCompatActivity
             fragment = new StatisticFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

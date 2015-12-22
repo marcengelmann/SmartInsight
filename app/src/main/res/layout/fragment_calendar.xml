@@ -4,10 +4,6 @@
     android:layout_height="match_parent"
     tools:context="de.tum.mw.ftm.praktikum.smartinsight.CalendarFragment">
 
-    <CalendarView
-    android:id="@+id/calendar"
-    android:layout_margin="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+
 
 </FrameLayout>

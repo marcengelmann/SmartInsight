@@ -19,7 +19,7 @@
         android:layout_height="100dp"
         app:siBorderWidth="4dp"
         app:siBorderAlpha="0.5"
-        app:siBorderColor="#000000"
+        app:siBorderColor="@color/borderCircleImage"
         android:alpha="1"/>
 <LinearLayout
     android:layout_width="wrap_content"
