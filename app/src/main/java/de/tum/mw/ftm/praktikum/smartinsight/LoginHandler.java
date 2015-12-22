@@ -72,13 +72,16 @@ public class LoginHandler {
             System.out.println("User Data received ... saving now!");
             JSONObject json = new JSONObject(jsonString);
 
+            System.out.println(json.toString());
+
             String name = json.get("name").toString();
             String matrikelnummer = json.get("matrikelnummer").toString();
-
-            //TODO: linked_exam ist momentan emailadresse!
             String linked_exam = json.get("linked_exam").toString();
+            String email = json.get("email").toString();
+
             // Todo sitznummer muss noch gespiecher werden
-            user = new User(linked_exam, "", name, matrikelnummer, "0");
+
+            user = new User(email, linked_exam, name, matrikelnummer, "0");
 
         } catch(JSONException e) {
             System.out.println(e);
