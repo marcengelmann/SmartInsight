@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -128,7 +129,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        View headerNavigation = navigationView.getHeaderView(0);
+        emailView = (TextView) headerNavigation.findViewById(R.id.emailView);
+        nameView = (TextView) headerNavigation.findViewById(R.id.nameView);
         //generate lsitview für anfragen
         // Construct the data source
         ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<AnfrageProvider>();
@@ -163,7 +166,8 @@ public class MainActivity extends AppCompatActivity
 
         Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Prüfung: "+user.email,
                 Toast.LENGTH_LONG).show();
-
+        emailView.setText(user.email);
+        nameView.setText(user.name);
         if(authenticate() == true){
             downloadRequests();
         }
