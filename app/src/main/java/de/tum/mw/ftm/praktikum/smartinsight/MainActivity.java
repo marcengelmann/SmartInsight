@@ -144,9 +144,6 @@ public class MainActivity extends AppCompatActivity
 
         user = userLocalStore.getUserLogInUser();
 
-        nameView = (TextView)findViewById(R.id.nameView);
-        emailView = (TextView)findViewById(R.id.emailView);
-
     }
 
     @Override
