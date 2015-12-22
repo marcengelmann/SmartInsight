@@ -4,27 +4,27 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_account_circle_white_24dp"
+            android:icon="@drawable/ic_action_user"
             android:title="Benutzerprofil" />
         <item
             android:id="@+id/nav_anfragen"
-            android:icon="@drawable/ic_format_list_bulleted"
+            android:icon="@drawable/ic_action_lists"
             android:title="Anfragenliste" />
         <item
             android:id="@+id/nav_calendar"
-            android:icon="@drawable/ic_date_range_white_24dp"
+            android:icon="@drawable/ic_action_calendar"
             android:title="Kalendar" />
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings_white_24dp"
+            android:icon="@drawable/ic_action_settings"
             android:title="Einstellungen" />
         <item
             android:id="@+id/nav_statistic"
-            android:icon="@drawable/ic_poll_white_24dp"
+            android:icon="@drawable/ic_action_statistic"
             android:title="Statistiken" />
         <item
             android:id="@+id/nav_abmelden"
-            android:icon="@drawable/ic_power_settings_new_white_24dp"
+            android:icon="@drawable/ic_action_power"
             android:title="Abmelden" />
     </group>
 

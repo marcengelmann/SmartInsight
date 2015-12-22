@@ -19,7 +19,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/fernrohr" />
+                android:src="@mipmap/ic_launcher_fernrohr" />
 
             <TextView
                 android:layout_width="wrap_content"
