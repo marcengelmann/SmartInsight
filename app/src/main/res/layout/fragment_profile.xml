@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="de.tum.mw.ftm.praktikum.smartinsight.ProfileFragment">
 
     <LinearLayout
@@ -14,12 +15,15 @@
             android:background="@color/colorAccent"
             android:orientation="vertical"
             android:gravity="center">
-            <de.tum.mw.ftm.praktikum.smartinsight.RoundedImageView
+            <de.tum.mw.ftm.praktikum.smartinsight.CircularImageView
                 android:id="@+id/profileImage"
+                android:src="@mipmap/ic_launcher_fernrohr"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="15dp"
-                android:src="@mipmap/ic_launcher_fernrohr" />
+                app:siBorderWidth="4dp"
+                app:siBorderAlpha="0.5"
+                app:siBorderColor="#000000"
+                android:alpha="1" />
 
             <TextView
                 android:layout_width="wrap_content"
