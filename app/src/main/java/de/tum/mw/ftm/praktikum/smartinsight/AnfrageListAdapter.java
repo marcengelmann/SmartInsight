@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
@@ -71,7 +72,7 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
         public TextView editor;
         public TextView taskNumber;
         public TextView taskSubNumber;
-        public FloatingActionButton listViewButton;
+        public ImageButton listViewButton;
 
         public ViewHolder(View view) {
             super(view);
@@ -84,7 +85,7 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
             startTime = (TextView) view.findViewById(R.id.startTime);
             taskNumber = (TextView) view.findViewById(R.id.taskNumber);
             taskSubNumber = (TextView) view.findViewById(R.id.taskSubNumber);
-            listViewButton = (FloatingActionButton) view.findViewById(R.id.listViewButton);
+            listViewButton = (ImageButton) view.findViewById(R.id.listViewButton);
         }
 
     }

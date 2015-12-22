@@ -24,7 +24,6 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-
     AnfrageListAdapter adapter;
 
     private OnListFragmentInteractionListener mListener;
