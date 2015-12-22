@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,10 +14,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+
 public class FloatingActivity extends AppCompatActivity {
 
     private Spinner spinnerTaskNumber;
-    private String[]stringTaskNumber = {"1", "2", "3"};
+    private String[] stringTaskNumber;
     private Spinner spinnerTaskSubNumber;
     private String[]stringTaskSubNumber = {"a", "b", "c"};
     final Context context = this;
@@ -34,8 +35,11 @@ public class FloatingActivity extends AppCompatActivity {
     private String taskNumber = "1";
     private String taskSubNumber = "a";
 
-    AnfrageClientLocalStore anfrageClientLocalStore;
+    AnfrageLocalStore anfrageLocalStore;
     UserLocalStore userLocalStore;
+    TaskListLocalStore taskListLocalStore;
+
+    private ArrayList<Task> tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,16 @@ public class FloatingActivity extends AppCompatActivity {
         radioBtnQuestionC = (RadioButton) findViewById(R.id.radioBtnQuestionC);
         radioGroupQuestion = (RadioGroup) findViewById(R.id.radioGroupQuestion);
 
+        taskListLocalStore = new TaskListLocalStore(this);
+        tasks = taskListLocalStore.getTaskList();
+
+        stringTaskNumber = new String[tasks.size()];
+
+        int pos = 0;
+        for(Task task:tasks) {
+           stringTaskNumber[pos] = task.number +". "+task.name;
+                   pos ++;
+        }
 
         spinnerTaskNumber = (Spinner)findViewById(R.id.spinnerTaskNumber);
         ArrayAdapter<String> adapterTaskNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, stringTaskNumber);
@@ -57,7 +71,7 @@ public class FloatingActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-               // Todo: anhand der postion das sub array laden
+                // Todo: anhand der postion das sub array laden
             }
 
             @Override
@@ -72,11 +86,12 @@ public class FloatingActivity extends AppCompatActivity {
         adapterSubTaskNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTaskSubNumber.setAdapter(adapterSubTaskNumber);
 
-        anfrageClientLocalStore = new AnfrageClientLocalStore(this);
+        anfrageLocalStore = new AnfrageLocalStore(this);
         userLocalStore = new UserLocalStore(this);
 
-        anfrageClientLocalStore.setStatusAnfrageClient(false);
-        anfrageClientLocalStore.clearDataAnfrageClient();
+
+        anfrageLocalStore.setStatusAnfrageClient(false);
+        anfrageLocalStore.clearDataAnfrageClient();
 
 
     }
@@ -115,9 +130,9 @@ public class FloatingActivity extends AppCompatActivity {
 
                 //TODO: linked_student, linked_task, linked_subtask, linked_phd, linked_exam
 
-                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,taskNumber,taskSubNumber,"linked_phd",artOfQuestion);
-                anfrageClientLocalStore.storeAnfrageData(anfrage);
-                anfrageClientLocalStore.setStatusAnfrageClient(true);
+                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).id,taskSubNumber,"linked_phd",artOfQuestion);
+                anfrageLocalStore.storeAnfrageData(anfrage);
+                anfrageLocalStore.setStatusAnfrageClient(true);
                 finish();
             }
         });

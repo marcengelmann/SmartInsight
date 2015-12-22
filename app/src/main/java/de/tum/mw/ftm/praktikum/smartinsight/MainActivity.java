@@ -1,13 +1,10 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,9 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +26,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AnfrageListFragment.OnListFragmentInteractionListener{
     UserLocalStore userLocalStore;
-    AnfrageClientLocalStore anfrageClientLocalStore;
+    AnfrageLocalStore anfrageLocalStore;
+    TaskListLocalStore taskListLocalStore;
     User user = null;
 
     TextView emailView;
@@ -108,8 +103,11 @@ public class MainActivity extends AppCompatActivity
     private GetJSONListener examResultListener = new GetJSONListener(){
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
+
+            taskListLocalStore.clearTaskStore();
+
             try {
-                requests.clear();
+                tasks.clear();
                 JSONArray jsonArray = jsonFromNet.getJSONArray("posts");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
@@ -124,6 +122,9 @@ public class MainActivity extends AppCompatActivity
                     tasks.add(task);
                     System.out.println(task.toString());
                 }
+
+                taskListLocalStore.storeTaskList(tasks);
+
 
             } catch (JSONException e) {
                 System.out.println(e);
@@ -168,9 +169,10 @@ public class MainActivity extends AppCompatActivity
         ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<AnfrageProvider>();
         // Create the adapter to convert the array to views
 
+        taskListLocalStore = new TaskListLocalStore(this);
         userLocalStore = new UserLocalStore(this);
-        anfrageClientLocalStore = new AnfrageClientLocalStore(this);
-        anfrageClientLocalStore.setStatusAnfrageClient(false);
+        anfrageLocalStore = new AnfrageLocalStore(this);
+        anfrageLocalStore.setStatusAnfrageClient(false);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, new AnfrageListFragment()).commit();
@@ -209,15 +211,13 @@ public class MainActivity extends AppCompatActivity
         }
 
         //Hier kommen updates nach dem Floating action button hin
-        if(anfrageClientLocalStore.getStatusAnfrageClient())
+        if(anfrageLocalStore.getStatusAnfrageClient())
         {
-
-            //TODO: upload data to server
-            Anfrage anfrage = anfrageClientLocalStore.getDataAnfrageClient();
+            Anfrage anfrage = anfrageLocalStore.getDataAnfrageClient();
             uploadData(anfrage);
             updateListView();
         }
-        anfrageClientLocalStore.setStatusAnfrageClient(false);
+        anfrageLocalStore.setStatusAnfrageClient(false);
 
 
     }
@@ -303,6 +303,7 @@ public class MainActivity extends AppCompatActivity
 
     private void uploadData(Anfrage anfrage) {
         System.out.println("Trying data upload ...");
+        System.out.println(anfrage.toString());
         JSONClient uploader = new JSONClient(this, uploadResultListener);
         // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
         String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer+"&task_id="+anfrage.linked_task+"&subtask_id="+anfrage.linked_subtask;

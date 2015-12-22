@@ -6,12 +6,12 @@ import android.content.SharedPreferences;
 /**
  * Created by Rebecca on 13.12.2015.
  */
-public class AnfrageClientLocalStore {
+public class AnfrageLocalStore {
 
     public  static final String SP_NAME = "anfrageDetails";
     SharedPreferences anfrageLocalDatabase;
 
-    public AnfrageClientLocalStore(Context context){
+    public AnfrageLocalStore(Context context){
         anfrageLocalDatabase = context.getSharedPreferences(SP_NAME, 0);
     }
 

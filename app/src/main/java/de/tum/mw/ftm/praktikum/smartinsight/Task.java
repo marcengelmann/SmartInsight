@@ -1,11 +1,12 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by marcengelmann on 15.12.15.
  */
-public class Task {
+public class Task implements Serializable {
     public String name, linked_exam,id, number, linked_phd;
     public ArrayList<SubTask> subtasks;
 
