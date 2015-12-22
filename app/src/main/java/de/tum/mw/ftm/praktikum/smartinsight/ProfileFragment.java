@@ -13,10 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 public class ProfileFragment extends Fragment {
     private Spinner spinnerSitzNumber;
+    private TextView txtMatrikelNum;
+    private TextView txtName;
+    private TextView txtEmail;
 
 
     public ProfileFragment() {
@@ -52,6 +56,9 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         spinnerSitzNumber = (Spinner) view.findViewById(R.id.profileSitzNumb);
+        txtEmail = (TextView) view.findViewById(R.id.profileEmail);
+        txtMatrikelNum = (TextView) view.findViewById(R.id.profilMatrikel);
+        txtName = (TextView) view.findViewById(R.id.profileName);
 
         int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
         String[] number = new String[maxSitNumb];
@@ -78,6 +85,10 @@ public class ProfileFragment extends Fragment {
             }
 
         });
+
+        txtEmail.setText(user.email);
+        txtName.setText(user.name);
+        txtMatrikelNum.setText(user.matrikelnummer);
         return view;
     }
 

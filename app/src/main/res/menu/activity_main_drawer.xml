@@ -20,7 +20,7 @@
             android:title="Einstellungen" />
         <item
             android:id="@+id/nav_statistic"
-            android:icon="@drawable/ic_settings_white_24dp"
+            android:icon="@drawable/ic_poll_white_24dp"
             android:title="Statistiken" />
         <item
             android:id="@+id/nav_abmelden"
