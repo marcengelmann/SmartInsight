@@ -1,6 +1,9 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,9 +23,7 @@ import java.util.List;
  */
 public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.customButtonListener{
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     AnfrageListAdapter adapter;
 
@@ -109,11 +110,34 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
 
     @Override
     public void onButtonClickListner(int position, AnfrageProvider value) {
-        mListener.onListFragmentInteraction(position, value);
+        String msg = "Möchtest du die Anfrage zur Aufgabe " + value.getTaskNumber() + value.getTaskSubNumber() + " löschen?" ;
+        String title = "Anfrage löschen?";
+
+        finalDialog(title,msg, position,value).show();
     }
 
+    private Dialog finalDialog(String title,String msg, final int position, final AnfrageProvider value){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(msg);
+        builder.setTitle(title);
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener
+                () {
+            @Override
+            public void onClick(DialogInterface dialog, int arg1) {
+                mListener.onListFragmentDeleteListItem(position, value);
+            }
+        });
+        builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.setCancelable(false);
+        return builder.create();    }
+
+
     public interface OnListFragmentInteractionListener {
-        // TODO: rename functions and interface
-        void onListFragmentInteraction(int position, AnfrageProvider value);
+        void onListFragmentDeleteListItem(int position, AnfrageProvider value);
     }
 }

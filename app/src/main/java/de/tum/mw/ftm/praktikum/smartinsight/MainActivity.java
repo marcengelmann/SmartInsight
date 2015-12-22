@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
 
     @Override
-    public void onListFragmentInteraction(int position, AnfrageProvider value) {
+    public void onListFragmentDeleteListItem(int position, AnfrageProvider value) {
         // TODO: hier müsste die Anfrage an der Position gelöscht werden. Und danach müsste die Liste neu geupdatet werden
-        Toast.makeText(MainActivity.this, "Button click " + position + "  " + value.editor,
+        Toast.makeText(MainActivity.this, "Anfrage ... wurde gelöscht!",
                 Toast.LENGTH_SHORT).show();
     }
 

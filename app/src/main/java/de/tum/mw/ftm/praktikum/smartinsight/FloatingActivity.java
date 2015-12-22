@@ -103,7 +103,6 @@ public class FloatingActivity extends AppCompatActivity {
 
         finalDialog("Anfrage senden","Zur Aufgabe: " + taskNumber + taskSubNumber + " hast du eine Frage zu: " + artOfQuestion).show();
     }
-
     private Dialog finalDialog(String title,String msg){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(msg);
@@ -132,3 +131,4 @@ public class FloatingActivity extends AppCompatActivity {
         builder.setCancelable(false);
         return builder.create();    }
 }
+
