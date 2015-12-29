@@ -54,7 +54,6 @@ public class FloatingActivity extends AppCompatActivity {
 
         taskListLocalStore = new TaskListLocalStore(this);
         tasks = taskListLocalStore.getTaskList();
-
         stringTaskNumber = new String[tasks.size()];
 
         int pos = 0;

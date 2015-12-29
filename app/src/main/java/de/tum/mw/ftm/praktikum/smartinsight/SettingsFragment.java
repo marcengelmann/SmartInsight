@@ -91,6 +91,9 @@ public class SettingsFragment extends Fragment {
         return view;
     }
 
+    public void btnUploadFoto(View view){
+
+    }
 
     @Override
     public void onAttach(Context context) {

@@ -2,7 +2,11 @@
     <string name="app_name">SmartInsight Student</string>
     <integer name="max_sitz_numb">15</integer>
     <!-- Strings related to login -->
-    <string name="prompt_email">Matrikelnummer</string>
+
+    <string name="prompt_matrikelnummber">Matrikelnummer</string>
+    <string name="text_information">Auf dieser Seite werden die erstellten Anfragen aufgelistet. Anfragen fügt ihr über den Floating Action Button unten links im Feld hinzu!</string>
+    <string name="prompt_email">E-Mail</string>
+    <string name="prompt_name">Name</string>
     <string name="prompt_password">Passwort</string>
     <string name="action_sign_in">Zur Einsicht einchecken</string>
     <string name="action_sign_in_short">Sign in</string>

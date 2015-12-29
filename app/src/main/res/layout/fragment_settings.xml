@@ -4,82 +4,100 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="de.tum.mw.ftm.praktikum.smartinsight.SettingsFragment">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <GridLayout
+                <AutoCompleteTextView
+                    android:id="@+id/profileName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_name"
+                    android:enabled="false"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/profilMatrikel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_matrikelnummber"
+                    android:enabled="false"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/profileEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_email"
+                    android:enabled="false"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/profilExam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Klausureinsicht"
+                    android:enabled="false"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="16dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name:"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_row="0"
-                android:layout_column="0"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Android Studio"
-                android:id="@+id/profileName"
-                android:layout_row="0"
-                android:layout_column="1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="E-Mail:"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_row="1"
-                android:layout_column="0"/>
-            <TextView
-                android:id="@+id/profileEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_column="1"/>
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sitznummer:"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_row="3"
+                android:layout_row="0"
                 android:layout_column="0"/>
             <Spinner
                 android:id="@+id/profileSitzNumb"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_row="3"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
                 android:layout_column="1"/>
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Push Nachrichten:"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_row="1"
+                    android:layout_column="0"/>
+            <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Matrikelnummer:"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_row="2"
-                android:layout_column="0"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/profilMatrikel"
-                android:layout_row="2"
-                android:layout_column="1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Aktuelle Prüfung:"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_row="5"
-                android:layout_column="0"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/profilExam"
-                android:layout_row="5"
+                android:id="@+id/switchPushsg"
+                android:layout_row="1"
                 android:layout_column="1"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -87,22 +105,39 @@
                 android:text="Profilfoto:"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:layout_row="4"
+                android:layout_row="2"
                 android:layout_column="0"/>
+            <LinearLayout
+                android:layout_row="2"
+                android:layout_column="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
             <de.tum.mw.ftm.praktikum.smartinsight.CircularImageView
                 android:id="@+id/profileImage"
                 android:src="@mipmap/ic_launcher_fernrohr"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_gravity="center"
                 app:siBorderWidth="4dp"
                 app:siBorderAlpha="0.5"
                 app:siBorderColor="#000000"
                 android:alpha="1"
-                android:layout_row="4"
-                android:layout_column="1"/>
+                />
+                <Button
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Hochladen Profilphoto"
+                    android:layout_gravity="center"
+                    android:id="@+id/btnUploadFoto"
+                    android:onClick="btnUploadFoto"
+                    android:layout_alignParentBottom="true"/>
+            </LinearLayout>
 
         </GridLayout>
 
+        </LinearLayout>
 
 
 

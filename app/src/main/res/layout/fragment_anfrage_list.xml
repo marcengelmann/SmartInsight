@@ -9,4 +9,6 @@
     android:background="#ECEFF1"
     app:layoutManager="LinearLayoutManager"
     tools:context="de.tum.mw.ftm.praktikum.smartinsight.AnfrageListFragment"
-    tools:listitem="@layout/fragment_list_item" />
+    tools:listitem="@layout/fragment_list_item"
+  >
+</android.support.v7.widget.RecyclerView>
