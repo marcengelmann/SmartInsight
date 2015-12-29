@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity
     User user = null;
 
     private boolean fragmentAnfrageListActive = false;
-    private boolean fragmentAnfrageListDefaultActive = false;
     private boolean startActFirstTime = true;
 
     TextView emailView;
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         downloadRequests();
         Toast.makeText(MainActivity.this, "Anfrage ... wurde gelöscht!",
                 Toast.LENGTH_SHORT).show();
+        updateListView();
     }
 
     private GetJSONListener uploadResultListener = new GetJSONListener(){
@@ -179,9 +179,9 @@ public class MainActivity extends AppCompatActivity
         anfrageLocalStore.setStatusAnfrageClient(false);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = new AnfrageListDefault();
+        Fragment fragment = new AnfrageListFragment();
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-        fragmentAnfrageListDefaultActive = true;
+        fragmentAnfrageListActive = true;
 
         user = userLocalStore.getUserLogInUser();
 
@@ -203,10 +203,6 @@ public class MainActivity extends AppCompatActivity
 
         user = userLocalStore.getUserLogInUser();
 
-        Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Email: "+user.email+ ", Prüfung: "+user.exam,
-                Toast.LENGTH_LONG).show();
-        emailView.setText(user.email);
-        nameView.setText(user.name);
         if(authenticate() == true && startActFirstTime){
             Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Email: "+user.email+ ", Prüfung: "+user.exam,
                     Toast.LENGTH_LONG).show();
@@ -240,21 +236,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private  void updateListView() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment;
-        if(fragmentAnfrageListDefaultActive && !requests.isEmpty()){
-            fragment = new AnfrageListFragment();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-            fragmentAnfrageListActive = true;
-            fragmentAnfrageListDefaultActive = false;
-        }
-        else if(fragmentAnfrageListActive && requests.isEmpty()){
-            fragment = new AnfrageListDefault();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-            fragmentAnfrageListDefaultActive = true;
-            fragmentAnfrageListActive = false;
-        }
-        else if (fragmentAnfrageListActive) {
+        if (fragmentAnfrageListActive) {
             AnfrageListFragment anfrageListFragment = (AnfrageListFragment)
                     getSupportFragmentManager().findFragmentById(R.id.container);
             if (anfrageListFragment != null) {
@@ -270,7 +252,6 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment;
         int id = item.getItemId();
         fragmentAnfrageListActive = false;
-        fragmentAnfrageListDefaultActive = false;
         if (id == R.id.nav_calendar) {
             fragment = new CalendarFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
@@ -284,16 +265,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(myIntent);
         }
         else if (id == R.id.nav_anfragen) {
-            if(!requests.isEmpty()) {
-                fragment = new AnfrageListFragment();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-                fragmentAnfrageListActive = true;
-            }
-            else {
-                fragment = new AnfrageListDefault();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-                fragmentAnfrageListDefaultActive = true;
-            }
+            fragment = new AnfrageListFragment();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+            fragmentAnfrageListActive = true;
         }
         else if (id == R.id.nav_settings) {
             fragment = new SettingsFragment();

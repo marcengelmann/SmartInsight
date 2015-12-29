@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     AnfrageListAdapter adapter;
-
+    TextView txtIntroduction;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -50,6 +52,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
         adapter = new AnfrageListAdapter(anfrageProviders, this);
 
     }
@@ -61,9 +64,9 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         View view = inflater.inflate(R.layout.fragment_anfrage_list, container, false);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
+            txtIntroduction = (TextView) view.findViewById(R.id.txtInfo);
+            recyclerView = (RecyclerView) view.findViewById(R.id.list);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -72,7 +75,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
 
             // Create the adapter to convert the array to views
             recyclerView.setAdapter(adapter);
-        }
+
 
         return view;
     }
@@ -98,13 +101,22 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
 
     public void updateFragmentListView(ArrayList<Anfrage> requests) {
         anfrageProviders.clear();
-        for(Anfrage request:requests) {
-            anfrageProviders.add(new AnfrageProvider(request.id,"12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam, request.linked_phd));
+        if (requests.isEmpty()) {
+            txtIntroduction.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+        else{
+            txtIntroduction.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            for (Anfrage request : requests) {
+                anfrageProviders.add(new AnfrageProvider(request.id, "12:00", "13:00", request.linked_task, request.linked_subtask, request.linked_exam, request.linked_phd));
+            }
         }
         if (recyclerView != null){
             // Create the adapter to convert the array to views
             recyclerView.setAdapter(adapter);
         }
+
 
     }
 
