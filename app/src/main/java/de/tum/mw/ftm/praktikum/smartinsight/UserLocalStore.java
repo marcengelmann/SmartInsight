@@ -2,6 +2,11 @@ package de.tum.mw.ftm.praktikum.smartinsight;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by Rebecca on 13.12.2015.
@@ -48,6 +53,51 @@ public class UserLocalStore {
             return true;
         }
         return false;
+    }
+
+    public boolean getUserStatusProfilPic(){
+        if(userLocalDatabase.getBoolean("statusProfilPic", false) == true){
+            return true;
+        }
+        return false;
+    }
+
+    public void setUserStatusProfilPic(boolean status){
+        SharedPreferences.Editor spEditor = userLocalDatabase.edit();
+        spEditor.putBoolean("statusProfilPic", status);
+        spEditor.commit();
+    }
+
+    public Bitmap getUserProfilPic(){
+        String profilPic = userLocalDatabase.getString("profilPic", "");
+
+        return StringToBitmap(profilPic);
+    }
+
+    public void setUserProfilPic(Bitmap bitmap){
+        SharedPreferences.Editor spEditor = userLocalDatabase.edit();
+        spEditor.putString("profilPic", BitMapToString(bitmap));
+        spEditor.commit();
+    }
+
+    private String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] arr = baos.toByteArray();
+        String result = Base64.encodeToString(arr, Base64.DEFAULT);
+        return result;
+    }
+
+    private Bitmap StringToBitmap(String image){
+        try{
+            byte[] encodeByte = Base64.decode(image,Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte,0,encodeByte.length);
+            return bitmap;
+        }
+        catch (Exception e){
+            e.getMessage();
+            return null;
+        }
     }
 
     public void clearUserData(){

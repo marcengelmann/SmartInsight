@@ -12,15 +12,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <de.tum.mw.ftm.praktikum.smartinsight.CircularImageView
+    <de.tum.mw.ftm.praktikum.smartinsight.CircleImageView
         android:id="@+id/imageView"
         android:src="@mipmap/ic_launcher_fernrohr"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:siBorderWidth="4dp"
-        app:siBorderAlpha="0.5"
-        app:siBorderColor="@color/borderCircleImage"
-        android:alpha="1"/>
+        android:layout_centerInParent="true"
+        app:civ_border_width="2dp"
+        app:civ_border_color="@color/borderCircleImage"/>
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

@@ -114,24 +114,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
-            <de.tum.mw.ftm.praktikum.smartinsight.CircularImageView
+            <de.tum.mw.ftm.praktikum.smartinsight.CircleImageView
                 android:id="@+id/profileImage"
                 android:src="@mipmap/ic_launcher_fernrohr"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_gravity="center"
-                app:siBorderWidth="4dp"
-                app:siBorderAlpha="0.5"
-                app:siBorderColor="#000000"
-                android:alpha="1"
+                android:layout_centerInParent="true"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/borderCircleImage"
                 />
                 <Button
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Hochladen Profilphoto"
+                    android:text="Neues Profilphoto"
                     android:layout_gravity="center"
                     android:id="@+id/btnUploadFoto"
-                    android:onClick="btnUploadFoto"
                     android:layout_alignParentBottom="true"/>
             </LinearLayout>
 

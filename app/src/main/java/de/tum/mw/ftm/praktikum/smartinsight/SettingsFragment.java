@@ -1,16 +1,34 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 public class SettingsFragment extends Fragment {
@@ -19,9 +37,10 @@ public class SettingsFragment extends Fragment {
     private TextView txtName;
     private TextView txtEmail;
     private TextView txtExam;
-
+    private Button btnUploadFoto;
+    CircleImageView profileImage;
     UserLocalStore userLocalStore;
-
+    private OnListFragmentInteractionListener mListener;
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -52,12 +71,25 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         spinnerSitzNumber = (Spinner) view.findViewById(R.id.profileSitzNumb);
         txtEmail = (TextView) view.findViewById(R.id.profileEmail);
         txtMatrikelNum = (TextView) view.findViewById(R.id.profilMatrikel);
         txtName = (TextView) view.findViewById(R.id.profileName);
         txtExam = (TextView) view.findViewById(R.id.profilExam);
+        profileImage = (CircleImageView) view.findViewById(R.id.profileImage);
+        btnUploadFoto = (Button) view.findViewById(R.id.btnUploadFoto);
+        btnUploadFoto.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+
+            public void onClick(View v) {
+
+                onClickUploadFoto(v);
+
+            }
+
+        });
         int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
         String[] number = new String[maxSitNumb];
         for(int i=0; i < number.length; i++){
@@ -88,22 +120,191 @@ public class SettingsFragment extends Fragment {
         txtName.setText(user.name);
         txtMatrikelNum.setText(user.matrikelnummer);
         txtExam.setText(user.exam);
+        updateProfilPic();
         return view;
     }
 
-    public void btnUploadFoto(View view){
+    public void onClickUploadFoto(View view){
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle("Neues Profilbild Hochladen!");
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Foto machen"))
+
+                {
+
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+
+                    startActivityForResult(intent, 1);
+
+                }
+
+                else if (options[item].equals("Foto aus Gallerie auswählen"))
+
+                {
+
+                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                    startActivityForResult(intent, 2);
+
+
+
+                }
+
+                else if (options[item].equals("Abbrechen")) {
+
+                    dialog.dismiss();
+
+                }
+
+            }
+
+        });
+
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK){
+            userLocalStore.setUserStatusProfilPic(false);
+            if (requestCode == 1) {
+
+                File f = new File(Environment.getExternalStorageDirectory().toString());
+
+                for (File temp : f.listFiles()) {
+
+                    if (temp.getName().equals("temp.jpg")) {
+
+                        f = temp;
+
+                        break;
+
+                    }
+
+                }
+
+                try {
+
+
+
+                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+                    Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
+                            bitmapOptions);
+                    userLocalStore.setUserProfilPic(bitmap);
+                    userLocalStore.setUserStatusProfilPic(true);
+
+                    String path = android.os.Environment
+                            .getExternalStorageDirectory()
+                            + File.separator
+                            + "Phoenix" + File.separator + "default";
+                    f.delete();
+
+                    OutputStream outFile = null;
+
+                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
+
+                    try {
+
+                        outFile = new FileOutputStream(file);
+                        outFile.flush();
+
+                        outFile.close();
+
+
+                    } catch (FileNotFoundException e) {
+
+                        e.printStackTrace();
+
+                    } catch (IOException e) {
+
+                        e.printStackTrace();
+
+                    } catch (Exception e) {
+
+                        e.printStackTrace();
+
+                    }
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            } else if (requestCode == 2) {
+
+
+
+                Uri selectedImage = data.getData();
+
+                String[] filePath = { MediaStore.Images.Media.DATA };
+
+                Cursor c = getContext().getContentResolver().query(selectedImage, filePath, null, null, null);
+
+                c.moveToFirst();
+
+                int columnIndex = c.getColumnIndex(filePath[0]);
+
+                String picturePath = c.getString(columnIndex);
+
+                c.close();
+
+                userLocalStore.setUserProfilPic(BitmapFactory.decodeFile(picturePath));
+                userLocalStore.setUserStatusProfilPic(true);
+
+
+            }
+
+        }
+        updateProfilPic();
+
+    }
+
+    private void updateProfilPic() {
+        if (userLocalStore.getUserStatusProfilPic()){
+            User user = userLocalStore.getUserLogInUser();
+            profileImage.setImageBitmap(userLocalStore.getUserProfilPic());
+            mListener.onListFragmentUpdateProfilePic();
+        }
+        else {
+            profileImage.setImageResource(R.mipmap.ic_launcher_fernrohr);
+        }
+
+    }
+
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentUpdateProfilePic();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
 }

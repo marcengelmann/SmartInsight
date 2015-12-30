@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AnfrageListFragment.OnListFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, AnfrageListFragment.OnListFragmentInteractionListener, SettingsFragment.OnListFragmentInteractionListener{
     UserLocalStore userLocalStore;
     AnfrageLocalStore anfrageLocalStore;
     TaskListLocalStore taskListLocalStore;
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
 
     TextView emailView;
     TextView nameView;
+    CircleImageView profilPicView;
 
     ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
     ArrayList<Task> tasks = new ArrayList<Task>();
@@ -166,8 +167,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerNavigation = navigationView.getHeaderView(0);
+        headerNavigation.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         emailView = (TextView) headerNavigation.findViewById(R.id.emailView);
         nameView = (TextView) headerNavigation.findViewById(R.id.nameView);
+        profilPicView = (CircleImageView) headerNavigation.findViewById(R.id.imageView);
         //generate lsitview für anfragen
         // Construct the data source
         ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<AnfrageProvider>();
@@ -208,6 +211,7 @@ public class MainActivity extends AppCompatActivity
                     Toast.LENGTH_LONG).show();
             emailView.setText(user.email);
             nameView.setText(user.name);
+            onListFragmentUpdateProfilePic();
             startActFirstTime = false;
             updateListView();
             downloadRequests();
@@ -315,4 +319,14 @@ public class MainActivity extends AppCompatActivity
         uploader.execute(url);
     }
 
+    @Override
+    public void onListFragmentUpdateProfilePic() {
+        if (userLocalStore.getUserStatusProfilPic()){
+            User user = userLocalStore.getUserLogInUser();
+            profilPicView.setImageBitmap(userLocalStore.getUserProfilPic());
+        }
+        else {
+            profilPicView.setImageResource(R.mipmap.ic_launcher_fernrohr);
+        }
+    }
 }

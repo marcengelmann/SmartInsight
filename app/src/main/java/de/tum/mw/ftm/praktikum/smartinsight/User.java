@@ -1,5 +1,7 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Rebecca on 13.12.2015.
  */
