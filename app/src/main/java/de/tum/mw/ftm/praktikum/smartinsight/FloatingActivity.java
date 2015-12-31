@@ -46,7 +46,7 @@ public class FloatingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_floating);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        setTitle(R.string.caption_addTask);
         radioBtnQuestionA = (RadioButton) findViewById(R.id.radioBtnQuestionA);
         radioBtnQuestionB = (RadioButton) findViewById(R.id.radioBtnQuestionB);
         radioBtnQuestionC = (RadioButton) findViewById(R.id.radioBtnQuestionC);

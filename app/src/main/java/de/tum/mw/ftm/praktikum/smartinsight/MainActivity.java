@@ -1,5 +1,6 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
+import android.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     TextView emailView;
     TextView nameView;
     CircleImageView profilPicView;
-
+    NavigationView navigationView;
     ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
     ArrayList<Task> tasks = new ArrayList<Task>();
 
@@ -164,13 +165,14 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerNavigation = navigationView.getHeaderView(0);
         headerNavigation.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         emailView = (TextView) headerNavigation.findViewById(R.id.emailView);
         nameView = (TextView) headerNavigation.findViewById(R.id.nameView);
         profilPicView = (CircleImageView) headerNavigation.findViewById(R.id.imageView);
+
         //generate lsitview für anfragen
         // Construct the data source
         ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<AnfrageProvider>();
@@ -184,6 +186,8 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = new AnfrageListFragment();
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        setTitle(R.string.capition_anfrageliste);
+
         fragmentAnfrageListActive = true;
 
         user = userLocalStore.getUserLogInUser();
@@ -199,6 +203,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
 
     @Override
     protected void onStart(){
@@ -216,6 +221,14 @@ public class MainActivity extends AppCompatActivity
             updateListView();
             downloadRequests();
             downloadExam();
+            navigationView.getMenu().getItem(0).setChecked(true);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = new AnfrageListFragment();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+            setTitle(R.string.capition_anfrageliste);
+
+            fragmentAnfrageListActive = true;
+
         }
         else if (startActFirstTime){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -256,28 +269,35 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment;
         int id = item.getItemId();
         fragmentAnfrageListActive = false;
+
         if (id == R.id.nav_calendar) {
             fragment = new CalendarFragment();
+            setTitle(R.string.caption_klausur);
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         else if (id == R.id.nav_abmelden) {
             userLocalStore.clearUserData();
             userLocalStore.setUserLoggedIn(false);
+            setTitle(R.string.caption);
             View view;
             view = new View(this);
             Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
             startActivity(myIntent);
+            startActFirstTime = true;
         }
         else if (id == R.id.nav_anfragen) {
+            setTitle(R.string.capition_anfrageliste);
             fragment = new AnfrageListFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
             fragmentAnfrageListActive = true;
         }
         else if (id == R.id.nav_settings) {
+            setTitle(R.string.caption_settings);
             fragment = new SettingsFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         else if (id == R.id.nav_statistic) {
+            setTitle(R.string.caption_statistic);
             fragment = new StatisticFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }

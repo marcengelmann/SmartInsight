@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">SmartInsight Student</string>
     <integer name="max_sitz_numb">15</integer>
+
+    <string name="capition_anfrageliste">AnfrageListe</string>
+    <string name="caption_klausur">Klausureinsichtstermine</string>
+    <string name="caption_settings">Einstellungen</string>
+    <string name="caption_statistic">Statistik</string>
+    <string name="caption_addTask">Anfragen erstellen</string>
+    <string name="caption">SmartInsight Student</string>
     <!-- Strings related to login -->
 
     <string name="prompt_matrikelnummber">Matrikelnummer</string>
