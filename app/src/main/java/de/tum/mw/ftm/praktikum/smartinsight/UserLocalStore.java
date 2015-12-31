@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -68,37 +69,18 @@ public class UserLocalStore {
         spEditor.commit();
     }
 
-    public Bitmap getUserProfilPic(){
+    public Uri getUserProfilPic(){
         String profilPic = userLocalDatabase.getString("profilPic", "");
 
-        return StringToBitmap(profilPic);
+        return (Uri.parse(profilPic));
     }
 
-    public void setUserProfilPic(Bitmap bitmap){
+    public void setUserProfilPic(Uri bitmap){
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();
-        spEditor.putString("profilPic", BitMapToString(bitmap));
+        spEditor.putString("profilPic", bitmap.toString());
         spEditor.commit();
     }
 
-    private String BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] arr = baos.toByteArray();
-        String result = Base64.encodeToString(arr, Base64.DEFAULT);
-        return result;
-    }
-
-    private Bitmap StringToBitmap(String image){
-        try{
-            byte[] encodeByte = Base64.decode(image,Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte,0,encodeByte.length);
-            return bitmap;
-        }
-        catch (Exception e){
-            e.getMessage();
-            return null;
-        }
-    }
 
     public void clearUserData(){
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();

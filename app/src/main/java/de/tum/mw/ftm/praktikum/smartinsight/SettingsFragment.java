@@ -125,7 +125,7 @@ public class SettingsFragment extends Fragment {
     }
 
     public void onClickUploadFoto(View view){
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+        final CharSequence[] options = { "Foto aufnehmen", "Foto aus Gallerie auswählen","Abbrechen" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
@@ -137,7 +137,7 @@ public class SettingsFragment extends Fragment {
 
             public void onClick(DialogInterface dialog, int item) {
 
-                if (options[item].equals("Foto machen"))
+                if (options[item].equals("Foto aufnehmen"))
 
                 {
 
@@ -149,21 +149,16 @@ public class SettingsFragment extends Fragment {
 
                     startActivityForResult(intent, 1);
 
-                }
-
-                else if (options[item].equals("Foto aus Gallerie auswählen"))
+                } else if (options[item].equals("Foto aus Gallerie auswählen"))
 
                 {
 
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                     startActivityForResult(intent, 2);
 
 
-
-                }
-
-                else if (options[item].equals("Abbrechen")) {
+                } else if (options[item].equals("Abbrechen")) {
 
                     dialog.dismiss();
 
@@ -190,6 +185,9 @@ public class SettingsFragment extends Fragment {
                     if (temp.getName().equals("temp.jpg")) {
 
                         f = temp;
+                        Uri uri = Uri.fromFile(f);
+                        userLocalStore.setUserProfilPic(uri);
+                        userLocalStore.setUserStatusProfilPic(true);
 
                         break;
 
@@ -197,73 +195,10 @@ public class SettingsFragment extends Fragment {
 
                 }
 
-                try {
-
-
-
-                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-                    Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                            bitmapOptions);
-                    userLocalStore.setUserProfilPic(bitmap);
-                    userLocalStore.setUserStatusProfilPic(true);
-
-                    String path = android.os.Environment
-                            .getExternalStorageDirectory()
-                            + File.separator
-                            + "Phoenix" + File.separator + "default";
-                    f.delete();
-
-                    OutputStream outFile = null;
-
-                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-
-                    try {
-
-                        outFile = new FileOutputStream(file);
-                        outFile.flush();
-
-                        outFile.close();
-
-
-                    } catch (FileNotFoundException e) {
-
-                        e.printStackTrace();
-
-                    } catch (IOException e) {
-
-                        e.printStackTrace();
-
-                    } catch (Exception e) {
-
-                        e.printStackTrace();
-
-                    }
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
             } else if (requestCode == 2) {
-
-
-
                 Uri selectedImage = data.getData();
 
-                String[] filePath = { MediaStore.Images.Media.DATA };
-
-                Cursor c = getContext().getContentResolver().query(selectedImage, filePath, null, null, null);
-
-                c.moveToFirst();
-
-                int columnIndex = c.getColumnIndex(filePath[0]);
-
-                String picturePath = c.getString(columnIndex);
-
-                c.close();
-
-                userLocalStore.setUserProfilPic(BitmapFactory.decodeFile(picturePath));
+                userLocalStore.setUserProfilPic(selectedImage);
                 userLocalStore.setUserStatusProfilPic(true);
 
 
@@ -277,7 +212,7 @@ public class SettingsFragment extends Fragment {
     private void updateProfilPic() {
         if (userLocalStore.getUserStatusProfilPic()){
             User user = userLocalStore.getUserLogInUser();
-            profileImage.setImageBitmap(userLocalStore.getUserProfilPic());
+            profileImage.setImageURI(userLocalStore.getUserProfilPic());
             mListener.onListFragmentUpdateProfilePic();
         }
         else {

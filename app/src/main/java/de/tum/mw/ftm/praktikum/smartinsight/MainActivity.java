@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentUpdateProfilePic() {
         if (userLocalStore.getUserStatusProfilPic()){
             User user = userLocalStore.getUserLogInUser();
-            profilPicView.setImageBitmap(userLocalStore.getUserProfilPic());
+            profilPicView.setImageURI(userLocalStore.getUserProfilPic());
         }
         else {
             profilPicView.setImageResource(R.mipmap.ic_launcher_fernrohr);
