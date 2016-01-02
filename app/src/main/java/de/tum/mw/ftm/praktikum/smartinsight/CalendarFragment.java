@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.lang.reflect.Array;
@@ -25,6 +26,7 @@ public class CalendarFragment extends Fragment {
     private int mColumnCount = 1;
     CalendarListAdapter adapter;
     TextView txtIntroduction;
+    LinearLayout layout_list_calendar;
     ArrayList<Calendar> listCalendar = new ArrayList<Calendar>();
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -65,6 +67,7 @@ public class CalendarFragment extends Fragment {
         // Set the adapter
         Context context = view.getContext();
         txtIntroduction = (TextView) view.findViewById(R.id.txtInfo);
+        layout_list_calendar = (LinearLayout) view.findViewById(R.id.calender_list_layout);
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         if (mColumnCount <= 1) {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -97,10 +100,10 @@ public class CalendarFragment extends Fragment {
         providerCalender.clear();
         if (listItems.isEmpty()) {
             txtIntroduction.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
+            layout_list_calendar.setVisibility(View.GONE);
         } else {
             txtIntroduction.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
+            layout_list_calendar.setVisibility(View.VISIBLE);
             for (Calendar request : listItems) {
                 providerCalender.add(new Calendar(request.date, request.name, request.room));
             }

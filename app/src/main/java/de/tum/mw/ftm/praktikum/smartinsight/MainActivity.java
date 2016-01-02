@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity
         user = userLocalStore.getUserLogInUser();
 
         //todo setze dummy daten für die Klausureinsichttermine im Kalendar
-        updateCalendarData();
+       updateCalendarData();
     }
 
     @Override

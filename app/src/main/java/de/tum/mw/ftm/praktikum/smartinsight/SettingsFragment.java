@@ -129,7 +129,7 @@ public class SettingsFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setTitle("Neues Profilbild Hochladen!");
+        builder.setTitle("Neues Profilbild hochladen!");
 
         builder.setItems(options, new DialogInterface.OnClickListener() {
 
