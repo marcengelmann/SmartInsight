@@ -99,7 +99,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     }
     static  ArrayList<AnfrageProvider> anfrageProviders =  new ArrayList<AnfrageProvider>();
 
-    public void updateFragmentListView(ArrayList<Anfrage> requests) {
+    public void updateFragmentListView(ArrayList<AnfrageProvider> requests) {
         anfrageProviders.clear();
         if (requests.isEmpty()) {
             txtIntroduction.setVisibility(View.VISIBLE);
@@ -108,14 +108,16 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         else{
             txtIntroduction.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            for (Anfrage request : requests) {
-                anfrageProviders.add(new AnfrageProvider(request.id, "12:00", "13:00", request.linked_task, request.linked_subtask, request.linked_exam, request.linked_phd));
+            for (AnfrageProvider request : requests) {
+                anfrageProviders.add(new AnfrageProvider(request.id, request.startTime, request.endTime, request.taskNumber, request.taskSubNumber, request.question, request.editor));
             }
         }
         if (recyclerView != null){
             // Create the adapter to convert the array to views
             recyclerView.setAdapter(adapter);
         }
+
+
     }
 
     @Override

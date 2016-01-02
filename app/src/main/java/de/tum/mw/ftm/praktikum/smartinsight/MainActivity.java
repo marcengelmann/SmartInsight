@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     TextView nameView;
     CircleImageView profilPicView;
     NavigationView navigationView;
-    ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
+    ArrayList<AnfrageProvider> requests = new ArrayList<AnfrageProvider>();
     //Todo In dieses Array müsste am Anfang (Nur einmal) alle aktuellen Prüfungstermine geladen werden!
     ArrayList<Calendar> requestsCalendar = new ArrayList<Calendar>();
 
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity
                     String task = obj.getString("linked_task");
                     String phd = obj.getString("linked_phd");
                     String id = obj.getString("id");
-                    Anfrage anfrage = new Anfrage(id,student, task, subtask, phd, exam);
+                    AnfrageProvider anfrage = new AnfrageProvider(id,"12:00","12:10", task, subtask, "Inhalt und PUnkte", phd);
                     requests.add(anfrage);
                     System.out.println(anfrage.toString());
                 }
