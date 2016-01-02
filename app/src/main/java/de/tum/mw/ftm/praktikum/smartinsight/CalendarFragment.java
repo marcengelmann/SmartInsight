@@ -91,7 +91,7 @@ public class CalendarFragment extends Fragment {
         super.onDetach();
     }
 
-    static ArrayList<CalendarProvider> providerCalender = new ArrayList<CalendarProvider>();
+    static ArrayList<Calendar> providerCalender = new ArrayList<Calendar>();
 
     public void updateFragmentListView(ArrayList<Calendar> listItems) {
         providerCalender.clear();
@@ -102,7 +102,7 @@ public class CalendarFragment extends Fragment {
             txtIntroduction.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             for (Calendar request : listItems) {
-                providerCalender.add(new CalendarProvider(request.date, request.name, request.room));
+                providerCalender.add(new Calendar(request.date, request.name, request.room));
             }
         }
         if (recyclerView != null) {

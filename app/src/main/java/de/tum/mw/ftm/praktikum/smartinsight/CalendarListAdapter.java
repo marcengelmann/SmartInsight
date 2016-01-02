@@ -13,13 +13,9 @@ import java.util.List;
  * Created by Rebecca on 02.01.2016.
  */
 public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.ViewHolder> {
-    private final List<CalendarProvider> mValues;
+    private final List<Calendar> mValues;
 
-    public interface customButtonListener {
-        public void onButtonClickListner(int position,AnfrageProvider value);
-    }
-
-    public CalendarListAdapter(List<CalendarProvider> anfrageProvider) {
+    public CalendarListAdapter(List<Calendar> anfrageProvider) {
         mValues = anfrageProvider;
     }
 
@@ -45,7 +41,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public CalendarProvider mItem;
+        public Calendar mItem;
 
         public TextView name;
         public TextView room;
