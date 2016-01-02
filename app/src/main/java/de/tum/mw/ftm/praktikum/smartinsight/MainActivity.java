@@ -1,6 +1,7 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
 import android.app.ActionBar;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity
     CircleImageView profilPicView;
     NavigationView navigationView;
     ArrayList<Anfrage> requests = new ArrayList<Anfrage>();
+    //Todo In dieses Array müsste am Anfang (Nur einmal) alle aktuellen Prüfungstermine geladen werden!
+    ArrayList<Calendar> requestsCalendar = new ArrayList<Calendar>();
+
     ArrayList<Task> tasks = new ArrayList<Task>();
 
     @Override
@@ -192,6 +197,8 @@ public class MainActivity extends AppCompatActivity
 
         user = userLocalStore.getUserLogInUser();
 
+        //todo setze dummy daten für die Klausureinsichttermine im Kalendar
+        updateCalendarData();
     }
 
     @Override
@@ -201,6 +208,15 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    //Todo ist akuteller dummy funktion um die Daten für die Kalender in das Array zu laden
+    private void  updateCalendarData(){
+        requestsCalendar.clear();
+        for (int i = 0; i < 10 ;i++){
+            Calendar calendarItem = new Calendar("DAtum " + i , "Klausurname " + i, "Raum " + i);
+            requestsCalendar.add(calendarItem);
         }
     }
 
@@ -271,7 +287,10 @@ public class MainActivity extends AppCompatActivity
         fragmentAnfrageListActive = false;
 
         if (id == R.id.nav_calendar) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("calendar", (Serializable) requestsCalendar);
             fragment = new CalendarFragment();
+            fragment.setArguments(bundle);
             setTitle(R.string.caption_klausur);
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }

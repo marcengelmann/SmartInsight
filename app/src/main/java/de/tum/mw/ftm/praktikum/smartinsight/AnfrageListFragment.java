@@ -116,8 +116,6 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
             // Create the adapter to convert the array to views
             recyclerView.setAdapter(adapter);
         }
-
-
     }
 
     @Override

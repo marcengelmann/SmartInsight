@@ -2,8 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="de.tum.mw.ftm.praktikum.smartinsight.CalendarFragment">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ECEFF1"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/fragment_list_calendar"
+        ></android.support.v7.widget.RecyclerView>
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/txtInfo"
+        android:layout_gravity="center"
+        android:enabled="false"
+        android:text="@string/calendar_information"/>
 </FrameLayout>
