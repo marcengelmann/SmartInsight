@@ -77,6 +77,22 @@ public class MainActivity extends AppCompatActivity
 
     };
 
+    private void setFragmentAnfrageliste(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment;
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("requests", (Serializable) requests);
+
+        setTitle(R.string.capition_anfrageliste);
+        fragment = new AnfrageListFragment();
+        fragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        fragmentAnfrageListActive = true;
+
+    }
+
     private GetJSONListener requestResultListener = new GetJSONListener(){
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
@@ -188,12 +204,7 @@ public class MainActivity extends AppCompatActivity
         anfrageLocalStore = new AnfrageLocalStore(this);
         anfrageLocalStore.setStatusAnfrageClient(false);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = new AnfrageListFragment();
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-        setTitle(R.string.capition_anfrageliste);
-
-        fragmentAnfrageListActive = true;
+        setFragmentAnfrageliste();
 
         user = userLocalStore.getUserLogInUser();
 
@@ -234,17 +245,10 @@ public class MainActivity extends AppCompatActivity
             nameView.setText(user.name);
             onListFragmentUpdateProfilePic();
             startActFirstTime = false;
-            updateListView();
             downloadRequests();
             downloadExam();
             navigationView.getMenu().getItem(0).setChecked(true);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment fragment = new AnfrageListFragment();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-            setTitle(R.string.capition_anfrageliste);
-
-            fragmentAnfrageListActive = true;
-
+            setFragmentAnfrageliste();
         }
         else if (startActFirstTime){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -305,10 +309,7 @@ public class MainActivity extends AppCompatActivity
             startActFirstTime = true;
         }
         else if (id == R.id.nav_anfragen) {
-            setTitle(R.string.capition_anfrageliste);
-            fragment = new AnfrageListFragment();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-            fragmentAnfrageListActive = true;
+            setFragmentAnfrageliste();
         }
         else if (id == R.id.nav_settings) {
             setTitle(R.string.caption_settings);

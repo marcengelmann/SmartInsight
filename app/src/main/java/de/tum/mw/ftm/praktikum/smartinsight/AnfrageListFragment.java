@@ -30,7 +30,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     AnfrageListAdapter adapter;
     TextView txtIntroduction;
     private OnListFragmentInteractionListener mListener;
-
+    ArrayList<AnfrageProvider> listAnfrageProvider = new ArrayList<AnfrageProvider>();
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -49,8 +49,11 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listAnfrageProvider.clear();
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            listAnfrageProvider = (ArrayList<AnfrageProvider>)getArguments().get("requests");
+
         }
 
         adapter = new AnfrageListAdapter(anfrageProviders, this);
@@ -76,7 +79,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
             // Create the adapter to convert the array to views
             recyclerView.setAdapter(adapter);
 
-
+        updateFragmentListView(listAnfrageProvider);
         return view;
     }
 
