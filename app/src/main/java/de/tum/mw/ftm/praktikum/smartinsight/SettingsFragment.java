@@ -37,8 +37,6 @@ public class SettingsFragment extends Fragment {
     private TextView txtName;
     private TextView txtEmail;
     private TextView txtExam;
-    private Button btnUploadFoto;
-    CircleImageView profileImage;
     UserLocalStore userLocalStore;
     private OnListFragmentInteractionListener mListener;
     public SettingsFragment() {
@@ -77,19 +75,7 @@ public class SettingsFragment extends Fragment {
         txtMatrikelNum = (TextView) view.findViewById(R.id.profilMatrikel);
         txtName = (TextView) view.findViewById(R.id.profileName);
         txtExam = (TextView) view.findViewById(R.id.profilExam);
-        profileImage = (CircleImageView) view.findViewById(R.id.profileImage);
-        btnUploadFoto = (Button) view.findViewById(R.id.btnUploadFoto);
-        btnUploadFoto.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-
-            public void onClick(View v) {
-
-                onClickUploadFoto(v);
-
-            }
-
-        });
         int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
         String[] number = new String[maxSitNumb];
         for(int i=0; i < number.length; i++){
@@ -120,56 +106,9 @@ public class SettingsFragment extends Fragment {
         txtName.setText(user.name);
         txtMatrikelNum.setText(user.matrikelnummer);
         txtExam.setText(user.exam);
-        updateProfilPic();
         return view;
     }
 
-    public void onClickUploadFoto(View view){
-        final CharSequence[] options = { "Foto aufnehmen", "Foto aus Gallerie auswählen","Abbrechen" };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setTitle("Neues Profilbild hochladen!");
-
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (options[item].equals("Foto aufnehmen"))
-
-                {
-
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-
-                    startActivityForResult(intent, 1);
-
-                } else if (options[item].equals("Foto aus Gallerie auswählen"))
-
-                {
-
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                    startActivityForResult(intent, 2);
-
-
-                } else if (options[item].equals("Abbrechen")) {
-
-                    dialog.dismiss();
-
-                }
-
-            }
-
-        });
-
-        builder.show();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -205,21 +144,9 @@ public class SettingsFragment extends Fragment {
             }
 
         }
-        updateProfilPic();
 
     }
 
-    private void updateProfilPic() {
-        if (userLocalStore.getUserStatusProfilPic()){
-            User user = userLocalStore.getUserLogInUser();
-            profileImage.setImageURI(userLocalStore.getUserProfilPic());
-            mListener.onListFragmentUpdateProfilePic();
-        }
-        else {
-            profileImage.setImageResource(R.mipmap.ic_launcher_fernrohr);
-        }
-
-    }
 
     public interface OnListFragmentInteractionListener {
         void onListFragmentUpdateProfilePic();
