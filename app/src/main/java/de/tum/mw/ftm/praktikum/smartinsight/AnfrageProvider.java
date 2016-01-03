@@ -85,14 +85,4 @@ public class AnfrageProvider implements Serializable {
         this.taskSubNumber = taskSubNumber;
     }
 
-
-    public static List<AnfrageProvider> createAnfrageProviderList(ArrayList<Anfrage> requests) {
-        List<AnfrageProvider> anfrageProvider = new ArrayList<AnfrageProvider>();
-
-        for(Anfrage request:requests) {
-            anfrageProvider.add(new AnfrageProvider(request.id, "12:00","13:00",request.linked_task,request.linked_subtask,request.linked_exam, request.linked_phd));
-        }
-
-        return anfrageProvider;
-    }
 }

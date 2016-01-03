@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity
                     String task = obj.getString("linked_task");
                     String phd = obj.getString("linked_phd");
                     String id = obj.getString("id");
+                    //Todo hinzufügen von Uhrzeit, Art der Frage
                     AnfrageProvider anfrage = new AnfrageProvider(id,"12:00","12:10", task, subtask, "Inhalt und PUnkte", phd);
                     requests.add(anfrage);
                     System.out.println(anfrage.toString());
