@@ -2,13 +2,14 @@ package de.tum.mw.ftm.praktikum.smartinsight;
 
 import android.support.v7.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rebecca on 13.12.2015.
  */
-public class AnfrageProvider{
+public class AnfrageProvider implements Serializable {
     public String endTime;
     public String startTime;
     public String editor;

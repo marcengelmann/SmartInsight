@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SmartInsight.iml" filepath="$PROJECT_DIR$/SmartInsight.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SmartInsightStudent.iml" filepath="$PROJECT_DIR$/SmartInsightStudent.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
