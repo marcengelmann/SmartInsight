@@ -104,13 +104,15 @@ public class MainActivity extends AppCompatActivity
                     String student = obj.getString("linked_student");
                     String exam = obj.getString("linked_exam");
                     String subtask = obj.getString("subtask_name");
-                    String task = obj.getString("task_name")+" ";
+                    String task = obj.getString("task_name");
                     String phd = obj.getString("linked_phd");
                     String id = obj.getString("id");
+                    String startTime = obj.getString("start_time");
+                    String endTime = obj.getString("end_time");
                     //Todo hinzufügen von Uhrzeit, Art der Frage
 
 
-                    AnfrageProvider anfrage = new AnfrageProvider(id,"12:00","12:10", task, subtask, "Inhalt und PUnkte", phd);
+                    AnfrageProvider anfrage = new AnfrageProvider(id,startTime.substring(0,startTime.length()-3),endTime.substring(0,endTime.length()-3), task, subtask, "Inhalt und PUnkte", phd);
                     requests.add(anfrage);
                 }
                 updateListView();
