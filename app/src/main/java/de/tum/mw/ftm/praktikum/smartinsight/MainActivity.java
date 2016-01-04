@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 tasks.clear();
                 JSONArray jsonArray = jsonFromNet.getJSONArray("posts");
+
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
 
@@ -147,23 +148,30 @@ public class MainActivity extends AppCompatActivity
                     String number = obj.getString("number");
 
                     Task task = new Task(name,linked_exam,linked_phd,id,number);
+
+                    JSONArray subtasks = obj.getJSONArray("subtasks");
+
+                    for (int j = 0; j < subtasks.length(); j++) {
+                        JSONObject sub_obj = subtasks.getJSONObject(j);
+
+                        String sub_name = sub_obj.getString("name");
+                        String sub_letter = sub_obj.getString("letter");
+                        String sub_id = sub_obj.getString("id");
+                        String sub_linked_phd = sub_obj.getString("linked_phd");
+
+                        SubTask subtask = new SubTask(sub_name,sub_letter,sub_id,sub_linked_phd);
+                        task.addSubtask(subtask);
+                    }
                     tasks.add(task);
-                    System.out.println(task.toString());
                 }
-
                 taskListLocalStore.storeTaskList(tasks);
-
-
             } catch (JSONException e) {
                 System.out.println(e);
             }catch (NullPointerException e) {
                 System.out.println(e);
             }
-
         }
-
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,11 +344,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void downloadExam() {
-        JSONClient client = new JSONClient(this, examResultListener);
+        JSONClient task_client = new JSONClient(this, examResultListener);
         // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
         // TODO: ACHTUNG KURZNAME!
         String url = "http://marcengelmann.com/smart/download.php?intent=exam&exam_name=AER";
-        client.execute(url);
+        task_client.execute(url);
     }
 
     private void uploadData(Anfrage anfrage) {

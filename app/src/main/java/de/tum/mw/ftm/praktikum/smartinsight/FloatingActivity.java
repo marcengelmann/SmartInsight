@@ -21,7 +21,7 @@ public class FloatingActivity extends AppCompatActivity {
     private Spinner spinnerTaskNumber;
     private String[] stringTaskNumber;
     private Spinner spinnerTaskSubNumber;
-    private String[]stringTaskSubNumber = {"a", "b", "c"};
+    private ArrayList<String[]> stringTaskSubNumber;
     final Context context = this;
 
     private RadioButton radioBtnQuestionA;
@@ -57,12 +57,28 @@ public class FloatingActivity extends AppCompatActivity {
         stringTaskNumber = new String[tasks.size()];
 
         int pos = 0;
+        stringTaskSubNumber = new ArrayList<String[]>();
+
         for(Task task:tasks) {
-           stringTaskNumber[pos] = task.number +". "+task.name;
-                   pos ++;
+            int sub_pos = 0;
+            stringTaskNumber[pos] = task.number +". "+task.name;
+            pos ++;
+            String[] subStringHelper = new String[task.getSubtasks().size()];
+            for(SubTask subtask:task.getSubtasks()) {
+                subStringHelper[sub_pos] = subtask.letter + ") "+subtask.name;
+                sub_pos ++;
+            }
+            if(subStringHelper.length == 0) {
+                subStringHelper = new String[1];
+                subStringHelper[0] = "no content";
+            }
+            stringTaskSubNumber.add(subStringHelper);
+            System.out.println(subStringHelper[0]);
         }
 
         spinnerTaskNumber = (Spinner)findViewById(R.id.spinnerTaskNumber);
+        spinnerTaskSubNumber = (Spinner)findViewById(R.id.spinnerTaskSubNumber);
+
         ArrayAdapter<String> adapterTaskNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, stringTaskNumber);
         adapterTaskNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTaskNumber.setAdapter(adapterTaskNumber);
@@ -70,24 +86,26 @@ public class FloatingActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                // Todo: anhand der postion das sub array laden
+
+                ArrayAdapter<String> newAdapter = new ArrayAdapter<>(FloatingActivity.this, android.R.layout.simple_spinner_dropdown_item, stringTaskSubNumber.get(position));
+                newAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerTaskSubNumber.setAdapter(newAdapter);
+                newAdapter.notifyDataSetChanged();
+
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
+               // do nothing
             }
         });
 
-
-        spinnerTaskSubNumber = (Spinner)findViewById(R.id.spinnerTaskSubNumber);
-        ArrayAdapter<String> adapterSubTaskNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, stringTaskSubNumber);
+        ArrayAdapter<String> adapterSubTaskNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, stringTaskSubNumber.get(0));
         adapterSubTaskNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTaskSubNumber.setAdapter(adapterSubTaskNumber);
 
         anfrageLocalStore = new AnfrageLocalStore(this);
         userLocalStore = new UserLocalStore(this);
-
 
         anfrageLocalStore.setStatusAnfrageClient(false);
         anfrageLocalStore.clearDataAnfrageClient();

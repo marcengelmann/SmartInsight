@@ -16,14 +16,19 @@ public class Task implements Serializable {
         this.name = name;
         this.linked_exam = linked_exam;
         this.linked_phd = linked_phd;
+        this.subtasks = new ArrayList<SubTask>();
     }
 
     public void addSubtask(SubTask subtask) {
         this.subtasks.add(subtask);
     }
 
+    public ArrayList<SubTask> getSubtasks() {
+        return subtasks;
+    }
+
     @Override
     public String toString() {
-        return "TASK: ID"+id+" number" +number+" name"+name+ " linked_exam" +linked_exam+" linked_phd"+linked_phd;
+        return "TASK: ID"+id+" number" +number+" name"+name+ " linked_exam" +linked_exam+" linked_phd"+linked_phd+" SUBTASKS: "+subtasks.size();
     }
 }
