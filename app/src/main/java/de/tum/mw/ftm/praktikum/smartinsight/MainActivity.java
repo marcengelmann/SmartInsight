@@ -103,14 +103,15 @@ public class MainActivity extends AppCompatActivity
                     JSONObject obj = jsonArray.getJSONObject(i);
                     String student = obj.getString("linked_student");
                     String exam = obj.getString("linked_exam");
-                    String subtask = obj.getString("linked_subtask");
-                    String task = obj.getString("linked_task");
+                    String subtask = obj.getString("subtask_name");
+                    String task = obj.getString("task_name")+" ";
                     String phd = obj.getString("linked_phd");
                     String id = obj.getString("id");
                     //Todo hinzufügen von Uhrzeit, Art der Frage
+
+
                     AnfrageProvider anfrage = new AnfrageProvider(id,"12:00","12:10", task, subtask, "Inhalt und PUnkte", phd);
                     requests.add(anfrage);
-                    System.out.println(anfrage.toString());
                 }
                 updateListView();
 
@@ -353,7 +354,6 @@ public class MainActivity extends AppCompatActivity
 
     private void uploadData(Anfrage anfrage) {
         System.out.println("Trying data upload ...");
-        System.out.println(anfrage.toString());
         JSONClient uploader = new JSONClient(this, uploadResultListener);
         // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
         String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer+"&task_id="+anfrage.linked_task+"&subtask_id="+anfrage.linked_subtask;

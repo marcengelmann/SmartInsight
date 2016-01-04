@@ -73,7 +73,6 @@ public class FloatingActivity extends AppCompatActivity {
                 subStringHelper[0] = "no content";
             }
             stringTaskSubNumber.add(subStringHelper);
-            System.out.println(subStringHelper[0]);
         }
 
         spinnerTaskNumber = (Spinner)findViewById(R.id.spinnerTaskNumber);
@@ -131,9 +130,8 @@ public class FloatingActivity extends AppCompatActivity {
         artOfQuestion = arrayQuestion[idx];
         taskNumber = String.valueOf(spinnerTaskNumber.getSelectedItem());
         taskSubNumber = String.valueOf(spinnerTaskSubNumber.getSelectedItem());
-        //String msg = "Zur Aufgabe: " + taskNumber + taskSubNumber + "hast du eine Frage zu: " + artOfQuestion;
 
-        finalDialog("Anfrage senden","Zur Aufgabe: " + taskNumber + taskSubNumber + " hast du eine Frage zu: " + artOfQuestion).show();
+        finalDialog("Anfrage senden","Zur Aufgabe " + taskNumber +" "+ taskSubNumber + " hast du eine Frage zu: " + artOfQuestion).show();
     }
     private Dialog finalDialog(String title,String msg){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -147,7 +145,7 @@ public class FloatingActivity extends AppCompatActivity {
 
                 //TODO: linked_student, linked_task, linked_subtask, linked_phd, linked_exam
 
-                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).id,taskSubNumber,"linked_phd",artOfQuestion);
+                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).id,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).getSubtasks().get(spinnerTaskSubNumber.getSelectedItemPosition()).id,"linked_phd",artOfQuestion);
                 anfrageLocalStore.storeAnfrageData(anfrage);
                 anfrageLocalStore.setStatusAnfrageClient(true);
                 finish();
