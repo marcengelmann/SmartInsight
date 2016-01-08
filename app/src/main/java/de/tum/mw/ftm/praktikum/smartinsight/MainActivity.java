@@ -321,12 +321,7 @@ public class MainActivity extends AppCompatActivity
             setTitle(R.string.caption_settings);
             fragment = new SettingsFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-        } else if (id == R.id.nav_statistic) {
-            setTitle(R.string.caption_statistic);
-            fragment = new StatisticFragment();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

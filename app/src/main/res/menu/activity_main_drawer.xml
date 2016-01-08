@@ -15,10 +15,6 @@
             android:icon="@drawable/ic_action_settings"
             android:title="@string/caption_settings" />
         <item
-            android:id="@+id/nav_statistic"
-            android:icon="@drawable/ic_action_statistic"
-            android:title="@string/caption_statistic" />
-        <item
             android:id="@+id/nav_abmelden"
             android:icon="@drawable/ic_action_power"
             android:title="Abmelden" />
