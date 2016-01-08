@@ -65,9 +65,6 @@ public class MainActivity extends AppCompatActivity
                     System.out.println("Upload successful!");
                     downloadRequests();
                 }
-
-                //TODO: Receive repsonse from server!
-
             } catch(JSONException e) {
                 System.out.println(e);
             }catch (NullPointerException e) {
@@ -109,10 +106,9 @@ public class MainActivity extends AppCompatActivity
                     String id = obj.getString("id");
                     String startTime = obj.getString("start_time");
                     String endTime = obj.getString("end_time");
-                    //Todo hinzufügen von Uhrzeit, Art der Frage
+                    String type_of_question = obj.getString("type_of_question");
 
-
-                    AnfrageProvider anfrage = new AnfrageProvider(id,startTime.substring(0,startTime.length()-3),endTime.substring(0,endTime.length()-3), task, subtask, "Inhalt und PUnkte", phd);
+                    AnfrageProvider anfrage = new AnfrageProvider(id,startTime.substring(0,startTime.length()-3),endTime.substring(0,endTime.length()-3), task, subtask, type_of_question, phd);
                     requests.add(anfrage);
                 }
                 updateListView();
@@ -251,7 +247,7 @@ public class MainActivity extends AppCompatActivity
         user = userLocalStore.getUserLogInUser();
 
         if(authenticate() == true && startActFirstTime){
-            Toast.makeText(MainActivity.this,"Willkommen, "+user.name + ", Matrikelnummer: "+ user.matrikelnummer + ", Email: "+user.email+ ", Prüfung: "+user.exam,
+            Toast.makeText(MainActivity.this,"Willkommen, "+user.name +" Matrikelnummer: "+ user.matrikelnummer + ", Email: "+user.email+ ", Prüfung: "+user.exam,
                     Toast.LENGTH_LONG).show();
             emailView.setText(user.email);
             nameView.setText(user.name);
@@ -340,33 +336,32 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void downloadRequests() {
+        System.out.println("Trying requests download ...");
         JSONClient client = new JSONClient(this, requestResultListener);
-        // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
-        String url = "http://www.marcengelmann.com/smart/download.php?intent=request&matrikelnummer=" + user.matrikelnummer;
+        // TODO: PRÜFUNG
+        String url = "http://www.marcengelmann.com/smart/download.php?intent=request&exam_name=AER&matrikelnummer=" + user.matrikelnummer+"&pw="+user.password;
         client.execute(url);
     }
 
     private void downloadExam() {
+        System.out.println("Trying exam download ...");
         JSONClient task_client = new JSONClient(this, examResultListener);
-        // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
         // TODO: ACHTUNG KURZNAME!
-        String url = "http://marcengelmann.com/smart/download.php?intent=exam&exam_name=AER";
+        String url = "http://marcengelmann.com/smart/download.php?intent=exam&exam_name=AER"+"&pw="+user.password;
         task_client.execute(url);
     }
 
     private void uploadData(Anfrage anfrage) {
         System.out.println("Trying data upload ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer+"&task_id="+anfrage.linked_task+"&subtask_id="+anfrage.linked_subtask;
+        String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer+"&task_id="+anfrage.linked_task+"&subtask_id="+anfrage.linked_subtask+"&pw="+user.password+"&type_of_question="+anfrage.type_of_question;
         uploader.execute(url);
     }
 
     private void deleteRequest(AnfrageProvider anfrage) {
         System.out.println("Trying data delete ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        // TODO: Website so konfigurieren, dass die Anfrage nur mit Passwort ausgegeben wird.
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=delete_request&request_id="+anfrage.id;
+        String url = "http://www.marcengelmann.com/smart/upload.php?intent=delete_request&request_id="+anfrage.id+"&pw="+user.password;
         uploader.execute(url);
     }
 

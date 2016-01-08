@@ -30,8 +30,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private ArrayList<String> listdata = new ArrayList<>();
     private Spinner spinnerSitzNumberView;
     UserLocalStore userLocalStore;
 
@@ -201,23 +198,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-
         }
     }
 
     private boolean isMatrikelnummerValid(String matrikelnummer) {
-
-        if(!TextUtils.isDigitsOnly(matrikelnummer)) {
-            return false;
-        } else if(matrikelnummer.length() <= 8 || matrikelnummer.length() > 12) {
-            return false;
-        } else {
-            return true;
-        }
+        return TextUtils.isDigitsOnly(matrikelnummer) && !(matrikelnummer.length() <= 8 || matrikelnummer.length() > 12);
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -308,7 +296,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     /**
@@ -322,18 +309,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         UserLoginTask(String matrikelnummer, String password) {
             this.mMatrikelnummer = matrikelnummer;
-            mPassword = password;
+            this.mPassword = password;
         }
-        final String getSitNumb = String.valueOf(spinnerSitzNumberView.getSelectedItem());
         @Override
         protected Boolean doInBackground(Void... params) {
-
-            JSONArray user_data = null;
 
             LoginHandler connection = new LoginHandler();
 
             try {
-                if(connection.tryLogin(mMatrikelnummer,mPassword)) {
+                if(connection.tryLogin(mMatrikelnummer,mPassword,String.valueOf(spinnerSitzNumberView.getSelectedItem()))) {
                     System.out.println("Login successful!");
                 } else {
                     System.out.println("Wrong credidentials!");
@@ -344,10 +328,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            User user = connection.getUserData();
-            user.sitNumb = getSitNumb;
             userLocalStore.setUserLoggedIn(true);
-            userLocalStore.storeUserData(user);
+            userLocalStore.storeUserData(connection.getUserData());
 
             return true;
         }

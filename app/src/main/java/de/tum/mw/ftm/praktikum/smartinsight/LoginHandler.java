@@ -17,13 +17,13 @@ public class LoginHandler {
 
     private User user = null;
 
-    protected boolean tryLogin(String mUsername, String mPassword)
+    protected boolean tryLogin(String mUsername, String mPassword, String mSeat)
     {
         HttpURLConnection connection;
         OutputStreamWriter request = null;
         URL url = null;
         String response = null;
-        String parameters = "matrikelnummer="+mUsername+"&passwort="+mPassword;
+        String parameters = "matrikelnummer="+mUsername+"&password="+MD5Encryptor.getMD5(mPassword)+"&seat="+mSeat;
 
         try
         {
@@ -78,10 +78,12 @@ public class LoginHandler {
             String matrikelnummer = json.get("matrikelnummer").toString();
             String linked_exam = json.get("linked_exam").toString();
             String email = json.get("email").toString();
+            String password = json.get("password").toString();
+            String seat = json.get("seat_number").toString();
 
             // Todo sitznummer muss noch gespiecher werden
 
-            user = new User(email, linked_exam, name, matrikelnummer, "0");
+            user = new User(email,password, linked_exam, name, matrikelnummer, seat);
 
         } catch(JSONException e) {
             System.out.println(e);

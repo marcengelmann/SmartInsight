@@ -142,10 +142,7 @@ public class FloatingActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int arg1) {
                 User user = userLocalStore.getUserLogInUser();
-
-                //TODO: linked_student, linked_task, linked_subtask, linked_phd, linked_exam
-
-                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).id,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).getSubtasks().get(spinnerTaskSubNumber.getSelectedItemPosition()).id,"linked_phd",artOfQuestion);
+                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).id,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).getSubtasks().get(spinnerTaskSubNumber.getSelectedItemPosition()).id,"linked_phd","linked_exam",artOfQuestion);
                 anfrageLocalStore.storeAnfrageData(anfrage);
                 anfrageLocalStore.setStatusAnfrageClient(true);
                 finish();

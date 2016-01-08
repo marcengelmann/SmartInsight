@@ -33,7 +33,7 @@
 
     <string name="checkQuestion_a">Inhalt</string>
     <string name="checkQuestion_b">Punkte</string>
-    <string name="checkQuestion_c">Inhalt und Punkte</string>
+    <string name="checkQuestion_c">Allgemein</string>
     <string-array name="art_of_question">
         <item>@string/checkQuestion_a</item>
         <item>@string/checkQuestion_b</item>
