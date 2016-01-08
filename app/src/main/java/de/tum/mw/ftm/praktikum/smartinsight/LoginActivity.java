@@ -3,7 +3,10 @@ package de.tum.mw.ftm.praktikum.smartinsight;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -58,6 +62,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private Spinner spinnerSitzNumberView;
     UserLocalStore userLocalStore;
 
+    private Button mEmailSignInButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +109,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         spinnerSitzNumberView.setAdapter(adapterSitNumber);
 
         userLocalStore = new UserLocalStore(this);
+
+        handleInternet();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        handleInternet();
+
     }
 
     private void populateAutoComplete() {
@@ -156,6 +171,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private void attemptLogin() {
         if (mAuthTask != null) {
+            return;
+        }
+
+        if(!handleInternet()) {
             return;
         }
 
@@ -353,6 +372,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+
+    private boolean handleInternet() {
+
+        if(false) {
+
+            return false;
+        } else {
+
+            return true;
         }
     }
 }

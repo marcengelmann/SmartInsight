@@ -1,6 +1,9 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
 import android.app.ActionBar;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
@@ -27,7 +30,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AnfrageListFragment.OnListFragmentInteractionListener, SettingsFragment.OnListFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, AnfrageListFragment.OnListFragmentInteractionListener, SettingsFragment.OnListFragmentInteractionListener {
     UserLocalStore userLocalStore;
     AnfrageLocalStore anfrageLocalStore;
     TaskListLocalStore taskListLocalStore;
@@ -55,26 +58,26 @@ public class MainActivity extends AppCompatActivity
         updateListView();
     }
 
-    private GetJSONListener uploadResultListener = new GetJSONListener(){
+    private GetJSONListener uploadResultListener = new GetJSONListener() {
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
             try {
                 String result = jsonFromNet.getString("result");
 
-                if(result.contains("true")) {
+                if (result.contains("true")) {
                     System.out.println("Upload successful!");
                     downloadRequests();
                 }
-            } catch(JSONException e) {
+            } catch (JSONException e) {
                 System.out.println(e);
-            }catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 System.out.println(e);
             }
         }
 
     };
 
-    private void setFragmentAnfrageliste(){
+    private void setFragmentAnfrageliste() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment;
 
@@ -90,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private GetJSONListener requestResultListener = new GetJSONListener(){
+    private GetJSONListener requestResultListener = new GetJSONListener() {
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
             try {
@@ -108,7 +111,7 @@ public class MainActivity extends AppCompatActivity
                     String endTime = obj.getString("end_time");
                     String type_of_question = obj.getString("type_of_question");
 
-                    AnfrageProvider anfrage = new AnfrageProvider(id,startTime.substring(0,startTime.length()-3),endTime.substring(0,endTime.length()-3), task, subtask, type_of_question, phd);
+                    AnfrageProvider anfrage = new AnfrageProvider(id, startTime.substring(0, startTime.length() - 3), endTime.substring(0, endTime.length() - 3), task, subtask, type_of_question, phd);
                     requests.add(anfrage);
                 }
                 updateListView();
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity
 
             } catch (JSONException e) {
                 System.out.println(e);
-            }catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 System.out.println(e);
             }
 
@@ -127,7 +130,7 @@ public class MainActivity extends AppCompatActivity
 
     };
 
-    private GetJSONListener examResultListener = new GetJSONListener(){
+    private GetJSONListener examResultListener = new GetJSONListener() {
         @Override
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
 
@@ -146,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                     String id = obj.getString("id");
                     String number = obj.getString("number");
 
-                    Task task = new Task(name,linked_exam,linked_phd,id,number);
+                    Task task = new Task(name, linked_exam, linked_phd, id, number);
 
                     JSONArray subtasks = obj.getJSONArray("subtasks");
 
@@ -158,7 +161,7 @@ public class MainActivity extends AppCompatActivity
                         String sub_id = sub_obj.getString("id");
                         String sub_linked_phd = sub_obj.getString("linked_phd");
 
-                        SubTask subtask = new SubTask(sub_name,sub_letter,sub_id,sub_linked_phd);
+                        SubTask subtask = new SubTask(sub_name, sub_letter, sub_id, sub_linked_phd);
                         task.addSubtask(subtask);
                     }
                     tasks.add(task);
@@ -166,7 +169,7 @@ public class MainActivity extends AppCompatActivity
                 taskListLocalStore.storeTaskList(tasks);
             } catch (JSONException e) {
                 System.out.println(e);
-            }catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 System.out.println(e);
             }
         }
@@ -217,7 +220,7 @@ public class MainActivity extends AppCompatActivity
         user = userLocalStore.getUserLogInUser();
 
         //todo setze dummy daten für die Klausureinsichttermine im Kalendar
-       updateCalendarData();
+        updateCalendarData();
     }
 
     @Override
@@ -231,23 +234,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     //Todo ist akuteller dummy funktion um die Daten für die Kalender in das Array zu laden
-    private void  updateCalendarData(){
+    private void updateCalendarData() {
         requestsCalendar.clear();
-        for (int i = 0; i < 10 ;i++){
-            Calendar calendarItem = new Calendar("DAtum " + i , "Klausurname " + i, "Raum " + i);
+        for (int i = 0; i < 10; i++) {
+            Calendar calendarItem = new Calendar("DAtum " + i, "Klausurname " + i, "Raum " + i);
             requestsCalendar.add(calendarItem);
         }
     }
 
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
 
         user = userLocalStore.getUserLogInUser();
 
-        if(authenticate() == true && startActFirstTime){
-            Toast.makeText(MainActivity.this,"Willkommen, "+user.name +" Matrikelnummer: "+ user.matrikelnummer + ", Email: "+user.email+ ", Prüfung: "+user.exam,
+        if (authenticate() == true && startActFirstTime) {
+            Toast.makeText(MainActivity.this, "Willkommen, " + user.name + " Matrikelnummer: " + user.matrikelnummer + ", Email: " + user.email + ", Prüfung: " + user.exam,
                     Toast.LENGTH_LONG).show();
             emailView.setText(user.email);
             nameView.setText(user.name);
@@ -257,15 +260,13 @@ public class MainActivity extends AppCompatActivity
             downloadExam();
             navigationView.getMenu().getItem(0).setChecked(true);
             setFragmentAnfrageliste();
-        }
-        else if (startActFirstTime){
+        } else if (startActFirstTime) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             startActFirstTime = true;
         }
 
         //Hier kommen updates nach dem Floating action button hin
-        if(anfrageLocalStore.getStatusAnfrageClient())
-        {
+        if (anfrageLocalStore.getStatusAnfrageClient()) {
             Anfrage anfrage = anfrageLocalStore.getDataAnfrageClient();
             uploadData(anfrage);
             updateListView();
@@ -276,11 +277,11 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private boolean authenticate(){
+    private boolean authenticate() {
         return userLocalStore.getUserLoggedIn();
     }
 
-    private  void updateListView() {
+    private void updateListView() {
         if (fragmentAnfrageListActive) {
             AnfrageListFragment anfrageListFragment = (AnfrageListFragment)
                     getSupportFragmentManager().findFragmentById(R.id.container);
@@ -305,8 +306,7 @@ public class MainActivity extends AppCompatActivity
             fragment.setArguments(bundle);
             setTitle(R.string.caption_klausur);
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-        }
-        else if (id == R.id.nav_abmelden) {
+        } else if (id == R.id.nav_abmelden) {
             userLocalStore.clearUserData();
             userLocalStore.setUserLoggedIn(false);
             setTitle(R.string.caption);
@@ -315,16 +315,13 @@ public class MainActivity extends AppCompatActivity
             Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
             startActivity(myIntent);
             startActFirstTime = true;
-        }
-        else if (id == R.id.nav_anfragen) {
+        } else if (id == R.id.nav_anfragen) {
             setFragmentAnfrageliste();
-        }
-        else if (id == R.id.nav_settings) {
+        } else if (id == R.id.nav_settings) {
             setTitle(R.string.caption_settings);
             fragment = new SettingsFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-        }
-        else if (id == R.id.nav_statistic) {
+        } else if (id == R.id.nav_statistic) {
             setTitle(R.string.caption_statistic);
             fragment = new StatisticFragment();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
@@ -339,7 +336,7 @@ public class MainActivity extends AppCompatActivity
         System.out.println("Trying requests download ...");
         JSONClient client = new JSONClient(this, requestResultListener);
         // TODO: PRÜFUNG
-        String url = "http://www.marcengelmann.com/smart/download.php?intent=request&exam_name=AER&matrikelnummer=" + user.matrikelnummer+"&pw="+user.password;
+        String url = "http://www.marcengelmann.com/smart/download.php?intent=request&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password;
         client.execute(url);
     }
 
@@ -347,31 +344,30 @@ public class MainActivity extends AppCompatActivity
         System.out.println("Trying exam download ...");
         JSONClient task_client = new JSONClient(this, examResultListener);
         // TODO: ACHTUNG KURZNAME!
-        String url = "http://marcengelmann.com/smart/download.php?intent=exam&exam_name=AER"+"&pw="+user.password;
+        String url = "http://marcengelmann.com/smart/download.php?intent=exam&exam_name="+user.exam+ "&pw=" + user.password;
         task_client.execute(url);
     }
 
     private void uploadData(Anfrage anfrage) {
         System.out.println("Trying data upload ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer+"&task_id="+anfrage.linked_task+"&subtask_id="+anfrage.linked_subtask+"&pw="+user.password+"&type_of_question="+anfrage.type_of_question;
+        String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer + "&task_id=" + anfrage.linked_task + "&subtask_id=" + anfrage.linked_subtask + "&pw=" + user.password + "&type_of_question=" + anfrage.type_of_question;
         uploader.execute(url);
     }
 
     private void deleteRequest(AnfrageProvider anfrage) {
         System.out.println("Trying data delete ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=delete_request&request_id="+anfrage.id+"&pw="+user.password;
+        String url = "http://www.marcengelmann.com/smart/upload.php?intent=delete_request&request_id=" + anfrage.id + "&pw=" + user.password;
         uploader.execute(url);
     }
 
     @Override
     public void onListFragmentUpdateProfilePic() {
-        if (userLocalStore.getUserStatusProfilPic()){
+        if (userLocalStore.getUserStatusProfilPic()) {
             User user = userLocalStore.getUserLogInUser();
             profilPicView.setImageURI(userLocalStore.getUserProfilPic());
-        }
-        else {
+        } else {
             profilPicView.setImageResource(R.mipmap.ic_launcher_fernrohr);
         }
     }
