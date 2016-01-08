@@ -5,4 +5,6 @@
     <color name="colorAccent">#f44336</color>
     <color name="naviagtionBarColor">#01579b</color>
     <color name="borderCircleImage">#FF222222</color>
+    <color name="spinner_base_color">#44000000</color>
+
 </resources>
