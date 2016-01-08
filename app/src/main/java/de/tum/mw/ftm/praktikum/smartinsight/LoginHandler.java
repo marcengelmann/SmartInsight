@@ -70,18 +70,14 @@ public class LoginHandler {
 
         try {
             System.out.println("User Data received ... saving now!");
+
             JSONObject json = new JSONObject(jsonString);
-
-            System.out.println(json.toString());
-
             String name = json.get("name").toString();
             String matrikelnummer = json.get("matrikelnummer").toString();
             String linked_exam = json.get("linked_exam").toString();
             String email = json.get("email").toString();
             String password = json.get("password").toString();
             String seat = json.get("seat_number").toString();
-
-            // Todo sitznummer muss noch gespiecher werden
 
             user = new User(email,password, linked_exam, name, matrikelnummer, seat);
 
