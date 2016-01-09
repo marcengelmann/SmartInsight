@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -295,32 +294,35 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment;
-        int id = item.getItemId();
         fragmentAnfrageListActive = false;
 
-        //TODO: use switch statement here!
-        if (id == R.id.nav_calendar) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("calendar", (Serializable) calendarList);
-            fragment = new CalendarFragment();
-            fragment.setArguments(bundle);
-            setTitle(R.string.caption_klausur);
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-        } else if (id == R.id.nav_abmelden) {
-            userLocalStore.clearUserData();
-            userLocalStore.setUserLoggedIn(false);
-            setTitle(R.string.caption);
-            View view;
-            view = new View(this);
-            Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
-            startActivity(myIntent);
-            startActFirstTime = true;
-        } else if (id == R.id.nav_anfragen) {
-            setFragmentAnfrageliste();
-        } else if (id == R.id.nav_settings) {
-            setTitle(R.string.caption_settings);
-            fragment = new SettingsFragment();
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        switch (item.getItemId()) {
+            case R.id.nav_calendar:
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("calendar", calendarList);
+                fragment = new CalendarFragment();
+                fragment.setArguments(bundle);
+                setTitle(R.string.caption_klausur);
+                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+                break;
+            case R.id.nav_abmelden:
+                userLocalStore.clearUserData();
+                userLocalStore.setUserLoggedIn(false);
+                setTitle(R.string.caption);
+                View view;
+                view = new View(this);
+                Intent myIntent = new Intent(view.getContext(), LoginActivity.class);
+                startActivity(myIntent);
+                startActFirstTime = true;
+                break;
+            case R.id.nav_anfragen:
+                setFragmentAnfrageliste();
+                break;
+            case R.id.nav_settings:
+                setTitle(R.string.caption_settings);
+                fragment = new SettingsFragment();
+                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
