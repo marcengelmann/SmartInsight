@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentDeleteListItem(int position, AnfrageProvider value) {
         deleteRequest(value);
         downloadRequests();
-        Toast.makeText(MainActivity.this, "Anfrage ... wurde gelöscht!",
+        Toast.makeText(MainActivity.this, "Anfrage wurde gelöscht!",
                 Toast.LENGTH_SHORT).show();
         updateListView();
     }
@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity
     private void downloadCalendar() {
         System.out.println("Trying calendar download ...");
         JSONClient task_client = new JSONClient(this, calendarResultListener);
-        String url = "http://marcengelmann.com/smart/download.php?intent=calendar&matrikelnummer="+user.matrikelnummer+ "&pw=" + user.password;
+        String url = "http://marcengelmann.com/smart/download.php?intent=calendar&exam_name="+user.exam+"&matrikelnummer="+user.matrikelnummer+ "&pw=" + user.password;
         task_client.execute(url);
     }
 
@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity
     private void uploadData(Anfrage anfrage) {
         System.out.println("Trying data upload ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&matrikelnummer=" + user.matrikelnummer + "&task_id=" + anfrage.linked_task + "&subtask_id=" + anfrage.linked_subtask + "&pw=" + user.password + "&type_of_question=" + anfrage.type_of_question;
+        String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&task_id=" + anfrage.linked_task + "&subtask_id=" + anfrage.linked_subtask + "&pw=" + user.password + "&type_of_question=" + anfrage.type_of_question;
         uploader.execute(url);
     }
 
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity
     private void deleteRequest(AnfrageProvider anfrage) {
         System.out.println("Trying data delete ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=delete_request&request_id=" + anfrage.id + "&pw=" + user.password;
+        String url = "http://www.marcengelmann.com/smart/upload.php?intent=delete_request&exam_name="+user.exam+"&request_id=" + anfrage.id + "&pw=" + user.password;
         uploader.execute(url);
     }
 
