@@ -1,10 +1,5 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
-import android.app.ActionBar;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,11 +37,10 @@ public class MainActivity extends AppCompatActivity
     TextView nameView;
     CircleImageView profilPicView;
     NavigationView navigationView;
-    ArrayList<AnfrageProvider> requests = new ArrayList<AnfrageProvider>();
-    //Todo In dieses Array müsste am Anfang (Nur einmal) alle aktuellen Prüfungstermine geladen werden!
-    ArrayList<Calendar> requestsCalendar = new ArrayList<Calendar>();
 
-    ArrayList<Task> tasks = new ArrayList<Task>();
+    ArrayList<AnfrageProvider> requests = new ArrayList<>();
+    ArrayList<Calendar> calendarList = new ArrayList<>();
+    ArrayList<Task> tasks = new ArrayList<>();
 
     @Override
     public void onListFragmentDeleteListItem(int position, AnfrageProvider value) {
@@ -69,20 +62,19 @@ public class MainActivity extends AppCompatActivity
                     downloadRequests();
                 }
             } catch (JSONException e) {
-                System.out.println(e);
-            } catch (NullPointerException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
 
     };
 
+    @SuppressWarnings("SpellCheckingInspection")
     private void setFragmentAnfrageliste() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment;
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("requests", (Serializable) requests);
+        bundle.putSerializable("requests", requests);
 
         setTitle(R.string.capition_anfrageliste);
         fragment = new AnfrageListFragment();
@@ -101,8 +93,6 @@ public class MainActivity extends AppCompatActivity
                 JSONArray jsonArray = jsonFromNet.getJSONArray("posts");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
-                    String student = obj.getString("linked_student");
-                    String exam = obj.getString("linked_exam");
                     String subtask = obj.getString("subtask_name");
                     String task = obj.getString("task_name");
                     String phd = obj.getString("linked_phd");
@@ -121,13 +111,33 @@ public class MainActivity extends AppCompatActivity
                 }*/
 
             } catch (JSONException e) {
-                System.out.println(e);
-            } catch (NullPointerException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
-
         }
 
+    };
+
+    private GetJSONListener calendarResultListener = new GetJSONListener() {
+        @Override
+        public void onRemoteCallComplete(JSONObject jsonFromNet) {
+            try {
+                calendarList.clear();
+                JSONArray jsonArray = jsonFromNet.getJSONArray("posts");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+
+                    String date = obj.getString("date");
+                    String name = obj.getString("name");
+                    String room = obj.getString("room");
+
+                    Calendar calendar = new Calendar(date,name,room);
+                    calendarList.add(calendar);
+                    System.out.println(calendar.toString());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     };
 
     private GetJSONListener examResultListener = new GetJSONListener() {
@@ -168,9 +178,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 taskListLocalStore.storeTaskList(tasks);
             } catch (JSONException e) {
-                System.out.println(e);
-            } catch (NullPointerException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     };
@@ -205,9 +213,9 @@ public class MainActivity extends AppCompatActivity
         nameView = (TextView) headerNavigation.findViewById(R.id.nameView);
         profilPicView = (CircleImageView) headerNavigation.findViewById(R.id.imageView);
 
-        //generate lsitview für anfragen
+        //generate list view for requests
         // Construct the data source
-        ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<AnfrageProvider>();
+        //ArrayList<AnfrageProvider> arrayOfUsers = new ArrayList<>();
         // Create the adapter to convert the array to views
 
         taskListLocalStore = new TaskListLocalStore(this);
@@ -218,9 +226,6 @@ public class MainActivity extends AppCompatActivity
         setFragmentAnfrageliste();
 
         user = userLocalStore.getUserLogInUser();
-
-        //todo setze dummy daten für die Klausureinsichttermine im Kalendar
-        updateCalendarData();
     }
 
     @Override
@@ -233,23 +238,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //Todo ist akuteller dummy funktion um die Daten für die Kalender in das Array zu laden
-    private void updateCalendarData() {
-        requestsCalendar.clear();
-        for (int i = 0; i < 10; i++) {
-            Calendar calendarItem = new Calendar("DAtum " + i, "Klausurname " + i, "Raum " + i);
-            requestsCalendar.add(calendarItem);
-        }
-    }
-
-
     @Override
     protected void onStart() {
         super.onStart();
 
         user = userLocalStore.getUserLogInUser();
 
-        if (authenticate() == true && startActFirstTime) {
+        if (authenticate() && startActFirstTime) {
             Toast.makeText(MainActivity.this, "Willkommen, " + user.name + " Matrikelnummer: " + user.matrikelnummer + ", Email: " + user.email + ", Prüfung: " + user.exam,
                     Toast.LENGTH_LONG).show();
             emailView.setText(user.email);
@@ -258,6 +253,7 @@ public class MainActivity extends AppCompatActivity
             startActFirstTime = false;
             downloadRequests();
             downloadExam();
+            downloadCalendar();
             navigationView.getMenu().getItem(0).setChecked(true);
             setFragmentAnfrageliste();
         } else if (startActFirstTime) {
@@ -281,6 +277,7 @@ public class MainActivity extends AppCompatActivity
         return userLocalStore.getUserLoggedIn();
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private void updateListView() {
         if (fragmentAnfrageListActive) {
             AnfrageListFragment anfrageListFragment = (AnfrageListFragment)
@@ -299,9 +296,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         fragmentAnfrageListActive = false;
 
+        //TODO: use switch statement here!
         if (id == R.id.nav_calendar) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable("calendar", (Serializable) requestsCalendar);
+            bundle.putSerializable("calendar", (Serializable) calendarList);
             fragment = new CalendarFragment();
             fragment.setArguments(bundle);
             setTitle(R.string.caption_klausur);
@@ -330,7 +328,6 @@ public class MainActivity extends AppCompatActivity
     private void downloadRequests() {
         System.out.println("Trying requests download ...");
         JSONClient client = new JSONClient(this, requestResultListener);
-        // TODO: PRÜFUNG
         String url = "http://www.marcengelmann.com/smart/download.php?intent=request&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password;
         client.execute(url);
     }
@@ -338,11 +335,18 @@ public class MainActivity extends AppCompatActivity
     private void downloadExam() {
         System.out.println("Trying exam download ...");
         JSONClient task_client = new JSONClient(this, examResultListener);
-        // TODO: ACHTUNG KURZNAME!
         String url = "http://marcengelmann.com/smart/download.php?intent=exam&exam_name="+user.exam+ "&pw=" + user.password;
         task_client.execute(url);
     }
 
+    private void downloadCalendar() {
+        System.out.println("Trying calendar download ...");
+        JSONClient task_client = new JSONClient(this, calendarResultListener);
+        String url = "http://marcengelmann.com/smart/download.php?intent=calendar&matrikelnummer="+user.matrikelnummer+ "&pw=" + user.password;
+        task_client.execute(url);
+    }
+
+    @SuppressWarnings("SpellCheckingInspection")
     private void uploadData(Anfrage anfrage) {
         System.out.println("Trying data upload ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
@@ -350,6 +354,7 @@ public class MainActivity extends AppCompatActivity
         uploader.execute(url);
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private void deleteRequest(AnfrageProvider anfrage) {
         System.out.println("Trying data delete ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
@@ -360,7 +365,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListFragmentUpdateProfilePic() {
         if (userLocalStore.getUserStatusProfilPic()) {
-            User user = userLocalStore.getUserLogInUser();
+            //User user = userLocalStore.getUserLogInUser();
             profilPicView.setImageURI(userLocalStore.getUserProfilPic());
         } else {
             profilPicView.setImageResource(R.mipmap.ic_launcher_fernrohr);

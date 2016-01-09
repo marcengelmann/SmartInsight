@@ -1,8 +1,5 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
@@ -17,4 +14,8 @@ public class Calendar implements Serializable {
         this.room = room;
     }
 
+    @Override
+    public String toString() {
+        return "Datum:"+date+" Name:"+name+" Raum:"+room;
+    }
 }
