@@ -20,9 +20,9 @@ public class LoginHandler {
     protected boolean tryLogin(String mUsername, String mPassword, String mSeat)
     {
         HttpURLConnection connection;
-        OutputStreamWriter request = null;
-        URL url = null;
-        String response = null;
+        OutputStreamWriter request;
+        URL url;
+        String response;
         String parameters = "matrikelnummer="+mUsername+"&password="+MD5Encryptor.getMD5(mPassword)+"&seat="+mSeat;
 
         try
@@ -37,7 +37,7 @@ public class LoginHandler {
             request.write(parameters);
             request.flush();
             request.close();
-            String line = "";
+            String line;
             InputStreamReader isr = new InputStreamReader(connection.getInputStream());
             BufferedReader reader = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();

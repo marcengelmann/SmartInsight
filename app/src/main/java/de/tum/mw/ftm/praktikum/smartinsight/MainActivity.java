@@ -112,7 +112,9 @@ public class MainActivity extends AppCompatActivity
                 }*/
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                requests.clear();
+                Toast.makeText(MainActivity.this, "Keine Anfragen verfügbar!",
+                        Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -136,7 +138,8 @@ public class MainActivity extends AppCompatActivity
                     System.out.println(calendar.toString());
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "Serververbindung fehlgeschlagen!",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -179,7 +182,8 @@ public class MainActivity extends AppCompatActivity
                 }
                 taskListLocalStore.storeTaskList(tasks);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Toast.makeText(MainActivity.this, "Fehler beim Laden der Prüfungsstruktur!",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     };

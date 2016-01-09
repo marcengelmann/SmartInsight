@@ -3,10 +3,7 @@ package de.tum.mw.ftm.praktikum.smartinsight;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -62,8 +58,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private Spinner spinnerSitzNumberView;
     UserLocalStore userLocalStore;
 
-    private Button mEmailSignInButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,7 +209,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password,String.valueOf(spinnerSitzNumberView.getSelectedItem()));
             mAuthTask.execute((Void) null);
         }
     }
@@ -325,10 +319,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mMatrikelnummer;
         private final String mPassword;
+        private final String mSeat;
 
-        UserLoginTask(String matrikelnummer, String password) {
+        UserLoginTask(String matrikelnummer, String password,String seat) {
             this.mMatrikelnummer = matrikelnummer;
             this.mPassword = password;
+            this.mSeat = seat;
         }
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -336,7 +332,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             LoginHandler connection = new LoginHandler();
 
             try {
-                if(connection.tryLogin(mMatrikelnummer,mPassword,String.valueOf(spinnerSitzNumberView.getSelectedItem()))) {
+                if(connection.tryLogin(mMatrikelnummer,mPassword,mSeat)) {
                     System.out.println("Login successful!");
                 } else {
                     System.out.println("Wrong credidentials!");
@@ -376,14 +372,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean handleInternet() {
-
-        if(false) {
-
-            return false;
-        } else {
-
-            return true;
-        }
+        return true;
     }
 }
 
