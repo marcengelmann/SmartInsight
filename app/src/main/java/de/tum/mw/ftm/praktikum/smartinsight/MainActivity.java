@@ -56,10 +56,12 @@ public class MainActivity extends AppCompatActivity
         public void onRemoteCallComplete(JSONObject jsonFromNet) {
             try {
                 String result = jsonFromNet.getString("result");
-
                 if (result.contains("true")) {
                     System.out.println("Upload successful!");
                     downloadRequests();
+                } else {
+                    Toast.makeText(MainActivity.this, result,
+                            Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
