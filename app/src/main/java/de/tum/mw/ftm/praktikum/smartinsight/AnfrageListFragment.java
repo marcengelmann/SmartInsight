@@ -70,12 +70,10 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
             Context context = view.getContext();
             txtIntroduction = (TextView) view.findViewById(R.id.txtInfo);
             recyclerView = (RecyclerView) view.findViewById(R.id.list);
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-
+            recyclerView.setHasFixedSize(true);
+            LinearLayoutManager llm = new LinearLayoutManager(getContext());
+            llm.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(llm);
             // Create the adapter to convert the array to views
             recyclerView.setAdapter(adapter);
 
