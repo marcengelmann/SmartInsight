@@ -14,15 +14,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/list_requerst_titel"
         android:orientation="horizontal"
-        android:textColor="@android:color/white"
         android:background="@color/colorPrimary"
         android:padding="4dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:id="@+id/txtTime"
-            android:text="Termin: "
+            android:text="Termin von "
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:textSize="16dp"/>
@@ -30,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:textColor="@android:color/white"
             android:layout_toRightOf="@id/txtTime"
             android:id="@+id/startTime"
             android:textSize="16dp"/>
@@ -37,16 +39,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:textColor="@android:color/white"
             android:id="@+id/txtUntil"
             android:layout_toRightOf="@id/startTime"
-            android:text=" - "
+            android:text=" bis "
             android:textSize="16dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
             android:id="@+id/endTime"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/txtUntil"
+            android:textSize="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_centerVertical="true"
+            android:text="Uhr"
+            android:layout_toRightOf="@id/endTime"
             android:textSize="16dp"/>
         <ImageButton
             android:id="@+id/listViewButton"
@@ -62,6 +74,7 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/list_requerst_content"
         android:padding="4dp">
         <TextView
             android:layout_width="wrap_content"
