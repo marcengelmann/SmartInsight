@@ -95,8 +95,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
         String[] number = new String[maxSitNumb];
-        for(int i=0; i < number.length; i++){
-            number[i] = String.valueOf(i);
+        for(int i=1; i <= number.length; i++){
+            number[i-1] = String.valueOf(i);
         }
         ArrayAdapter<String> adapterSitNumber = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, number);
         adapterSitNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

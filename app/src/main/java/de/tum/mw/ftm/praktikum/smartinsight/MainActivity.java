@@ -136,8 +136,12 @@ public class MainActivity extends AppCompatActivity
                     String date = obj.getString("date");
                     String name = obj.getString("name");
                     String room = obj.getString("room");
-                    // todo hinzfügen von der Anzahl der Teilnehmer und Verantwortliche Person für Klausur durchschnittsnote
-                    Calendar calendar = new Calendar(date,name,room, String.valueOf(i), "Markus Schmitt", "2,5");
+                    String responsible_person = obj.getString("responsible_person");
+                    String number_of_students = obj.getString("number_of_students");
+                    String mean_grade = obj.getString("mean_grade");
+                    Calendar calendar = new Calendar(date,name,room,number_of_students, responsible_person,mean_grade);
+
+                    //TODO: durchschnittsnote noch in Fragment einfügen !!!
 
                     calendarList.add(calendar);
                     System.out.println(calendar.toString());
@@ -255,7 +259,7 @@ public class MainActivity extends AppCompatActivity
         user = userLocalStore.getUserLogInUser();
 
         if (authenticate() && startActFirstTime) {
-            Toast.makeText(MainActivity.this, "Willkommen, " + user.name + " Matrikelnummer: " + user.matrikelnummer + ", Email: " + user.email + ", Prüfung: " + user.exam,
+            Toast.makeText(MainActivity.this, "Willkommen, " + user.name + ".",
                     Toast.LENGTH_LONG).show();
             emailView.setText(user.email);
             nameView.setText(user.name);
@@ -279,7 +283,13 @@ public class MainActivity extends AppCompatActivity
         }
         anfrageLocalStore.setStatusAnfrageClient(false);
 
+        System.out.println(user.sitNumb);
+        System.out.println(user.didChange);
 
+        if(user.didChange) {
+            System.out.println("Change in user data detected!");
+            refreshUserData();
+        }
     }
 
 
@@ -365,6 +375,16 @@ public class MainActivity extends AppCompatActivity
         JSONClient uploader = new JSONClient(this, uploadResultListener);
         String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&task_id=" + anfrage.linked_task + "&subtask_id=" + anfrage.linked_subtask + "&pw=" + user.password + "&type_of_question=" + anfrage.type_of_question;
         uploader.execute(url);
+    }
+
+    @SuppressWarnings("SpellCheckingInspection")
+    private void refreshUserData() {
+        System.out.println("Trying user data update ...");
+        JSONClient uploader = new JSONClient(this, uploadResultListener);
+        String url = "http://www.marcengelmann.com/smart/upload.php?intent=userdata&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password + "&seat=" + user.sitNumb;
+        uploader.execute(url);
+        user.didChange = false;
+        userLocalStore.storeUserData(user);
     }
 
     @SuppressWarnings("SpellCheckingInspection")
