@@ -34,6 +34,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
         viewHolder.date.setText(mValues.get(position).date);
         viewHolder.numbOfReg.setText(mValues.get(position).numbOfRegistration);
         viewHolder.responsiblePerson.setText(mValues.get(position).responsiblePerson);
+        viewHolder.mean.setText(mValues.get(position).mean);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
         public TextView date;
         public TextView numbOfReg;
         public TextView responsiblePerson;
-
+        public TextView mean;
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -59,6 +60,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
             date = (TextView) view.findViewById(R.id.calendar_date);
             numbOfReg = (TextView) view.findViewById(R.id.calendar_numbOfReg);
             responsiblePerson = (TextView) view.findViewById(R.id.calendar_responsiblePerson);
+            mean = (TextView) view.findViewById(R.id.calendar_mean);
         }
 
     }
