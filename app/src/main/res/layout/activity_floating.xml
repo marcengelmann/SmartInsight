@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hier kann eine Frage zu der Klausur zu einer bestimmten Aufgabe (z.B. 1a) gesendet werden"
+        android:text="Hier kann eine Anfrage zu einer bestimmten Aufgabe erstellt werden. Der zuständige Dozent bekommt die Anfrage übermittelt."
         android:textSize="16dp"
         android:layout_margin="8dp"
         android:id="@+id/rowDesc"/>
@@ -49,6 +49,7 @@
         app:ms_enableErrorLabel="false"
         app:ms_highlightColor="@color/colorAccent"
         app:ms_arrowSize="16dp"
+        android:layout_marginBottom="20dp"
         app:ms_alignLabels="false"/>
 
     <TextView
@@ -59,14 +60,13 @@
         android:textSize="18dp"
         android:textStyle="bold"
         android:layout_margin="8dp"
-        android:layout_marginTop="60dp"
         android:id="@+id/rowQuestion"/>
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@+id/rowQuestion"
+        android:layout_below="@id/rowQuestion"
         android:id="@+id/radioGroupQuestion">
         <RadioButton android:id="@+id/radioBtnQuestionA"
             android:layout_width="match_parent"
