@@ -136,6 +136,8 @@ public class MainActivity extends AppCompatActivity
                     String date = obj.getString("date");
                     String name = obj.getString("name");
                     String room = obj.getString("room");
+                    // todo hinzfügen von der Anzahl der Teilnehmer und Verantwortliche Person für Klausur
+                    Calendar calendar = new Calendar(date,name,room, String.valueOf(i), "Markus Schmitt");
 
                     //TODO: durchschnittsnote !
 
