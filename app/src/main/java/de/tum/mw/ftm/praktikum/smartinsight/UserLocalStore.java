@@ -29,6 +29,7 @@ public class UserLocalStore {
         spEditor.putString("exam",user.exam);
         spEditor.putString("sitNumb", user.sitNumb);
         spEditor.putString("password",user.password);
+        spEditor.putBoolean("didChange", user.didChange);
         spEditor.commit();
     }
 
@@ -39,8 +40,9 @@ public class UserLocalStore {
         String exam = userLocalDatabase.getString("exam", "");
         String sitNumb = userLocalDatabase.getString("sitNumb", "");
         String password = userLocalDatabase.getString("password","");
+        Boolean didChange = userLocalDatabase.getBoolean("didChange",false);
 
-        User storedUser = new User(email,password, exam, name , matrikelnummer, sitNumb);
+        User storedUser = new User(email,password, exam, name , matrikelnummer, sitNumb,didChange);
 
         return storedUser;
     }

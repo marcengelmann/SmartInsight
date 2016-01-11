@@ -39,9 +39,7 @@ public class SettingsFragment extends Fragment {
      * @return A new instance of fragment SettingsFragment.
      */
     public static SettingsFragment newInstance(String param1, String param2) {
-        SettingsFragment fragment = new SettingsFragment();
-
-        return fragment;
+        return new SettingsFragment();
     }
 
     @Override
@@ -64,21 +62,24 @@ public class SettingsFragment extends Fragment {
 
         int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
         String[] number = new String[maxSitNumb];
-        for(int i=0; i < number.length; i++){
-            number[i] = String.valueOf(i);
+        for(int i=1; i <= number.length; i++){
+            number[i-1] = String.valueOf(i);
         }
         ArrayAdapter<String> adapterSitNumber = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, number);
         adapterSitNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSitzNumber.setAdapter(adapterSitNumber);
         final User user = userLocalStore.getUserLogInUser();
-        spinnerSitzNumber.setSelection(Integer.valueOf(user.sitNumb));
+        spinnerSitzNumber.setSelection(Integer.valueOf(user.sitNumb)-1);
         spinnerSitzNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                user.sitNumb = String.valueOf(position);
-                userLocalStore.storeUserData(user);
-                //Todo interface erstellen, was die Sitzpostion updated oder bei UserLocalStore eine Variable  hinzufügen, die besagt, dass das ganze upgedated werden muss
+                if(!user.sitNumb.equals(String.valueOf(position))) {
+                    user.didChange = true;
+                    user.sitNumb = String.valueOf(position+1);
+                    userLocalStore.storeUserData(user);
+                    System.out.println("Locally stored!");
+                }
             }
 
             @Override
@@ -125,14 +126,9 @@ public class SettingsFragment extends Fragment {
 
                 userLocalStore.setUserProfilPic(selectedImage);
                 userLocalStore.setUserStatusProfilPic(true);
-
-
             }
-
         }
-
     }
-
 
     public interface OnListFragmentInteractionListener {
         void onListFragmentUpdateProfilePic();
@@ -154,5 +150,4 @@ public class SettingsFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 }

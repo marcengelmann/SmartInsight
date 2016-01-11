@@ -79,7 +79,7 @@ public class LoginHandler {
             String password = json.get("password").toString();
             String seat = json.get("seat_number").toString();
 
-            user = new User(email,password, linked_exam, name, matrikelnummer, seat);
+            user = new User(email,password, linked_exam, name, matrikelnummer, seat, false);
 
         } catch(JSONException e) {
             System.out.println(e);
