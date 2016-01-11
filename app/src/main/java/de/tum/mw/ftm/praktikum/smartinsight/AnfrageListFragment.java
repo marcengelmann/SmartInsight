@@ -6,16 +6,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.os.Handler;
+import android.widget.Toast;
 
+import android.text.format.Time;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -24,7 +28,7 @@ import java.util.List;
  * interface.
  */
 public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.customButtonListener{
-
+    private SwipeRefreshLayout swipeContainer;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     AnfrageListAdapter adapter;
@@ -65,22 +69,43 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_anfrage_list, container, false);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContRequestList);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshListView();
+            }
 
-        // Set the adapter
-            Context context = view.getContext();
-            txtIntroduction = (TextView) view.findViewById(R.id.txtInfo);
-            recyclerView = (RecyclerView) view.findViewById(R.id.list);
-            recyclerView.setHasFixedSize(true);
-            LinearLayoutManager llm = new LinearLayoutManager(getContext());
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(llm);
-            // Create the adapter to convert the array to views
-            recyclerView.setAdapter(adapter);
-
+        });
+        txtIntroduction = (TextView) view.findViewById(R.id.txtInfo);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
+        // Create the adapter to convert the array to views
+        recyclerView.setAdapter(adapter);
         updateFragmentListView(listAnfrageProvider);
         return view;
     }
 
+    private void refreshListView(){
+        //Nur die Liste refreshen wenn auch anfragen vorhanden sind
+        if(recyclerView != null && !anfrageProviders.isEmpty())
+        {
+            adapter.setStatusPositon(false);
+            //Adapter für die Anfrage liste bescheid geben, dass sich daten geändert haben.
+            adapter.notifyDataSetChanged();
+            long requestStartDate = 0;
+            long requestEndDate = 0;
+            Time time = new Time("Europe/Berlin");
+            time.setToNow();
+            time.format("%c");
+            Log.d("test2","Refresh um : " + time);
+        }
+        swipeContainer.setRefreshing(false);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -102,6 +127,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
 
     public void updateFragmentListView(ArrayList<AnfrageProvider> requests) {
         anfrageProviders.clear();
+        adapter.setStatusPositon(false);
         if (requests.isEmpty()) {
             txtIntroduction.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -109,9 +135,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         else{
             txtIntroduction.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            for (AnfrageProvider request : requests) {
-                anfrageProviders.add(new AnfrageProvider(request.id, request.startTime, request.endTime, request.taskNumber, request.taskSubNumber, request.question, request.editor));
-            }
+            anfrageProviders.addAll(requests);
         }
         if (recyclerView != null){
             // Create the adapter to convert the array to views
@@ -127,6 +151,19 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         String title = "Anfrage löschen?";
 
         finalDialog(title,msg, position,value).show();
+    }
+
+    @Override
+    public void refreshListListener(int position, long timer) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshListView();
+            }
+        }, timer);
+        recyclerView.scrollToPosition(position);
+
+        Log.d("test","Update in ms. " +timer);
     }
 
     private Dialog finalDialog(String title,String msg, final int position, final AnfrageProvider value){

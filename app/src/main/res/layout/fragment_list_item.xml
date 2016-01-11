@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_requerst_titel"
+        android:id="@+id/list_request_title"
         android:orientation="horizontal"
         android:background="@color/colorPrimary"
         android:padding="4dp">
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:layout_centerVertical="true"
-            android:text="Uhr"
+            android:text=" Uhr"
             android:layout_toRightOf="@id/endTime"
             android:textSize="16dp"/>
         <ImageButton
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_delete"
+            android:src="@drawable/ic_action_delete"
             android:background="@color/colorPrimary"
             />
     </RelativeLayout>
@@ -74,7 +74,7 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_requerst_content"
+        android:id="@+id/list_request_content"
         android:padding="4dp">
         <TextView
             android:layout_width="wrap_content"

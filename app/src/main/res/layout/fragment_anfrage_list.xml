@@ -4,22 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-
     tools:context="de.tum.mw.ftm.praktikum.smartinsight.AnfrageListDefault">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContRequestList"
+        android:layout_width="match_parent"
+        android:layout_margin="16dp"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_list_item"
+            ></android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
-        android:layout_margin="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/fragment_list_item"
-        ></android.support.v7.widget.RecyclerView>
     <TextView
-        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/txtInfo"
+        android:layout_margin="24dp"
         android:layout_gravity="center"
         android:enabled="false"
         android:text="@string/text_information"/>

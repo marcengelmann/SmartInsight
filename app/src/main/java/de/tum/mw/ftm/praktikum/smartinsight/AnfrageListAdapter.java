@@ -1,14 +1,21 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
-import android.support.design.widget.FloatingActionButton;
+import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -16,10 +23,16 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
 
     private final List<AnfrageProvider> mValues;
     customButtonListener customListner;
+    private Boolean statusPositon = false; //
 
+
+    public void setStatusPositon(Boolean statusPositon) {
+        this.statusPositon = statusPositon;
+    }
 
     public interface customButtonListener {
         public void onButtonClickListner(int position,AnfrageProvider value);
+        public void refreshListListener(int position, long timer);
     }
 
     public AnfrageListAdapter(List<AnfrageProvider> anfrageProvider , customButtonListener listener) {
@@ -34,27 +47,72 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
         return new ViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder,final int position) {
+        String endTime = mValues.get(position).endTime;
+        String startTime = mValues.get(position).startTime;
         viewHolder.mItem = mValues.get(position);
         viewHolder.editor.setText(mValues.get(position).editor);
-        viewHolder.endTime.setText(mValues.get(position).endTime);
-        viewHolder.startTime.setText(mValues.get(position).startTime);
+        viewHolder.endTime.setText(endTime);
+        viewHolder.startTime.setText(startTime);
         viewHolder.question.setText(mValues.get(position).question);
         viewHolder.taskNumber.setText(mValues.get(position).taskNumber);
         viewHolder.taskSubNumber.setText(mValues.get(position).taskSubNumber);
-        viewHolder.listViewButton.setOnClickListener(new View.OnClickListener() {
+        long requestStartDate = 0;
+        long requestEndDate = 0;
+        Time time = new Time("Europe/Berlin");
+        time.setToNow();
+        long actualDate = time.hour * 60 + time.minute;
+        SimpleDateFormat curFormater = new SimpleDateFormat("HH:mm");
 
-            @Override
-            public void onClick(View v) {
+        try {
+            Date startDate = curFormater.parse(startTime);
+            requestStartDate = startDate.getHours() * 60 + startDate.getMinutes();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            Date endDate = curFormater.parse(endTime);
+            requestEndDate = endDate.getHours() * 60 + endDate.getMinutes();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if(requestEndDate != 0 && requestStartDate != 0) {
+
+            if(actualDate < requestEndDate && !statusPositon)
+            {
+                statusPositon = true;
                 if (customListner != null) {
-                    customListner.onButtonClickListner(position, viewHolder.mItem);
+                    customListner.refreshListListener(position, ((requestEndDate - actualDate) * 60 * 1000));
                 }
             }
-        });
-    }
 
+            if(actualDate > requestEndDate){
+                viewHolder.card.setCardBackgroundColor(Color.parseColor("#c3c3c3"));
+
+            }
+            if(actualDate >= requestStartDate){
+                viewHolder.listViewButton.setVisibility(View.GONE);
+            }
+            else
+            {
+                viewHolder.listViewButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (customListner != null) {
+                            customListner.onButtonClickListner(position, viewHolder.mItem);
+                        }
+
+                    }
+                });
+
+            }
+
+
+        }
+    }
 
 
     @Override
@@ -73,7 +131,9 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
         public TextView taskNumber;
         public TextView taskSubNumber;
         public ImageButton listViewButton;
-
+        private RelativeLayout layoutTitle;
+        private CardView card;
+        private GridLayout layoutContent;
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -86,7 +146,13 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
             taskNumber = (TextView) view.findViewById(R.id.taskNumber);
             taskSubNumber = (TextView) view.findViewById(R.id.taskSubNumber);
             listViewButton = (ImageButton) view.findViewById(R.id.listViewButton);
+            layoutTitle = (RelativeLayout) view.findViewById(R.id.list_request_title);
+            card = (CardView) view.findViewById(R.id.card_view_request_list);
+            layoutContent = (GridLayout) view.findViewById(R.id.list_request_content);
+
         }
 
     }
 }
+
+

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity
                     AnfrageProvider anfrage = new AnfrageProvider(id, startTime.substring(0, startTime.length() - 3), endTime.substring(0, endTime.length() - 3), task, subtask, type_of_question, phd);
                     requests.add(anfrage);
                 }
-                updateListView();
+
 
                 /*if (customIntFragListView != null) {
                     customIntFragListView.updateFragmentListView(requests);
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "Keine Anfragen verfügbar!",
                         Toast.LENGTH_SHORT).show();
             }
+            updateListView();
         }
 
     };
