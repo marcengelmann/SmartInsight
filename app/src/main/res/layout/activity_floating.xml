@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,56 +11,78 @@
     android:orientation="vertical"
     tools:context="de.tum.mw.ftm.praktikum.smartinsight.FloatingActivity">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Aufgabe:"
-            android:textSize="16dp"
-            android:layout_margin="8dp"
-            android:id="@+id/rowTask"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hier kann eine Frage zu der Klausur zu einer bestimmten Aufgabe (z.B. 1a) gesendet werden"
+        android:textSize="16dp"
+        android:layout_margin="8dp"
+        android:id="@+id/rowDesc"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rowDesc"
+        android:text="Aufgabe:"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_margin="8dp"
+        android:id="@+id/rowTask"/>
 
-        <Spinner
-            android:id="@+id/spinnerTaskNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rowTask"
-            android:spinnerMode="dropdown"/>
-        <Spinner
-            android:id="@+id/spinnerTaskSubNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/spinnerTaskNumber"
-            android:spinnerMode="dropdown"/>
-
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/spinnerTaskNumber"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:ms_multiline="false"
+        android:layout_below="@id/rowTask"
+        app:ms_enableFloatingLabel="false"
+        app:ms_enableErrorLabel="false"
+        app:ms_highlightColor="@color/colorAccent"
+        app:ms_arrowSize="16dp"
+        app:ms_alignLabels="false"/>
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/spinnerTaskSubNumber"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:ms_multiline="false"
+        android:layout_below="@id/spinnerTaskNumber"
+        app:ms_enableFloatingLabel="false"
+        app:ms_enableErrorLabel="false"
+        app:ms_highlightColor="@color/colorAccent"
+        app:ms_arrowSize="16dp"
+        app:ms_alignLabels="false"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Frage zu:"
-        android:layout_below="@+id/spinnerTaskSubNumber"
-        android:textSize="16dp"
+        android:layout_below="@id/spinnerTaskSubNumber"
+        android:textSize="18dp"
+        android:textStyle="bold"
         android:layout_margin="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="60dp"
         android:id="@+id/rowQuestion"/>
 
     <RadioGroup
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@+id/rowQuestion"
         android:id="@+id/radioGroupQuestion">
         <RadioButton android:id="@+id/radioBtnQuestionA"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="16dp"
             android:checked="true"
             android:text="@string/checkQuestion_a"/>
         <RadioButton android:id="@+id/radioBtnQuestionB"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="16dp"
             android:text="@string/checkQuestion_b"/>
         <RadioButton android:id="@+id/radioBtnQuestionC"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="16dp"
             android:text="@string/checkQuestion_c"/>
     </RadioGroup>
 
@@ -69,5 +92,6 @@
         android:text="Anfrage senden"
         android:id="@+id/btnSendQuestion"
         android:onClick="onButtonSendQuestion"
+        android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"/>
 </RelativeLayout>

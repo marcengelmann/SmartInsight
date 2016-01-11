@@ -97,12 +97,6 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
             adapter.setStatusPositon(false);
             //Adapter für die Anfrage liste bescheid geben, dass sich daten geändert haben.
             adapter.notifyDataSetChanged();
-            long requestStartDate = 0;
-            long requestEndDate = 0;
-            Time time = new Time("Europe/Berlin");
-            time.setToNow();
-            time.format("%c");
-            Log.d("test2","Refresh um : " + time);
         }
         swipeContainer.setRefreshing(false);
     }
@@ -161,8 +155,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
                 refreshListView();
             }
         }, timer);
-        recyclerView.scrollToPosition(position);
-
+        // Todo scroll to position
         Log.d("test","Update in ms. " +timer);
     }
 
