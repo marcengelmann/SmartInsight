@@ -5,8 +5,9 @@ package de.tum.mw.ftm.praktikum.smartinsight;
  */
 public class Anfrage {
     public String linked_student, linked_task, linked_subtask, linked_phd, linked_exam,id, type_of_question;
+    boolean done;
 
-    public Anfrage(String id,String student, String task, String subtask, String phd, String exam,String type_of_question) {
+    public Anfrage(String id,String student, String task, String subtask, String phd, String exam,String type_of_question, boolean done) {
         this.linked_student = student;
         this.linked_task = task;
         this.id = id;
@@ -14,6 +15,7 @@ public class Anfrage {
         this.linked_phd = phd;
         this.linked_exam = exam;
         this.type_of_question = type_of_question;
+        this.done = done;
     }
 
     @Override

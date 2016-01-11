@@ -30,7 +30,6 @@ public class FloatingActivity extends AppCompatActivity {
     private RadioGroup radioGroupQuestion;
 
     //Aufgaben Informationen fürs senden
-    Anfrage anfrage;
     private String artOfQuestion = "Inhalt";
     private String taskNumber = "1";
     private String taskSubNumber = "a";
@@ -70,7 +69,7 @@ public class FloatingActivity extends AppCompatActivity {
             }
             if(subStringHelper.length == 0) {
                 subStringHelper = new String[1];
-                subStringHelper[0] = "no content";
+                subStringHelper[0] = "gesamt";
             }
             stringTaskSubNumber.add(subStringHelper);
         }
@@ -142,7 +141,14 @@ public class FloatingActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int arg1) {
                 User user = userLocalStore.getUserLogInUser();
-                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).id,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).getSubtasks().get(spinnerTaskSubNumber.getSelectedItemPosition()).id,"linked_phd","linked_exam",artOfQuestion);
+                String subtask_string;
+                try {
+                    subtask_string = tasks.get(spinnerTaskNumber.getSelectedItemPosition()).getSubtasks().get(spinnerTaskSubNumber.getSelectedItemPosition()).id;
+                }
+                catch (IndexOutOfBoundsException e) {
+                    subtask_string = null;
+                }
+                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).id,subtask_string,"linked_phd","linked_exam",artOfQuestion,false);
                 anfrageLocalStore.storeAnfrageData(anfrage);
                 anfrageLocalStore.setStatusAnfrageClient(true);
                 finish();

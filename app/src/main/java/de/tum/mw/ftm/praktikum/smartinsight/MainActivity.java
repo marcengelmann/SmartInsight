@@ -102,7 +102,10 @@ public class MainActivity extends AppCompatActivity
                     String endTime = obj.getString("end_time");
                     String type_of_question = obj.getString("type_of_question");
 
-                    AnfrageProvider anfrage = new AnfrageProvider(id, startTime.substring(0, startTime.length() - 3), endTime.substring(0, endTime.length() - 3), task, subtask, type_of_question, phd);
+                    String cutStart = startTime.substring(11, startTime.length() - 3);
+                    String cutEnd = endTime.substring(11, endTime.length() - 3);
+
+                    AnfrageProvider anfrage = new AnfrageProvider(id,cutStart , cutEnd, task, subtask, type_of_question, phd);
                     requests.add(anfrage);
                 }
 
@@ -133,6 +136,8 @@ public class MainActivity extends AppCompatActivity
                     String date = obj.getString("date");
                     String name = obj.getString("name");
                     String room = obj.getString("room");
+
+                    //TODO: durchschnittsnote !
 
                     Calendar calendar = new Calendar(date,name,room);
                     calendarList.add(calendar);

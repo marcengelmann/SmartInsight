@@ -24,7 +24,8 @@ public class AnfrageLocalStore {
         spEditor.putString("linked_exam",anfrage.linked_exam);
         spEditor.putString("type_of_question",anfrage.type_of_question);
         spEditor.putString("id",anfrage.id);
-        spEditor.commit();
+        spEditor.putBoolean("done",anfrage.done);
+        spEditor.apply();
     }
 
     public Anfrage getDataAnfrageClient(){
@@ -35,28 +36,24 @@ public class AnfrageLocalStore {
         String linked_exam = anfrageLocalDatabase.getString("linked_exam", "");
         String id = anfrageLocalDatabase.getString("id", "");
         String type_of_question = anfrageLocalDatabase.getString("type_of_question","");
+        boolean done = anfrageLocalDatabase.getBoolean("done",false);
 
-        Anfrage storedAnfrage = new Anfrage(id,linked_student, linked_task, linked_subtask , linked_phd,linked_exam,type_of_question);
-
-        return storedAnfrage;
+        return new Anfrage(id,linked_student, linked_task, linked_subtask , linked_phd,linked_exam,type_of_question,done);
     }
 
     public void setStatusAnfrageClient(boolean setAnfrage){
         SharedPreferences.Editor spEditor = anfrageLocalDatabase.edit();
         spEditor.putBoolean("setAnfrage", setAnfrage);
-        spEditor.commit();
+        spEditor.apply();
     }
 
     public boolean getStatusAnfrageClient(){
-        if(anfrageLocalDatabase.getBoolean("setAnfrage", false) == true){
-            return true;
-        }
-        return false;
+        return anfrageLocalDatabase.getBoolean("setAnfrage", false);
     }
 
     public void clearDataAnfrageClient(){
         SharedPreferences.Editor spEditor = anfrageLocalDatabase.edit();
         spEditor.clear();
-        spEditor.commit();
+        spEditor.apply();
     }
 }

@@ -10,14 +10,7 @@ import java.util.List;
  * Created by Rebecca on 13.12.2015.
  */
 public class AnfrageProvider implements Serializable {
-    public String endTime;
-    public String startTime;
-    public String editor;
-    public String question;
-    public String taskNumber;
-    public String taskSubNumber;
-    public String id;
-
+    public String endTime,startTime,editor,question,taskNumber,taskSubNumber,id;
 
     public AnfrageProvider(String id, String startTime, String endTime, String taskNumber, String taskSubNumber, String question, String editor) {
         this.endTime = endTime;
