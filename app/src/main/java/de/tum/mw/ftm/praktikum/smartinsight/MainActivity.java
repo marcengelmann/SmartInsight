@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AnfrageListFragment.OnListFragmentInteractionListener, SettingsFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AnfrageListFragment.OnListFragmentInteractionListener {
     UserLocalStore userLocalStore;
     AnfrageLocalStore anfrageLocalStore;
     TaskListLocalStore taskListLocalStore;
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity
         downloadRequests();
         Toast.makeText(MainActivity.this, "Anfrage wurde gelöscht!",
                 Toast.LENGTH_SHORT).show();
-        updateListView();
     }
 
     private GetJSONListener uploadResultListener = new GetJSONListener() {
@@ -262,9 +261,7 @@ public class MainActivity extends AppCompatActivity
                     Toast.LENGTH_LONG).show();
             emailView.setText(user.email);
             nameView.setText(user.name);
-            onListFragmentUpdateProfilePic();
             startActFirstTime = false;
-            downloadRequests();
             downloadExam();
             downloadCalendar();
             navigationView.getMenu().getItem(0).setChecked(true);
@@ -278,11 +275,11 @@ public class MainActivity extends AppCompatActivity
         if (anfrageLocalStore.getStatusAnfrageClient()) {
             Anfrage anfrage = anfrageLocalStore.getDataAnfrageClient();
             uploadData(anfrage);
-            updateListView();
         }
         anfrageLocalStore.setStatusAnfrageClient(false);
 
         downloadRequests();
+
 
         if(user.didChange) {
             System.out.println("Change in user data detected!");
@@ -395,13 +392,4 @@ public class MainActivity extends AppCompatActivity
         uploader.execute(url);
     }
 
-    @Override
-    public void onListFragmentUpdateProfilePic() {
-        if (userLocalStore.getUserStatusProfilPic()) {
-            //User user = userLocalStore.getUserLogInUser();
-            profilPicView.setImageURI(userLocalStore.getUserProfilPic());
-        } else {
-            profilPicView.setImageResource(R.mipmap.ic_launcher_fernrohr);
-        }
-    }
 }

@@ -25,7 +25,6 @@ public class SettingsFragment extends Fragment {
     private TextView txtEmail;
     private TextView txtExam;
     UserLocalStore userLocalStore;
-    private OnListFragmentInteractionListener mListener;
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -130,24 +129,4 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentUpdateProfilePic();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 }
