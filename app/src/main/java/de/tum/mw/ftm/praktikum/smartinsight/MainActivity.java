@@ -1,5 +1,7 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -283,8 +285,7 @@ public class MainActivity extends AppCompatActivity
         }
         anfrageLocalStore.setStatusAnfrageClient(false);
 
-        System.out.println(user.sitNumb);
-        System.out.println(user.didChange);
+        downloadRequests();
 
         if(user.didChange) {
             System.out.println("Change in user data detected!");
@@ -349,16 +350,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void downloadRequests() {
+
         System.out.println("Trying requests download ...");
         JSONClient client = new JSONClient(this, requestResultListener);
-        String url = "http://www.marcengelmann.com/smart/download.php?intent=request&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password;
+        String url = "http://www.marcengelmann.com/smart/download.php?intent=request&exam_name=" + user.exam + "&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password;
         client.execute(url);
     }
 
     private void downloadExam() {
         System.out.println("Trying exam download ...");
         JSONClient task_client = new JSONClient(this, examResultListener);
-        String url = "http://marcengelmann.com/smart/download.php?intent=exam&exam_name="+user.exam+ "&pw=" + user.password;
+        String url = "http://marcengelmann.com/smart/download.php?intent=exam&matrikelnummer="+user.matrikelnummer+"&exam_name="+user.exam+ "&pw=" + user.password;
+        System.out.println(url);
         task_client.execute(url);
     }
 
