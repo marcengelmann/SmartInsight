@@ -104,11 +104,11 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
             }
 
             if(actualDate >= requestEndDate){
-                viewHolder.card.setCardBackgroundColor(Color.parseColor("#c3c3c3"));
+                viewHolder.card.setCardBackgroundColor(Color.LTGRAY);
             }
             else
             {
-                viewHolder.card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                viewHolder.card.setCardBackgroundColor(Color.WHITE);
 
             }
             if(actualDate >= requestStartDate){

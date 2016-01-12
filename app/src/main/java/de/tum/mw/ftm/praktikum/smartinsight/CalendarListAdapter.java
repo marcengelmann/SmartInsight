@@ -52,7 +52,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
                     && examDate.getDay() == currentDay.getDay()){
                 viewHolder.card.setCardBackgroundColor(Color.GREEN);
             } else{
-                viewHolder.card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                viewHolder.card.setCardBackgroundColor(Color.WHITE);
 
             }
         }
