@@ -92,7 +92,7 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
                 refreshActive = true;
                 long calcTime = 0 ;
                 if(actualDate >= requestStartDate){
-                    calcTime = (requestEndDate - actualDate) * 1000;
+                    calcTime = (requestEndDate - actualDate + 10) * 1000;
                 }
                 else{
                     calcTime = (requestStartDate - actualDate + 10) * 1000;
