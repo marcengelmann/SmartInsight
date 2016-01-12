@@ -150,9 +150,7 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
         public TextView taskNumber;
         public TextView taskSubNumber;
         public ImageButton listViewButton;
-        private RelativeLayout layoutTitle;
         private CardView card;
-        private GridLayout layoutContent;
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -165,9 +163,7 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
             taskNumber = (TextView) view.findViewById(R.id.taskNumber);
             taskSubNumber = (TextView) view.findViewById(R.id.taskSubNumber);
             listViewButton = (ImageButton) view.findViewById(R.id.listViewButton);
-            layoutTitle = (RelativeLayout) view.findViewById(R.id.list_request_title);
             card = (CardView) view.findViewById(R.id.card_view_request_list);
-            layoutContent = (GridLayout) view.findViewById(R.id.list_request_content);
 
         }
 
