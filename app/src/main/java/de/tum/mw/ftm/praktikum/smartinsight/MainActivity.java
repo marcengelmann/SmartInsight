@@ -44,11 +44,18 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Task> tasks = new ArrayList<>();
 
     @Override
-    public void onListFragmentDeleteListItem(int position, AnfrageProvider value) {
-        deleteRequest(value);
-        downloadRequests();
-        Toast.makeText(MainActivity.this, "Anfrage wurde gelöscht!",
-                Toast.LENGTH_SHORT).show();
+    public void onListFragmentDeleteListItem(int position, AnfrageProvider value, Boolean deleteNUpdate) {
+        if(deleteNUpdate){
+            deleteRequest(value);
+            downloadRequests();
+            Toast.makeText(MainActivity.this, "Anfrage wurde gelöscht!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else {
+            //Todo update die aktuelle Anfrage indem sie nochmal neu gesendet wird --> wird nur als dummy implementiert
+            Toast.makeText(MainActivity.this, "Anfrage wurde erneuert! Achtung Dummy Funktion!",
+                    Toast.LENGTH_SHORT).show();        }
+
     }
 
     private GetJSONListener uploadResultListener = new GetJSONListener() {

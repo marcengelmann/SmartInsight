@@ -129,11 +129,16 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     }
 
     @Override
-    public void onButtonClickListner(int position, AnfrageProvider value) {
+    public void onButtonClickListner(int position, AnfrageProvider value, Boolean deleteNupdate) {
         String msg = "Möchtest du die Anfrage zur Aufgabe " + value.getTaskNumber() + value.getTaskSubNumber() + " löschen?" ;
         String title = "Anfrage löschen?";
 
-        finalDialog(title,msg, position,value).show();
+        if(!deleteNupdate){
+            msg = "Möchtest du eine neue Anfrage zur Aufgabe " + value.getTaskNumber() + value.getTaskSubNumber() + " senden?" ;
+            title = "Anfrage erneuern?";
+        }
+
+        finalDialog(title,msg, position,value, deleteNupdate).show();
     }
 
     @Override
@@ -150,7 +155,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         Log.d("test","Update in ms. " +timer);
     }
 
-    private Dialog finalDialog(String title,String msg, final int position, final AnfrageProvider value){
+    private Dialog finalDialog(String title,String msg, final int position, final AnfrageProvider value, final Boolean deletNuPdate){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(msg);
         builder.setTitle(title);
@@ -158,7 +163,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
                 () {
             @Override
             public void onClick(DialogInterface dialog, int arg1) {
-                mListener.onListFragmentDeleteListItem(position, value);
+                mListener.onListFragmentDeleteListItem(position, value, deletNuPdate);
             }
         });
         builder.setNegativeButton("Nein", new DialogInterface.OnClickListener() {
@@ -172,6 +177,6 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
 
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentDeleteListItem(int position, AnfrageProvider value);
+        void onListFragmentDeleteListItem(int position, AnfrageProvider value, Boolean deleteNupdate);
     }
 }

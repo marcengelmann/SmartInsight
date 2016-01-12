@@ -33,7 +33,7 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
     }
 
     public interface customButtonListener {
-        public void onButtonClickListner(int position,AnfrageProvider value);
+        public void onButtonClickListner(int position,AnfrageProvider value, Boolean deleteNupdate);
         public void refreshListListener(int position, long timer);
     }
 
@@ -56,6 +56,7 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder,final int position) {
+        Boolean deleteNupdate = true;
         String endTime = mValues.get(position).endTime;
         String startTime = mValues.get(position).startTime;
         viewHolder.mItem = mValues.get(position);
@@ -112,23 +113,25 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
 
             }
             if(actualDate >= requestStartDate){
-                viewHolder.listViewButton.setVisibility(View.GONE);
+                deleteNupdate = false;
+                viewHolder.listViewButton.setImageResource(R.drawable.ic_action_update);
             }
-            else
-            {
-                viewHolder.listViewButton.setOnClickListener(new View.OnClickListener() {
+            else {
+                viewHolder.listViewButton.setImageResource(R.drawable.ic_action_delete);
+                deleteNupdate = true;
+            }
 
-                    @Override
-                    public void onClick(View v) {
-                        if (customListner != null) {
-                            customListner.onButtonClickListner(position, viewHolder.mItem);
-                        }
+            final  Boolean status = deleteNupdate;
+            viewHolder.listViewButton.setOnClickListener(new View.OnClickListener() {
 
+                @Override
+                public void onClick(View v) {
+                    if (customListner != null) {
+                        customListner.onButtonClickListner(position, viewHolder.mItem, status);
                     }
-                });
 
-            }
-
+                }
+            });
 
         }
     }
