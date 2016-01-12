@@ -112,11 +112,14 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
                 viewHolder.card.setCardBackgroundColor(Color.WHITE);
 
             }
-            if(actualDate >= requestStartDate){
+            if(actualDate > requestStartDate && actualDate > requestEndDate){
                 deleteNupdate = false;
                 viewHolder.listViewButton.setImageResource(R.drawable.ic_action_update);
             }
-            else {
+            else if (actualDate >= requestStartDate){
+                viewHolder.listViewButton.setVisibility(View.GONE);
+            }
+            else{
                 viewHolder.listViewButton.setImageResource(R.drawable.ic_action_delete);
                 deleteNupdate = true;
             }
