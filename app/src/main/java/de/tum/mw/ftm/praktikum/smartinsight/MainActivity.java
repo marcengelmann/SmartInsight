@@ -140,9 +140,6 @@ public class MainActivity extends AppCompatActivity
                     String number_of_students = obj.getString("number_of_students");
                     String mean_grade = obj.getString("mean_grade");
                     Calendar calendar = new Calendar(date,name,room,number_of_students, responsible_person,mean_grade);
-
-                    //TODO: durchschnittsnote noch in Fragment einfügen !!!
-
                     calendarList.add(calendar);
                     System.out.println(calendar.toString());
                 }

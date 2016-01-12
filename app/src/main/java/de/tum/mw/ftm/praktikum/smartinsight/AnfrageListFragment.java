@@ -130,12 +130,8 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
             txtIntroduction.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             anfrageProviders.addAll(requests);
+            adapter.notifyDataSetChanged();
         }
-        if (recyclerView != null){
-            // Create the adapter to convert the array to views
-            recyclerView.setAdapter(adapter);
-        }
-
 
     }
 
