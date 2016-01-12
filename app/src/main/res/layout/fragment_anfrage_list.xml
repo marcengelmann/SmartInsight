@@ -24,7 +24,7 @@
         android:id="@+id/txtInfo"
         android:layout_margin="16dp"
         android:layout_gravity="center"
-        android:textSize="24dp"
+        android:textSize="18dp"
         android:enabled="false"
         android:text="@string/text_information"/>
 </FrameLayout>

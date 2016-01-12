@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +16,20 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
 public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.ViewHolder> {
 
-    private final List<AnfrageProvider> mValues;
+    private final ArrayList<AnfrageProvider> mValues = new ArrayList<AnfrageProvider>();
     customButtonListener customListner;
-    private Boolean statusPositon = false; //
+    private Boolean refreshActive = false; //
 
 
-    public void setStatusPositon(Boolean statusPositon) {
-        this.statusPositon = statusPositon;
+    public void setRefreshActive(Boolean refreshActive) {
+        this.refreshActive = refreshActive;
     }
 
     public interface customButtonListener {
@@ -36,7 +38,7 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
     }
 
     public AnfrageListAdapter(List<AnfrageProvider> anfrageProvider , customButtonListener listener) {
-        mValues = anfrageProvider;
+        mValues.addAll(anfrageProvider);
         customListner = listener;
     }
 
@@ -45,6 +47,11 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_list_item, parent, false);
         return new ViewHolder(view);
+    }
+
+    public void updateData(ArrayList<AnfrageProvider> anfrageProvider){
+        mValues.clear();
+        mValues.addAll(anfrageProvider);
     }
 
     @Override
@@ -62,34 +69,46 @@ public class AnfrageListAdapter extends RecyclerView.Adapter<AnfrageListAdapter.
         long requestEndDate = 0;
         Time time = new Time("Europe/Berlin");
         time.setToNow();
-        long actualDate = time.hour * 60 + time.minute;
+        long actualDate = (time.hour * 60 + time.minute) * 60 + time.second;
         SimpleDateFormat curFormater = new SimpleDateFormat("HH:mm");
 
         try {
             Date startDate = curFormater.parse(startTime);
-            requestStartDate = startDate.getHours() * 60 + startDate.getMinutes();
+            requestStartDate = (startDate.getHours() * 60 + startDate.getMinutes()) * 60;
         } catch (ParseException e) {
             e.printStackTrace();
         }
         try {
             Date endDate = curFormater.parse(endTime);
-            requestEndDate = endDate.getHours() * 60 + endDate.getMinutes();
+            requestEndDate = (endDate.getHours() * 60 + endDate.getMinutes()) * 60;
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
         if(requestEndDate != 0 && requestStartDate != 0) {
 
-            if(actualDate < requestEndDate && !statusPositon)
+            if(actualDate < requestEndDate && !refreshActive)
             {
-                statusPositon = true;
+                refreshActive = true;
+                long calcTime = 0 ;
+                if(actualDate >= requestStartDate){
+                    calcTime = (requestEndDate - actualDate) * 1000;
+                }
+                else{
+                    calcTime = (requestStartDate - actualDate + 10) * 1000;
+                }
+
                 if (customListner != null) {
-                    customListner.refreshListListener(position, ((requestEndDate - actualDate) * 60 * 1000));
+                    customListner.refreshListListener(position, calcTime);
                 }
             }
 
-            if(actualDate > requestEndDate){
+            if(actualDate >= requestEndDate){
                 viewHolder.card.setCardBackgroundColor(Color.parseColor("#c3c3c3"));
+            }
+            else
+            {
+                viewHolder.card.setCardBackgroundColor(Color.parseColor("#ffffff"));
 
             }
             if(actualDate >= requestStartDate){

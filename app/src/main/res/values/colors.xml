@@ -6,5 +6,7 @@
     <color name="naviagtionBarColor">#01579b</color>
     <color name="borderCircleImage">#FF222222</color>
     <color name="spinner_base_color">#44000000</color>
+    <color name="white_background">#FFFFFF</color>
+    <color name="grey">#c3c3c3</color>
 
 </resources>

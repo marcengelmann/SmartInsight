@@ -35,6 +35,8 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     TextView txtIntroduction;
     private OnListFragmentInteractionListener mListener;
     ArrayList<AnfrageProvider> listAnfrageProvider = new ArrayList<AnfrageProvider>();
+    Handler handlerRefreshList = new Handler();
+    Runnable runnableRefreshList = null;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -60,7 +62,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
 
         }
 
-        adapter = new AnfrageListAdapter(anfrageProviders, this);
+        adapter = new AnfrageListAdapter(listAnfrageProvider, this);
 
     }
     RecyclerView recyclerView = null;
@@ -91,13 +93,8 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     }
 
     private void refreshListView(){
-        //Nur die Liste refreshen wenn auch anfragen vorhanden sind
-        if(recyclerView != null && !anfrageProviders.isEmpty())
-        {
-            adapter.setStatusPositon(false);
-            //Adapter für die Anfrage liste bescheid geben, dass sich daten geändert haben.
-            adapter.notifyDataSetChanged();
-        }
+        //Adapter für die Anfrage liste bescheid geben, dass sich daten geändert haben.
+        adapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
     }
 
@@ -117,11 +114,8 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         super.onDetach();
         mListener = null;
     }
-    static  ArrayList<AnfrageProvider> anfrageProviders =  new ArrayList<AnfrageProvider>();
 
     public void updateFragmentListView(ArrayList<AnfrageProvider> requests) {
-        anfrageProviders.clear();
-        adapter.setStatusPositon(false);
         if (requests.isEmpty()) {
             txtIntroduction.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -129,10 +123,9 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         else{
             txtIntroduction.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            anfrageProviders.addAll(requests);
+            adapter.updateData(requests);
             adapter.notifyDataSetChanged();
         }
-
     }
 
     @Override
@@ -145,13 +138,15 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
 
     @Override
     public void refreshListListener(int position, long timer) {
-        new Handler().postDelayed(new Runnable() {
+        handlerRefreshList.removeCallbacks(runnableRefreshList);
+        runnableRefreshList = new Runnable() {
             @Override
             public void run() {
+                adapter.setRefreshActive(false);
                 refreshListView();
             }
-        }, timer);
-        // Todo scroll to position
+        };
+        handlerRefreshList.postDelayed(runnableRefreshList, timer);
         Log.d("test","Update in ms. " +timer);
     }
 
