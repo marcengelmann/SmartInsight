@@ -33,6 +33,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.ganfra.materialspinner.MaterialSpinner;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -55,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private Spinner spinnerSitzNumberView;
+    private MaterialSpinner spinnerSitzNumberView;
     UserLocalStore userLocalStore;
 
     @Override
@@ -91,7 +93,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        spinnerSitzNumberView = (Spinner) findViewById(R.id.loginSitzNumb);
+        spinnerSitzNumberView = (MaterialSpinner) findViewById(R.id.loginSitzNumb);
 
         int maxSitNumb = getResources().getInteger(R.integer.max_sitz_numb);
         String[] number = new String[maxSitNumb];
@@ -175,20 +177,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
-
+        spinnerSitzNumberView.setError(null);
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
@@ -201,6 +196,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid password, if the user entered one.
+        String sitNumbVal = String.valueOf(spinnerSitzNumberView.getSelectedItem());
+        if (!isSitNumberValid(sitNumbVal)) {
+            spinnerSitzNumberView.setError(getString(R.string.error_invalid_sitNumber));
+            focusView = spinnerSitzNumberView;
+            cancel = true;
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -209,13 +219,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password,String.valueOf(spinnerSitzNumberView.getSelectedItem()));
+            mAuthTask = new UserLoginTask(email, password,sitNumbVal);
             mAuthTask.execute((Void) null);
         }
     }
 
     private boolean isMatrikelnummerValid(String matrikelnummer) {
         return TextUtils.isDigitsOnly(matrikelnummer) && !(matrikelnummer.length() <= 8 || matrikelnummer.length() > 12);
+    }
+
+    private boolean isSitNumberValid(String sitNumb) {
+        return TextUtils.isDigitsOnly(sitNumb);
     }
 
     private boolean isPasswordValid(String password) {
@@ -359,6 +373,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
             } else {
+                //Todo kannst du hier nachgucken, ob email oder password invalid ist und dementsprechend den error setzen? das gleich natürlich für die phd seite
                 mEmailView.setError(getString(R.string.error_incorrect_password));
                 mEmailView.requestFocus();
             }

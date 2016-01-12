@@ -79,11 +79,11 @@
             <fr.ganfra.materialspinner.MaterialSpinner
                 android:id="@+id/loginSitzNumb"
                 android:layout_width="fill_parent"
-                android:layout_height="60dp"
+                android:layout_height="80dp"
                 app:ms_multiline="false"
                 app:ms_hint="@string/txtSitzplatzNummer"
                 app:ms_enableFloatingLabel="true"
-                app:ms_enableErrorLabel="false"
+                app:ms_enableErrorLabel="true"
                 app:ms_floatingLabelText="@string/txtSitzplatzNummer"
                 app:ms_highlightColor="@color/colorAccent"
                 app:ms_arrowSize="16dp"

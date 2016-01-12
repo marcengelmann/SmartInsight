@@ -19,6 +19,7 @@
     <string name="prompt_password">Passwort</string>
     <string name="action_sign_in">Zur Einsicht einchecken</string>
     <string name="action_sign_in_short">Anmelden</string>
+    <string name="error_invalid_sitNumber">Wähle einen Sitzplatz aus.</string>
     <string name="error_invalid_email">Die Matrikelnummer ist ungültig</string>
     <string name="error_invalid_password">Das Passwortformat ist ungültig</string>
     <string name="error_incorrect_password">Die Matrikelnummer ist unbekannt</string>
