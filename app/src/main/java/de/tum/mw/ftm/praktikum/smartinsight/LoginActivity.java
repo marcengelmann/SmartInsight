@@ -203,7 +203,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        // Check for a valid password, if the user entered one.
+        // Check for a valid number of sit is selected of the user
         String sitNumbVal = String.valueOf(spinnerSitzNumberView.getSelectedItem());
         if (!isSitNumberValid(sitNumbVal)) {
             spinnerSitzNumberView.setError(getString(R.string.error_invalid_sitNumber));

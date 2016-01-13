@@ -14,15 +14,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hier kann eine Anfrage zu einer bestimmten Aufgabe erstellt werden. Der zuständige Dozent bekommt die Anfrage übermittelt."
-        android:textSize="16dp"
-        android:layout_margin="8dp"
-        android:id="@+id/rowDesc"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rowDesc"
-        android:text="Aufgabe:"
+        android:text="Wähle eine Aufgabe aus:"
         android:textSize="18dp"
         android:textStyle="bold"
         android:layout_margin="8dp"
