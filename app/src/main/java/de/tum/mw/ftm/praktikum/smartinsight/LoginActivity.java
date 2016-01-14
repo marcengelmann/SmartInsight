@@ -3,6 +3,7 @@ package de.tum.mw.ftm.praktikum.smartinsight;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -159,7 +161,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    public void openWebSite(View view){
+        String webseitenURL = "http://www.marcengelmann.com/smart/register.php";
 
+        // Erzeugen des Data-URI Scheme für die anzuzeigende Webseite
+        // Mehr Infos auf der "Common Intents" Seite des Android Developer Guides:
+        // http://developer.android.com/guide/components/intents-common.html#Browser
+        Uri webseitenUri = Uri.parse(webseitenURL);
+
+        // Erzeugen eines impliziten View-Intents mit der Data URI-Information
+        Intent intent = new Intent(Intent.ACTION_VIEW, webseitenUri);
+
+        // Prüfen ob eine Web-App auf dem Android Gerät installiert ist
+        // und Starten der App mit dem oben erzeugten impliziten View-Intent
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.d("Anmeldung", "Keine Web-App installiert!");
+        }
+
+
+    }
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
