@@ -10,6 +10,8 @@
     <string name="caption">SmartInsight Student</string>
     <!-- Strings related to login -->
 
+    <string name="website">http://marcengelmann.com/smart</string>
+
     <string name="prompt_matrikelnummber">Matrikelnummer</string>
     <string name="text_information">Auf dieser Seite werden die erstellten Anfragen aufgelistet. Anfragen fügt ihr über den Floating Action Button unten links im Feld hinzu!</string>
     <string name="calendar_information">Hier wirden die aktuellen Klausureinsichtstermine aufgelistet. Zur Zeit sind keine vorhanden!</string>

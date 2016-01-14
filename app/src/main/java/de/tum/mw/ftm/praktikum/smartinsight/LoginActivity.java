@@ -368,7 +368,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             LoginHandler connection = new LoginHandler();
 
             try {
-                if(connection.tryLogin(mMatrikelnummer,mPassword,mSeat)) {
+                if(connection.tryLogin(mMatrikelnummer,mPassword,mSeat,getApplicationContext())) {
                     System.out.println("Login successful!");
                 } else {
                     System.out.println("Wrong credidentials!");

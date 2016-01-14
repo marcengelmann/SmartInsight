@@ -352,22 +352,21 @@ public class MainActivity extends AppCompatActivity
 
         System.out.println("Trying requests download ...");
         JSONClient client = new JSONClient(this, requestResultListener);
-        String url = "http://www.marcengelmann.com/smart/download.php?intent=request&exam_name=" + user.exam + "&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password;
+        String url = getString(R.string.website)+"/download.php?intent=request&exam_name=" + user.exam + "&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password;
         client.execute(url);
     }
 
     private void downloadExam() {
         System.out.println("Trying exam download ...");
         JSONClient task_client = new JSONClient(this, examResultListener);
-        String url = "http://marcengelmann.com/smart/download.php?intent=exam&matrikelnummer="+user.matrikelnummer+"&exam_name="+user.exam+ "&pw=" + user.password;
-        System.out.println(url);
+        String url = getString(R.string.website)+"/download.php?intent=exam&matrikelnummer="+user.matrikelnummer+"&exam_name="+user.exam+ "&pw=" + user.password;
         task_client.execute(url);
     }
 
     private void downloadCalendar() {
         System.out.println("Trying calendar download ...");
         JSONClient task_client = new JSONClient(this, calendarResultListener);
-        String url = "http://marcengelmann.com/smart/download.php?intent=calendar&exam_name="+user.exam+"&matrikelnummer="+user.matrikelnummer+ "&pw=" + user.password;
+        String url = getString(R.string.website)+"/download.php?intent=calendar&exam_name="+user.exam+"&matrikelnummer="+user.matrikelnummer+ "&pw=" + user.password;
         task_client.execute(url);
     }
 
@@ -375,7 +374,7 @@ public class MainActivity extends AppCompatActivity
     private void uploadData(Anfrage anfrage) {
         System.out.println("Trying data upload ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=request&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&task_id=" + anfrage.linked_task + "&subtask_id=" + anfrage.linked_subtask + "&pw=" + user.password + "&type_of_question=" + anfrage.type_of_question;
+        String url = getString(R.string.website)+"/upload.php?intent=request&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&task_id=" + anfrage.linked_task + "&subtask_id=" + anfrage.linked_subtask + "&pw=" + user.password + "&type_of_question=" + anfrage.type_of_question;
         uploader.execute(url);
     }
 
@@ -383,7 +382,7 @@ public class MainActivity extends AppCompatActivity
     private void refreshUserData() {
         System.out.println("Trying user data update ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=userdata&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password + "&seat=" + user.sitNumb;
+        String url = getString(R.string.website)+"/upload.php?intent=userdata&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password + "&seat=" + user.sitNumb;
         uploader.execute(url);
         user.didChange = false;
         userLocalStore.storeUserData(user);
@@ -393,7 +392,7 @@ public class MainActivity extends AppCompatActivity
     private void deleteRequest(AnfrageProvider anfrage) {
         System.out.println("Trying data delete ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
-        String url = "http://www.marcengelmann.com/smart/upload.php?intent=delete_request&exam_name="+user.exam+"&request_id=" + anfrage.id + "&pw=" + user.password;
+        String url = getString(R.string.website)+"/upload.php?intent=delete_request&exam_name="+user.exam+"&request_id=" + anfrage.id + "&pw=" + user.password;
         uploader.execute(url);
     }
 
