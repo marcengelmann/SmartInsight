@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartInsight Student</string>
+    <string name="app_name">SI Student</string>
     <integer name="max_sitz_numb">15</integer>
 
     <string name="capition_anfrageliste">Anfrageliste</string>
@@ -22,7 +22,7 @@
     <string name="error_invalid_sitNumber">Wähle einen Sitzplatz aus.</string>
     <string name="error_invalid_email">Die Matrikelnummer ist ungültig</string>
     <string name="error_invalid_password">Das Passwortformat ist ungültig</string>
-    <string name="error_incorrect_password">Die Matrikelnummer ist unbekannt</string>
+    <string name="error_incorrect_password">Matrikelnummer/Passwort falsch!</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."

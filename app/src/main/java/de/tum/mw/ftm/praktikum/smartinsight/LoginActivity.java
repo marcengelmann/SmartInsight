@@ -373,7 +373,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
             } else {
-                //Todo kannst du hier nachgucken, ob email oder password invalid ist und dementsprechend den error setzen? das gleich natürlich für die phd seite
                 mEmailView.setError(getString(R.string.error_incorrect_password));
                 mEmailView.requestFocus();
             }
