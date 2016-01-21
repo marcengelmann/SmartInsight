@@ -62,7 +62,7 @@ public class JSONClient extends AsyncTask<String, Void, JSONObject>{
     }
 
 
-    public static JSONObject connect(String url)
+    public static JSONObject connect(String url) throws NullPointerException
     {
         HttpClient httpclient = new DefaultHttpClient();
 
@@ -119,8 +119,12 @@ public class JSONClient extends AsyncTask<String, Void, JSONObject>{
     }
 
     @Override
-    protected void onPostExecute(JSONObject json ) {
-        getJSONListener.onRemoteCallComplete(json);
+    protected void onPostExecute(JSONObject json ) throws NullPointerException {
+        try {
+            getJSONListener.onRemoteCallComplete(json);
+        } catch (NullPointerException e) {
+
+        }
         progressDialog.dismiss();
     }
 }

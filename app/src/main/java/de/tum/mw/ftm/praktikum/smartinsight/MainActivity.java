@@ -353,6 +353,7 @@ public class MainActivity extends AppCompatActivity
         System.out.println("Trying requests download ...");
         JSONClient client = new JSONClient(this, requestResultListener);
         String url = getString(R.string.website)+"/download.php?intent=request&exam_name=" + user.exam + "&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password;
+        System.out.println(url);
         client.execute(url);
     }
 
@@ -360,6 +361,7 @@ public class MainActivity extends AppCompatActivity
         System.out.println("Trying exam download ...");
         JSONClient task_client = new JSONClient(this, examResultListener);
         String url = getString(R.string.website)+"/download.php?intent=exam&matrikelnummer="+user.matrikelnummer+"&exam_name="+user.exam+ "&pw=" + user.password;
+        System.out.println(url);
         task_client.execute(url);
     }
 
@@ -367,6 +369,7 @@ public class MainActivity extends AppCompatActivity
         System.out.println("Trying calendar download ...");
         JSONClient task_client = new JSONClient(this, calendarResultListener);
         String url = getString(R.string.website)+"/download.php?intent=calendar&exam_name="+user.exam+"&matrikelnummer="+user.matrikelnummer+ "&pw=" + user.password;
+        System.out.println(url);
         task_client.execute(url);
     }
 
@@ -375,6 +378,7 @@ public class MainActivity extends AppCompatActivity
         System.out.println("Trying data upload ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
         String url = getString(R.string.website)+"/upload.php?intent=request&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&task_id=" + anfrage.linked_task + "&subtask_id=" + anfrage.linked_subtask + "&pw=" + user.password + "&type_of_question=" + anfrage.type_of_question;
+        System.out.println(url);
         uploader.execute(url);
     }
 
@@ -383,6 +387,7 @@ public class MainActivity extends AppCompatActivity
         System.out.println("Trying user data update ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
         String url = getString(R.string.website)+"/upload.php?intent=userdata&exam_name="+user.exam+"&matrikelnummer=" + user.matrikelnummer + "&pw=" + user.password + "&seat=" + user.sitNumb;
+        System.out.println(url);
         uploader.execute(url);
         user.didChange = false;
         userLocalStore.storeUserData(user);
@@ -393,6 +398,7 @@ public class MainActivity extends AppCompatActivity
         System.out.println("Trying data delete ...");
         JSONClient uploader = new JSONClient(this, uploadResultListener);
         String url = getString(R.string.website)+"/upload.php?intent=delete_request&exam_name="+user.exam+"&request_id=" + anfrage.id + "&pw=" + user.password;
+        System.out.println(url);
         uploader.execute(url);
     }
 
