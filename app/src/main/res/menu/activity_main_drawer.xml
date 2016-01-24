@@ -11,9 +11,9 @@
             android:icon="@drawable/ic_action_calendar"
             android:title="@string/caption_klausur" />
         <item
-            android:id="@+id/nav_settings"
+            android:id="@+id/nav_profil"
             android:icon="@drawable/ic_action_user"
-            android:title="@string/caption_settings" />
+            android:title="@string/caption_profil" />
         <item
             android:id="@+id/nav_abmelden"
             android:icon="@drawable/ic_action_power"

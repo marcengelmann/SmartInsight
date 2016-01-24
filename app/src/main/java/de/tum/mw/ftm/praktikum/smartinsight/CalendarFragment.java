@@ -23,15 +23,11 @@ import java.util.ArrayList;
 
 public class CalendarFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
-    CalendarListAdapter adapter;
-    TextView txtIntroduction;
-    RecyclerView list_calendar;
-    ArrayList<Calendar> listCalendar = new ArrayList<Calendar>();
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    private CalendarListAdapter adapter;
+    private TextView txtIntroduction;
+    private RecyclerView list_calendar;
+    private ArrayList<Calendar> listCalendar = new ArrayList<Calendar>();
+
     public CalendarFragment() {
     }
 
@@ -48,16 +44,14 @@ public class CalendarFragment extends Fragment {
         super.onCreate(savedInstanceState);
         listCalendar.clear();
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            listCalendar = (ArrayList<Calendar>)getArguments().get("calendar");
+            // get bundle
+            listCalendar = (ArrayList<Calendar>)getArguments().get(String.valueOf(R.string.calendar));
         }
 
-
-        adapter = new CalendarListAdapter(providerCalender);
+        adapter = new CalendarListAdapter(listCalendar);
 
     }
 
-    RecyclerView recyclerView = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,12 +62,8 @@ public class CalendarFragment extends Fragment {
         Context context = view.getContext();
         txtIntroduction = (TextView) view.findViewById(R.id.txtInfo);
         list_calendar = (RecyclerView) view.findViewById(R.id.list);
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        if (mColumnCount <= 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-        }
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Create the adapter to convert the array to views
         recyclerView.setAdapter(adapter);
@@ -94,22 +84,18 @@ public class CalendarFragment extends Fragment {
         super.onDetach();
     }
 
-    static ArrayList<Calendar> providerCalender = new ArrayList<Calendar>();
-
     public void updateFragmentListView(ArrayList<Calendar> listItems) {
-        providerCalender.clear();
+        // wenn keine Klausureinsichtstermine vorhanden ist, soll ein defualt text geladen werden
         if (listItems.isEmpty()) {
             txtIntroduction.setVisibility(View.VISIBLE);
             list_calendar.setVisibility(View.GONE);
         } else {
             txtIntroduction.setVisibility(View.GONE);
             list_calendar.setVisibility(View.VISIBLE);
-            providerCalender.addAll(listItems);
+            adapter.updateData(listItems);
+            adapter.notifyDataSetChanged();
         }
-        if (recyclerView != null) {
-            // Create the adapter to convert the array to views
-            recyclerView.setAdapter(adapter);
-        }
+
     }
 
 

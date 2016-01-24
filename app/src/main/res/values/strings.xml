@@ -4,7 +4,7 @@
 
     <string name="capition_anfrageliste">Anfrageliste</string>
     <string name="caption_klausur">Klausureinsichtstermine</string>
-    <string name="caption_settings">Profil</string>
+    <string name="caption_profil">Profil</string>
     <string name="caption_statistic">Statistik</string>
     <string name="caption_addTask">Anfragen erstellen</string>
     <string name="caption">SmartInsight Student</string>
@@ -46,4 +46,19 @@
 
     <string name="txtSitzplatzNummer">Sitzplatznummer</string>
 
+    <string name="bundleRequests">requests</string>
+    <string name="name">name</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="exam">exam</string>
+    <string name="id">id</string>
+    <string name="registrationNumb">registrationNumb</string>
+    <string name="sitNumb">sitNumb</string>
+    <string name="didChange">didChange</string>
+    <string name="loggedIn">loggedIn</string>
+    <string name="calendar">calendar</string>
+    <string name="takslist">tasklist</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

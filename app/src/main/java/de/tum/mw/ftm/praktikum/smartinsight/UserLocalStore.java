@@ -10,7 +10,7 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Created by Rebecca on 13.12.2015.
+ * KLasse die den Aktuellen nutzer lokal speichert
  */
 public class UserLocalStore {
 
@@ -23,24 +23,24 @@ public class UserLocalStore {
 
     public void storeUserData(User user){
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();
-        spEditor.putString("name", user.name);
-        spEditor.putString("email", user.email);
-        spEditor.putString("matrikelnummer", user.matrikelnummer);
-        spEditor.putString("exam",user.exam);
-        spEditor.putString("sitNumb", user.sitNumb);
-        spEditor.putString("password",user.password);
-        spEditor.putBoolean("didChange", user.didChange);
+        spEditor.putString(String.valueOf(R.string.name), user.getName());
+        spEditor.putString(String.valueOf(R.string.email), user.getEmail());
+        spEditor.putString(String.valueOf(R.string.registrationNumb), user.getMatrikelnummer());
+        spEditor.putString(String.valueOf(R.string.exam),user.getExam());
+        spEditor.putString(String.valueOf(R.string.sitNumb), user.getSitNumb());
+        spEditor.putString(String.valueOf(R.string.password), user.getPassword());
+        spEditor.putBoolean(String.valueOf(R.string.didChange), user.getDidChange());
         spEditor.commit();
     }
 
     public User getUserLogInUser(){
-        String name = userLocalDatabase.getString("name", "");
-        String email = userLocalDatabase.getString("email","");
-        String matrikelnummer = userLocalDatabase.getString("matrikelnummer", "");
-        String exam = userLocalDatabase.getString("exam", "");
-        String sitNumb = userLocalDatabase.getString("sitNumb", "");
-        String password = userLocalDatabase.getString("password","");
-        Boolean didChange = userLocalDatabase.getBoolean("didChange",false);
+        String name = userLocalDatabase.getString(String.valueOf(R.string.name), "");
+        String email = userLocalDatabase.getString(String.valueOf(R.string.email),"");
+        String matrikelnummer = userLocalDatabase.getString(String.valueOf(R.string.registrationNumb), "");
+        String exam = userLocalDatabase.getString(String.valueOf(R.string.exam), "");
+        String sitNumb = userLocalDatabase.getString(String.valueOf(R.string.sitNumb), "");
+        String password = userLocalDatabase.getString(String.valueOf(R.string.password),"");
+        Boolean didChange = userLocalDatabase.getBoolean(String.valueOf(R.string.didChange),false);
 
         User storedUser = new User(email,password, exam, name , matrikelnummer, sitNumb,didChange);
 
@@ -49,42 +49,16 @@ public class UserLocalStore {
 
     public void setUserLoggedIn(boolean loggedIn){
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();
-        spEditor.putBoolean("loggedIn", loggedIn);
+        spEditor.putBoolean(String.valueOf(R.string.loggedIn), loggedIn);
         spEditor.commit();
     }
 
     public boolean getUserLoggedIn(){
-        if(userLocalDatabase.getBoolean("loggedIn", false) == true){
+        if(userLocalDatabase.getBoolean(String.valueOf(R.string.loggedIn), false) == true){
             return true;
         }
         return false;
     }
-
-    public boolean getUserStatusProfilPic(){
-        if(userLocalDatabase.getBoolean("statusProfilPic", false) == true){
-            return true;
-        }
-        return false;
-    }
-
-    public void setUserStatusProfilPic(boolean status){
-        SharedPreferences.Editor spEditor = userLocalDatabase.edit();
-        spEditor.putBoolean("statusProfilPic", status);
-        spEditor.commit();
-    }
-
-    public Uri getUserProfilPic(){
-        String profilPic = userLocalDatabase.getString("profilPic", "");
-
-        return (Uri.parse(profilPic));
-    }
-
-    public void setUserProfilPic(Uri bitmap){
-        SharedPreferences.Editor spEditor = userLocalDatabase.edit();
-        spEditor.putString("profilPic", bitmap.toString());
-        spEditor.commit();
-    }
-
 
     public void clearUserData(){
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();

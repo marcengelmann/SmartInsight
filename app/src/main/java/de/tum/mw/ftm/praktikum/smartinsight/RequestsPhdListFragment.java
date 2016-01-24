@@ -4,10 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,37 +16,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.os.Handler;
-import android.widget.Toast;
 
-import android.text.format.Time;
 import java.util.ArrayList;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+/*
+* Fragment welches die Anfragen der Studente auflistet mit den Informatinen,
+* wann die dozenten kommen
  */
-public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.customButtonListener{
+public class RequestsPhdListFragment extends Fragment implements RequestsPhdListAdapter.customButtonListener{
     private SwipeRefreshLayout swipeContainer;
     private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
-    AnfrageListAdapter adapter;
-    TextView txtIntroduction;
+    private RequestsPhdListAdapter adapter;
+    private TextView txtIntroduction;
     private OnListFragmentInteractionListener mListener;
-    ArrayList<AnfrageProvider> listAnfrageProvider = new ArrayList<AnfrageProvider>();
-    Handler handlerRefreshList = new Handler();
-    Runnable runnableRefreshList = null;
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public AnfrageListFragment() {
+    private ArrayList<RequestsPhd> listAnfrageProvider = new ArrayList<RequestsPhd>();
+    private Handler handlerRefreshList = new Handler();
+    private Runnable runnableRefreshList = null;
+
+    public RequestsPhdListFragment() {
     }
 
-    public static AnfrageListFragment newInstance(int columnCount) {
-        AnfrageListFragment fragment = new AnfrageListFragment();
+    public static RequestsPhdListFragment newInstance(int columnCount) {
+        RequestsPhdListFragment fragment = new RequestsPhdListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -56,13 +48,13 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         listAnfrageProvider.clear();
+        // hol die Liste für die Anfragen
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            listAnfrageProvider = (ArrayList<AnfrageProvider>)getArguments().get("requests");
+            listAnfrageProvider = (ArrayList<RequestsPhd>)getArguments().get(String.valueOf(R.string.bundleRequests));
 
         }
 
-        adapter = new AnfrageListAdapter(listAnfrageProvider, this);
+        adapter = new RequestsPhdListAdapter(listAnfrageProvider, this);
 
     }
     RecyclerView recyclerView = null;
@@ -70,7 +62,8 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_anfrage_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_requests_phd_list, container, false);
+        // setzte den swip container und aktualisiere die Liste, wenn er betätigt wird
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContRequestList);
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -92,6 +85,7 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         return view;
     }
 
+    // Update der Anfrage lsite
     private void refreshListView(){
         //Adapter für die Anfrage liste bescheid geben, dass sich daten geändert haben.
         adapter.notifyDataSetChanged();
@@ -115,7 +109,9 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         mListener = null;
     }
 
-    public void updateFragmentListView(ArrayList<AnfrageProvider> requests) {
+    public void updateFragmentListView(ArrayList<RequestsPhd> requests) {
+        // überprüfe ob keine Anfragen vorhanden sind, sind keien Anfragen vorhanden,
+        // dann setz die Liste unsichtbar und einen Einleitungstext true
         if (requests.isEmpty()) {
             txtIntroduction.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -128,8 +124,9 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         }
     }
 
+    // Nachfrage, ob die ausgewählte Anfrage wirklich gelöscht oder erneurt werden soll
     @Override
-    public void onButtonClickListner(int position, AnfrageProvider value, Boolean deleteNupdate) {
+    public void onButtonClickListner(int position, RequestsPhd value, Boolean deleteNupdate) {
         String msg = "Möchtest du die Anfrage zur Aufgabe " + value.getTaskNumber() + value.getTaskSubNumber() + " löschen?" ;
         String title = "Anfrage löschen?";
 
@@ -141,6 +138,8 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
         finalDialog(title,msg, position,value, deleteNupdate).show();
     }
 
+    // Methode, die die post delay aktualisiert in abhängigkeit, wie langee es noch bis zur
+    // nächsten Anfrage dauert
     @Override
     public void refreshListListener(int position, long timer) {
         handlerRefreshList.removeCallbacks(runnableRefreshList);
@@ -152,10 +151,10 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
             }
         };
         handlerRefreshList.postDelayed(runnableRefreshList, timer);
-        Log.d("test","Update in ms. " +timer);
+        Log.d("test", "Update in ms. " + timer);
     }
 
-    private Dialog finalDialog(String title,String msg, final int position, final AnfrageProvider value, final Boolean deletNuPdate){
+    private Dialog finalDialog(String title,String msg, final int position, final RequestsPhd value, final Boolean deletNuPdate){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(msg);
         builder.setTitle(title);
@@ -177,6 +176,6 @@ public class AnfrageListFragment extends Fragment implements AnfrageListAdapter.
 
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentDeleteListItem(int position, AnfrageProvider value, Boolean deleteNupdate);
+        void onListFragmentDeleteListItem(int position, RequestsPhd value, Boolean deleteNupdate);
     }
 }

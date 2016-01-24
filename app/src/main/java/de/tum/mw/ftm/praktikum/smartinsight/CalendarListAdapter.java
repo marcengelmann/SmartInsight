@@ -14,17 +14,17 @@ import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Rebecca on 02.01.2016.
+ * Adapter für die KLausureinsichtstermin eliste
  */
 public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.ViewHolder> {
-    private final List<Calendar> mValues;
-
+    private final ArrayList<Calendar> mValues = new ArrayList<Calendar>();
     public CalendarListAdapter(List<Calendar> anfrageProvider) {
-        mValues = anfrageProvider;
+        mValues.addAll(anfrageProvider);
     }
 
     @Override
@@ -36,10 +36,11 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        String date = mValues.get(position).date;
+        String date = mValues.get(position).getDate();
+        viewHolder.mItem = mValues.get(position);
+        // get the acutal date
         SimpleDateFormat curFormater = new SimpleDateFormat("dd.MM.yyyy");
         Date examDate = null;
-        Date today;
         try {
             examDate = curFormater.parse(date);
         } catch (ParseException e) {
@@ -47,6 +48,8 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
         }
         Date currentDay = new Date();
         if(examDate != null){
+            // wenn an dem heutigen Tag eine Klausureinsicht ist, soll der Termin einen grünen
+            // HIntergrund haben, sonst normal einen weißen
             if(examDate.getYear() == currentDay.getYear()
                     && examDate.getMonth() == currentDay.getMonth()
                     && examDate.getDay() == currentDay.getDay()){
@@ -56,20 +59,24 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
 
             }
         }
-        viewHolder.mItem = mValues.get(position);
-        viewHolder.name.setText(mValues.get(position).name);
-        viewHolder.room.setText(mValues.get(position).room);
+        // von dem aktuellen Klausureinsichttermin sollen die Werte gesetzt werden
+        viewHolder.name.setText(mValues.get(position).getName());
+        viewHolder.room.setText(mValues.get(position).getRoom());
         viewHolder.date.setText(date);
-        viewHolder.numbOfReg.setText(mValues.get(position).numbOfRegistration);
-        viewHolder.responsiblePerson.setText(mValues.get(position).responsiblePerson);
-        viewHolder.meanGrade.setText(mValues.get(position).mean_grade);
+        viewHolder.numbOfReg.setText(mValues.get(position).getNumbOfRegistration());
+        viewHolder.responsiblePerson.setText(mValues.get(position).getResponsiblePerson());
+        viewHolder.mean.setText(mValues.get(position).getMean_grade());
+
     }
 
     @Override
     public int getItemCount() {
         return mValues.size();
     }
-
+    public void updateData(ArrayList<Calendar> calendarArrayList){
+        mValues.clear();
+        mValues.addAll(calendarArrayList);
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public Calendar mItem;
@@ -79,7 +86,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
         public TextView date;
         public TextView numbOfReg;
         public TextView responsiblePerson;
-        public TextView meanGrade;
+        public TextView mean;
         private CardView card;
 
         public ViewHolder(View view) {
@@ -90,9 +97,11 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
             date = (TextView) view.findViewById(R.id.calendar_date);
             numbOfReg = (TextView) view.findViewById(R.id.calendar_numbOfReg);
             responsiblePerson = (TextView) view.findViewById(R.id.calendar_responsiblePerson);
-            meanGrade = (TextView) view.findViewById(R.id.calendar_mean);
+            mean = (TextView) view.findViewById(R.id.calendar_mean);
             card = (CardView) view.findViewById(R.id.card_view_calendar_list);
+
         }
 
     }
 }
+

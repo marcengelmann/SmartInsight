@@ -1,18 +1,14 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
-import android.support.v7.widget.RecyclerView;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by Rebecca on 13.12.2015.
+ * Created by Rebecca on 24.01.2016.
  */
-public class AnfrageProvider implements Serializable {
+public class RequestsPhd implements Serializable {
     public String endTime,startTime,editor,question,taskNumber,taskSubNumber,id;
 
-    public AnfrageProvider(String id, String startTime, String endTime, String taskNumber, String taskSubNumber, String question, String editor) {
+    public RequestsPhd(String id, String startTime, String endTime, String taskNumber, String taskSubNumber, String question, String editor) {
         this.endTime = endTime;
         this.startTime = startTime;
         this.editor = editor;
@@ -79,3 +75,4 @@ public class AnfrageProvider implements Serializable {
     }
 
 }
+

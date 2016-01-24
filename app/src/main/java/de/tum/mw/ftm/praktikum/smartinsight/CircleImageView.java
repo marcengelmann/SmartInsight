@@ -1,7 +1,7 @@
 package de.tum.mw.ftm.praktikum.smartinsight;
 
 /**
- * Created by Rebecca on 30.12.2015.
+ * Klasse die einen Kreisrundes Bild aus einem ImageView erstellt
  */
 import android.content.Context;
 import android.content.res.TypedArray;

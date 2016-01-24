@@ -15,7 +15,11 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-
+/*
+* Diese Activity wird von der Main Activity geöffnet, wenn der Floating Action Button gedrückt wurde
+* Hier soll der Studenten eine Anfrage zu eine bestimmten Aufgabe
+ * von der KLausur auswählen können und  sagen in welcher Kategorie eine Frage besteht
+* */
 public class FloatingActivity extends AppCompatActivity {
 
     private Spinner spinnerTaskNumber;
@@ -34,9 +38,9 @@ public class FloatingActivity extends AppCompatActivity {
     private String taskNumber = "1";
     private String taskSubNumber = "a";
 
-    AnfrageLocalStore anfrageLocalStore;
-    UserLocalStore userLocalStore;
-    TaskListLocalStore taskListLocalStore;
+    private StudentRequestLocalStore anfrageLocalStore;
+    private UserLocalStore userLocalStore;
+    private TaskListLocalStore taskListLocalStore;
 
     private ArrayList<Task> tasks;
 
@@ -57,14 +61,14 @@ public class FloatingActivity extends AppCompatActivity {
 
         int pos = 0;
         stringTaskSubNumber = new ArrayList<String[]>();
-
+        // laden der Hauptaufgabe und Unteraufgabe in dei Spinner
         for(Task task:tasks) {
             int sub_pos = 0;
-            stringTaskNumber[pos] = task.number +". "+task.name;
+            stringTaskNumber[pos] = task.getNumber() +". "+task.getName();
             pos ++;
             String[] subStringHelper = new String[task.getSubtasks().size()];
             for(SubTask subtask:task.getSubtasks()) {
-                subStringHelper[sub_pos] = subtask.letter + ") "+subtask.name;
+                subStringHelper[sub_pos] = subtask.getLetter() + ") "+subtask.getName();
                 sub_pos ++;
             }
             if(subStringHelper.length == 0) {
@@ -102,7 +106,7 @@ public class FloatingActivity extends AppCompatActivity {
         adapterSubTaskNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTaskSubNumber.setAdapter(adapterSubTaskNumber);
 
-        anfrageLocalStore = new AnfrageLocalStore(this);
+        anfrageLocalStore = new StudentRequestLocalStore(this);
         userLocalStore = new UserLocalStore(this);
 
         anfrageLocalStore.setStatusAnfrageClient(false);
@@ -121,6 +125,7 @@ public class FloatingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // diese Methode wird aufgerufen, wenn der Student die Anfrage absenden möchte
     public void onButtonSendQuestion(View view){
         String[] arrayQuestion = getResources().getStringArray(R.array.art_of_question);
         int radioButtonID = radioGroupQuestion.getCheckedRadioButtonId();
@@ -129,7 +134,7 @@ public class FloatingActivity extends AppCompatActivity {
         artOfQuestion = arrayQuestion[idx];
         taskNumber = String.valueOf(spinnerTaskNumber.getSelectedItem());
         taskSubNumber = String.valueOf(spinnerTaskSubNumber.getSelectedItem());
-
+        // stearten des Dialoges ob er die ausgewählte Aufgabe eine Frage aht
         finalDialog("Anfrage senden","Zur Aufgabe " + taskNumber +" "+ taskSubNumber + " hast du eine Frage zu: " + artOfQuestion).show();
     }
     private Dialog finalDialog(String title,String msg){
@@ -143,12 +148,12 @@ public class FloatingActivity extends AppCompatActivity {
                 User user = userLocalStore.getUserLogInUser();
                 String subtask_string;
                 try {
-                    subtask_string = tasks.get(spinnerTaskNumber.getSelectedItemPosition()).getSubtasks().get(spinnerTaskSubNumber.getSelectedItemPosition()).id;
+                    subtask_string = tasks.get(spinnerTaskNumber.getSelectedItemPosition()).getSubtasks().get(spinnerTaskSubNumber.getSelectedItemPosition()).getId();
                 }
                 catch (IndexOutOfBoundsException e) {
                     subtask_string = null;
                 }
-                Anfrage anfrage = new Anfrage("0",user.matrikelnummer,tasks.get(spinnerTaskNumber.getSelectedItemPosition()).id,subtask_string,"linked_phd","linked_exam",artOfQuestion,false);
+                StudentRequest anfrage = new StudentRequest("0",user.getMatrikelnummer(),tasks.get(spinnerTaskNumber.getSelectedItemPosition()).getId(),subtask_string,"linked_phd","linked_exam",artOfQuestion,false);
                 anfrageLocalStore.storeAnfrageData(anfrage);
                 anfrageLocalStore.setStatusAnfrageClient(true);
                 finish();

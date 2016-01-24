@@ -8,7 +8,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
- * Created by marcengelmann on 15.12.15.
+ * Der Student ist in eien bestimmte Klausur eingeschreiben mit Hauptaufgaben von 1 bis x und
+ * Unteraufgaben von a bis z
+ * In dieser Klasse sollen die Aufgaben der Klasuur gespeichert werden
  */
 public class TaskListLocalStore {
 
@@ -23,7 +25,7 @@ public class TaskListLocalStore {
             SharedPreferences.Editor spEditor = taskLocalDatabase.edit();
 
             try {
-                spEditor.putString("tasklist", ObjectSerializer.serialize(taskList));
+                spEditor.putString(String.valueOf(R.string.takslist), ObjectSerializer.serialize(taskList));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -35,7 +37,7 @@ public class TaskListLocalStore {
     public ArrayList<Task> getTaskList(){
             ArrayList<Task> tasks = null;
             try {
-                tasks = (ArrayList<Task>) ObjectSerializer.deserialize(taskLocalDatabase.getString("tasklist",""));
+                tasks = (ArrayList<Task>) ObjectSerializer.deserialize(taskLocalDatabase.getString(String.valueOf(R.string.takslist),""));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
